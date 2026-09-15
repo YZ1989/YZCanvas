@@ -20,7 +20,7 @@
             "identifier": "http:default",
             "allow": [
                 {
-                    "url": "https://api.aitudou.net/**"
+                    "url": "https://api.yz-jinyu.com/**"
                 }
             ]
         },

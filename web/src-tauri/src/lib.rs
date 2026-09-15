@@ -89,8 +89,8 @@ fn open_downloads_directory(app: AppHandle, directory: Option<String>) -> Result
 }
 
 #[tauri::command]
-fn open_aitudou_registration() -> Result<(), String> {
-    const REGISTRATION_URL: &str = "https://api.aitudou.net/";
+fn open_jinyu_page(docs: bool) -> Result<(), String> {
+    let page_url = if docs { "https://api.yz-jinyu.com/docs/" } else { "https://api.yz-jinyu.com/" };
 
     #[cfg(target_os = "windows")]
     let mut command = Command::new("explorer.exe");
@@ -100,9 +100,9 @@ fn open_aitudou_registration() -> Result<(), String> {
     let mut command = Command::new("xdg-open");
 
     command
-        .arg(REGISTRATION_URL)
+        .arg(page_url)
         .spawn()
-        .map_err(|error| format!("无法打开 AI 土豆注册页面：{error}"))?;
+        .map_err(|error| format!("无法打开 Jinyu 页面：{error}"))?;
     Ok(())
 }
 
@@ -193,7 +193,7 @@ pub fn run() {
             frontend_ready,
             splash_animation_complete,
             open_downloads_directory,
-            open_aitudou_registration,
+            open_jinyu_page,
             allow_download_directory,
             media_cache::cache_remote_media,
             media_cache::import_legacy_cached_media

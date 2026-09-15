@@ -729,7 +729,7 @@ function YZCanvasProjectPage() {
             const definition = getNodeDefinition(type);
             // Display-only plugin nodes with hidePanel do not open a panel; custom Panels require autoOpenPanel on creation.
             // Plugin nodes declaring useBuiltinPanel open the built-in generation panel on creation, like image nodes.
-            // Native media/text nodes open their integrated Aitudou workbench on creation.
+            // Native media/text nodes open their integrated Jinyu workbench on creation.
             const wantsPanel = definition?.hidePanel ? false : definition?.Panel ? Boolean(definition.autoOpenPanel) : definition?.useBuiltinPanel ? true : isBuiltinType(type) && type !== CanvasNodeType.Group && type !== CanvasNodeType.Aitudou;
             if (wantsPanel) setDialogNodeId(newNode.id);
         },
@@ -2148,10 +2148,10 @@ function YZCanvasProjectPage() {
                             .filter(Boolean)
                             .join("；"),
                     );
-                else message.success(result.status === "attention" ? "任务正在等待补充参数，请查看节点状态。" : "Aitudou 任务已完成，并已缓存到 data/media-cache。");
+                else message.success(result.status === "attention" ? "任务正在等待补充参数，请查看节点状态。" : "Jinyu 任务已完成，并已缓存到 data/media-cache。");
             } catch (error) {
                 if (error instanceof AitudouPollingStoppedError || isGenerationCanceled(error)) {
-                    const stoppedMessage = error instanceof AitudouPollingStoppedError ? error.message : "本地请求已停止；如果 Aitudou 已收到提交，远端任务仍可能继续执行并计费。";
+                    const stoppedMessage = error instanceof AitudouPollingStoppedError ? error.message : "本地请求已停止；如果 Jinyu 已收到提交，远端任务仍可能继续执行并计费。";
                     setNodes((prev) =>
                         prev.map((item) =>
                             item.id === node.id
@@ -2255,7 +2255,7 @@ function YZCanvasProjectPage() {
                             .filter(Boolean)
                             .join("；"),
                     );
-                else message.success(result.status === "attention" ? "任务正在等待补充参数。" : "Aitudou 任务查询完成，并已缓存到 data/media-cache。");
+                else message.success(result.status === "attention" ? "任务正在等待补充参数。" : "Jinyu 任务查询完成，并已缓存到 data/media-cache。");
             } catch (error) {
                 if (error instanceof AitudouPollingStoppedError) {
                     setNodes((prev) =>
@@ -2283,7 +2283,7 @@ function YZCanvasProjectPage() {
                     );
                     message.warning(interruption);
                 } else {
-                    const failure = describeAitudouError(error, { operationId, taskIds }, "Aitudou 任务查询失败");
+                    const failure = describeAitudouError(error, { operationId, taskIds }, "Jinyu 任务查询失败");
                     message.error(failure.summary);
                     setNodes((prev) =>
                         prev.map((item) =>
@@ -2311,7 +2311,7 @@ function YZCanvasProjectPage() {
         (node: CanvasNodeData) => {
             modal.confirm({
                 title: "停止本地轮询？",
-                content: "Aitudou 没有取消任务接口。停止后远端任务仍会继续执行并可能计费，Task ID 会保留，可稍后恢复查询。",
+                content: "当前画布仅停止本地轮询。停止后远端任务仍会继续执行并可能计费，Task ID 会保留，可稍后恢复查询。",
                 okText: "停止轮询",
                 cancelText: "继续等待",
                 okButtonProps: { danger: true },

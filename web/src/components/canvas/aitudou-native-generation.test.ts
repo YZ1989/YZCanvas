@@ -28,7 +28,7 @@ import {
     writeAitudouNativePrompt,
 } from "./aitudou-native-generation";
 
-describe("native Aitudou canvas classification", () => {
+describe("native Jinyu canvas classification", () => {
     it("maps every documented non-utility operation once to its native output node", () => {
         expect(AITUDOU_OPERATIONS).toHaveLength(55);
         expect(AITUDOU_NATIVE_OPERATION_IDS_BY_KIND.image).toHaveLength(15);
@@ -55,7 +55,7 @@ describe("native Aitudou canvas classification", () => {
 
     it("builds the RHTV-style provider to version hierarchy without exposing transport variants", () => {
         const categories = aitudouNativeVideoModelCategories("video.generate");
-        expect(categories.map((category) => category.label)).toEqual(["Seedance", "MiniMax", "Flux", "Aitudou Video"]);
+        expect(categories.map((category) => category.label)).toEqual(["Seedance", "MiniMax", "Flux", "Jinyu Video"]);
 
         const flatChoices = categories.flatMap((category) => category.options);
         const legacyChoices = aitudouNativeModelGroups("video.generate").flatMap((group) => group.options);
@@ -69,7 +69,7 @@ describe("native Aitudou canvas classification", () => {
 
         const minimax = categories.find((category) => category.id === "minimax")!;
         expect(minimax.options.map((choice) => choice.value)).toEqual(expect.arrayContaining(["hailuo-2.3-standard", "hailuo-h3", "minimax-h3-ow"]));
-        expect(categories.find((category) => category.id === "aitudou-video")?.options.map((choice) => choice.value)).toEqual(expect.arrayContaining(["aitudou-video-gk-v15", "aitudou-video-v31-fast", "aitudou-video-g-omni-flash"]));
+        expect(categories.find((category) => category.id === "aitudou-video")?.options.map((choice) => choice.value)).toEqual(expect.arrayContaining(["jinyu-video-gk-v15", "jinyu-video-v31-fast", "jinyu-video-g-omni-flash"]));
     });
 
     it.each(["happyhorse-1.1-t2v", "wan-2.7-spicy-i2v", "kling-v3.0-std", "vidu-q3-pro-t2v"])("migrates the removed video model %s to the first available model", (modelId) => {
@@ -79,7 +79,7 @@ describe("native Aitudou canvas classification", () => {
     });
 });
 
-describe("native Aitudou payload adapter", () => {
+describe("native Jinyu payload adapter", () => {
     it("exposes documented Midjourney versions as image models and maps reference images to Imagine", () => {
         const choices = aitudouNativeModelChoiceGroups("image", "image.generate").flatMap((group) => group.options);
         expect(choices.map((choice) => choice.value)).toEqual(expect.arrayContaining(["midjourney:v8.2", "midjourney:v8.1", "midjourney:v7", "midjourney:v6.1", "midjourney:v5.2", "midjourney:v5.1", "midjourney:niji7", "midjourney:niji6"]));
@@ -192,10 +192,10 @@ describe("native Aitudou payload adapter", () => {
             parameterLabel: "5/10/15 秒 · 480p/720p · 比例 8 档",
         });
 
-        const fixed = changeAitudouNativeModel("video.generate", { ...seedance, seconds: "6" }, "aitudou-video-v31-fast");
+        const fixed = changeAitudouNativeModel("video.generate", { ...seedance, seconds: "6" }, "jinyu-video-v31-fast");
         expect(fixed.seconds).toBe("8");
 
-        const omni = changeAitudouNativeModel("video.generate", { ...fixed, duration: 8, metadata: { duration: 8 } }, "aitudou-video-g-omni-flash");
+        const omni = changeAitudouNativeModel("video.generate", { ...fixed, duration: 8, metadata: { duration: 8 } }, "jinyu-video-g-omni-flash");
         expect(omni).not.toHaveProperty("seconds");
         expect(omni).not.toHaveProperty("duration");
         expect(omni.metadata).not.toHaveProperty("duration");
@@ -301,14 +301,14 @@ describe("native Aitudou payload adapter", () => {
         qwen = createAitudouNativePayload("image.generate", qwen);
         expect(qwen.metadata).not.toHaveProperty("ratio");
 
-        let strict = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), "aitudou-image-g2-t2i");
+        let strict = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), "jinyu-image-g2-t2i");
         strict = writeAitudouNativeParameter(strict, "metadata.ratio", "7:5");
         strict = createAitudouNativePayload("image.generate", strict);
         expect(strict.metadata).not.toHaveProperty("ratio");
     });
 
-    it("keeps Aitudou Image G-2 on its documented 1K-only contract", () => {
-        let payload = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), "aitudou-image-g2-t2i");
+    it("keeps Jinyu Image G-2 on its documented 1K-only contract", () => {
+        let payload = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), "jinyu-image-g2-t2i");
         payload = writeAitudouNativeParameter(payload, "metadata.resolution", "4k");
         payload.quality = "high";
         (payload.metadata as Record<string, unknown>).quality = "high";
@@ -368,7 +368,7 @@ describe("native Aitudou payload adapter", () => {
         const valid = createAitudouNativePayload("video.upscale", undefined, counts);
         expect(valid).toEqual(
             expect.objectContaining({
-                model: "aitudou-upscaler",
+                model: "jinyu-upscaler",
                 metadata: expect.objectContaining({ content: [{ type: "video_url", video_url: { url: "@Video 1" } }] }),
             }),
         );
@@ -422,7 +422,7 @@ describe("native Aitudou payload adapter", () => {
     it("uses connected video or task for the two mutually exclusive Omni continuation modes", () => {
         const videoCounts = { image: 2, video: 1, audio: 0, text: 1, task: 1 };
         let videoPayload = createAitudouNativePayload("video.generate", undefined, videoCounts);
-        videoPayload = changeAitudouNativeModel("video.generate", videoPayload, "aitudou-video-g-omni-flash", videoCounts);
+        videoPayload = changeAitudouNativeModel("video.generate", videoPayload, "jinyu-video-g-omni-flash", videoCounts);
         expect(videoPayload.images).toEqual(["@Image 1", "@Image 2"]);
         expect(videoPayload.metadata).toEqual(expect.objectContaining({ video_url: "@Video 1" }));
         expect(videoPayload.metadata).not.toHaveProperty("extend_from_task_id");
@@ -431,36 +431,36 @@ describe("native Aitudou payload adapter", () => {
 
         const taskCounts = { image: 0, video: 0, audio: 0, text: 0, task: 1 };
         let taskPayload = createAitudouNativePayload("video.generate", undefined, taskCounts);
-        taskPayload = changeAitudouNativeModel("video.generate", taskPayload, "aitudou-video-g-omni-flash", taskCounts);
+        taskPayload = changeAitudouNativeModel("video.generate", taskPayload, "jinyu-video-g-omni-flash", taskCounts);
         delete taskPayload.prompt;
         expect(taskPayload.metadata).toEqual(expect.objectContaining({ extend_from_task_id: "@Task 1" }));
         expect(taskPayload.metadata).not.toHaveProperty("video_url");
         expect(validateAitudouNativePayload("video", "video.generate", taskPayload, taskCounts)).toBeNull();
     });
 
-    it.each(["aitudou-video-gk-v15", "aitudou-video-v31-fast"])("injects optional image references for documented Aitudou video model %s", (modelId) => {
+    it.each(["jinyu-video-gk-v15", "jinyu-video-v31-fast"])("injects optional image references for documented Jinyu video model %s", (modelId) => {
         const counts = { ...EMPTY_AITUDOU_NATIVE_REFERENCE_COUNTS, image: 4, text: 1 };
         let payload = createAitudouNativePayload("video.generate", undefined, counts);
         payload = changeAitudouNativeModel("video.generate", payload, modelId, counts);
-        const expectedCount = modelId === "aitudou-video-v31-fast" ? 3 : 4;
+        const expectedCount = modelId === "jinyu-video-v31-fast" ? 3 : 4;
         expect(payload.images).toEqual(Array.from({ length: expectedCount }, (_, index) => `@Image ${index + 1}`));
-        if (modelId === "aitudou-video-v31-fast") expect(payload.seconds).toBe("8");
+        if (modelId === "jinyu-video-v31-fast") expect(payload.seconds).toBe("8");
         expect(validateAitudouNativePayload("video", "video.generate", payload, counts)).toBeNull();
     });
 
-    it("removes reference mode from Aitudou V31 quality and pins its documented duration", () => {
+    it("removes reference mode from Jinyu V31 quality and pins its documented duration", () => {
         const counts = { ...EMPTY_AITUDOU_NATIVE_REFERENCE_COUNTS, image: 3, text: 1 };
         let payload = createAitudouNativePayload("video.generate", undefined, counts);
-        payload = changeAitudouNativeModel("video.generate", payload, "aitudou-video-v31-fast", counts);
+        payload = changeAitudouNativeModel("video.generate", payload, "jinyu-video-v31-fast", counts);
         payload.type = "reference";
-        payload = changeAitudouNativeModel("video.generate", payload, "aitudou-video-v31-quality", counts);
+        payload = changeAitudouNativeModel("video.generate", payload, "jinyu-video-v31-quality", counts);
         expect(payload).not.toHaveProperty("images");
         expect(payload).not.toHaveProperty("type");
         expect(payload.seconds).toBe("8");
         expect(validateAitudouNativePayload("video", "video.generate", payload, counts)).toBeNull();
     });
 
-    it.each(["aitudou-image-g-v2-lowprice", "aitudou-image-nb-flash", "aitudou-image-nb-2", "aitudou-image-nb-2-lite", "aitudou-image-nb-pro"])("injects optional image inputs without exposing a free-form size field for %s", (modelId) => {
+    it.each(["jinyu-image-g-v2-lowprice", "jinyu-image-nb-flash", "jinyu-image-nb-2", "jinyu-image-nb-2-lite", "jinyu-image-nb-pro"])("injects optional image inputs without exposing a free-form size field for %s", (modelId) => {
         const counts = { ...EMPTY_AITUDOU_NATIVE_REFERENCE_COUNTS, image: 20, text: 1 };
         let payload = createAitudouNativePayload("image.generate", undefined, counts);
         payload = changeAitudouNativeModel("image.generate", payload, modelId, counts);
@@ -468,12 +468,12 @@ describe("native Aitudou payload adapter", () => {
         expect(payload.images).toHaveLength(profile.constraints?.maxImages || 0);
         const definitions = aitudouNativeParameterDefinitions("image.generate", payload);
         expect(definitions).not.toEqual(expect.arrayContaining([expect.objectContaining({ path: "size", control: "text" })]));
-        if (modelId === "aitudou-image-g-v2-lowprice") expect(definitions.map((definition) => definition.path)).toContain(AITUDOU_NATIVE_SIZE_RATIO_PATH);
+        if (modelId === "jinyu-image-g-v2-lowprice") expect(definitions.map((definition) => definition.path)).toContain(AITUDOU_NATIVE_SIZE_RATIO_PATH);
         expect(validateAitudouNativePayload("image", "image.generate", payload, counts)).toBeNull();
     });
 
     it("keeps every image geometry control preset-only and adds the documented GK v2 model", () => {
-        expect(AITUDOU_MODEL_PROFILES.map((profile) => profile.id)).toContain("aitudou-image-gk-v2");
+        expect(AITUDOU_MODEL_PROFILES.map((profile) => profile.id)).toContain("jinyu-image-gk-v2");
         for (const profile of AITUDOU_MODEL_PROFILES.filter((candidate) => candidate.family === "image")) {
             const payload = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), profile.id);
             const definitions = aitudouNativeParameterDefinitions("image.generate", payload);
@@ -483,7 +483,7 @@ describe("native Aitudou payload adapter", () => {
     });
 
     it("uses the RHTV low-price GPT ratio presets and narrows them for 4K", () => {
-        let payload = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), "aitudou-image-g-v2-lowprice");
+        let payload = changeAitudouNativeModel("image.generate", createAitudouNativePayload("image.generate"), "jinyu-image-g-v2-lowprice");
         const initialDefinitions = aitudouNativeParameterDefinitions("image.generate", payload);
         let definition = initialDefinitions.find((item) => item.path === AITUDOU_NATIVE_SIZE_RATIO_PATH)!;
         expect(definition.control).toBe("select");
@@ -512,11 +512,11 @@ describe("native Aitudou payload adapter", () => {
         };
 
         expect(definitionFor("seedream-v5-pro-t2i")).toEqual(expect.objectContaining({ path: AITUDOU_NATIVE_CANVAS_BATCH_COUNT_PATH, control: "number", min: 1, max: 4 }));
-        expect(definitionFor("aitudou-image-g2-t2i")).toEqual(expect.objectContaining({ path: AITUDOU_NATIVE_CANVAS_BATCH_COUNT_PATH, control: "number", min: 1, max: 4 }));
+        expect(definitionFor("jinyu-image-g2-t2i")).toEqual(expect.objectContaining({ path: AITUDOU_NATIVE_CANVAS_BATCH_COUNT_PATH, control: "number", min: 1, max: 4 }));
         expect(definitionFor("qwen-image-3.0-pro-t2i")).toEqual(expect.objectContaining({ control: "number", min: 1, max: 6 }));
-        expect(definitionFor("aitudou-image-g-v2-lowprice")).toEqual(expect.objectContaining({ control: "number", min: 1, max: 10 }));
-        expect(definitionFor("aitudou-image-nb-2-lite")).toEqual(expect.objectContaining({ control: "number", min: 1, max: 4 }));
-        expect(definitionFor("aitudou-image-nb-pro")).toEqual(expect.objectContaining({ path: AITUDOU_NATIVE_CANVAS_BATCH_COUNT_PATH, max: 4 }));
+        expect(definitionFor("jinyu-image-g-v2-lowprice")).toEqual(expect.objectContaining({ control: "number", min: 1, max: 10 }));
+        expect(definitionFor("jinyu-image-nb-2-lite")).toEqual(expect.objectContaining({ control: "number", min: 1, max: 4 }));
+        expect(definitionFor("jinyu-image-nb-pro")).toEqual(expect.objectContaining({ path: AITUDOU_NATIVE_CANVAS_BATCH_COUNT_PATH, max: 4 }));
     });
 
     it("strips canvas batching before the API call and migrates the selected count to native n", () => {
@@ -543,7 +543,7 @@ describe("native Aitudou payload adapter", () => {
         expect(parameterPaths("flux-3-video-draft-enhance")).toContain("metadata.draft_cache");
         expect(parameterPaths("flux-3-video-t2v")).toEqual(expect.arrayContaining(["metadata.draft", "metadata.generate_audio", "metadata.safety_tolerance"]));
         expect(parameterPaths("hailuo-h3-multi")).toContain("metadata.ratio");
-        expect(parameterPaths("aitudou-video-g-omni-flash")).toEqual(expect.arrayContaining(["metadata.extend_from_task_id", "metadata.ratio"]));
+        expect(parameterPaths("jinyu-video-g-omni-flash")).toEqual(expect.arrayContaining(["metadata.extend_from_task_id", "metadata.ratio"]));
 
         let draftPayload = createAitudouNativePayload("video.generate");
         draftPayload = changeAitudouNativeModel("video.generate", draftPayload, "flux-3-video-draft-enhance");

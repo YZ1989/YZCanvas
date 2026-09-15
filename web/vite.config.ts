@@ -5,6 +5,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 import { parseChangelog } from "./src/lib/release";
+import { JINYU_API_BASE_URL, JINYU_PROXY_PREFIX } from "./src/constant/provider";
 import { createMediaDownloadProxyPlugin } from "./server/media-download-proxy";
 import { createMediaCachePlugin, resolveMediaCacheDirectory } from "./server/media-cache";
 
@@ -12,11 +13,11 @@ const webDir = dirname(fileURLToPath(import.meta.url));
 const localVersion = readFileSync(resolve(webDir, "../VERSION"), "utf8").trim() || "dev";
 const localChangelog = readFileSync(resolve(webDir, "../CHANGELOG.md"), "utf8");
 const mediaCache = resolveMediaCacheDirectory(resolve(webDir, ".."));
-const aitudouProxy = {
-    target: "https://api.aitudou.net",
+const jinyuProxy = {
+    target: JINYU_API_BASE_URL,
     changeOrigin: true,
     secure: true,
-    rewrite: (path: string) => path.replace(/^\/tdtv-api\/aitudou/, ""),
+    rewrite: (path: string) => path.slice(JINYU_PROXY_PREFIX.length),
 };
 
 export default defineConfig({
@@ -39,16 +40,15 @@ export default defineConfig({
             },
         },
     },
-    // Aitudou's upload endpoint does not answer browser CORS preflights. The local
-    // development/preview proxy keeps API keys out of URLs and enables local Blob uploads.
+    // Route development requests and Blob uploads through Jinyu; keys stay in headers.
     server: {
-        proxy: { "/tdtv-api/aitudou": aitudouProxy },
+        proxy: { [JINYU_PROXY_PREFIX]: jinyuProxy },
         strictPort: true,
         watch: {
             ignored: ["**/src-tauri/**"],
         },
     },
     preview: {
-        proxy: { "/tdtv-api/aitudou": aitudouProxy },
+        proxy: { [JINYU_PROXY_PREFIX]: jinyuProxy },
     },
 });

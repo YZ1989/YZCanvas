@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { nanoid } from "nanoid";
 
 import i18n from "@/i18n";
+import { JINYU_API_BASE_URL } from "@/constant/provider";
 
 export type ApiCallFormat = "openai" | "gemini" | "ark" | "aitudou";
 export type ModelCapability = "image" | "video" | "text" | "audio";
@@ -62,15 +63,16 @@ export type WebdavSyncConfig = {
 };
 export type ConfigTabKey = "channels" | "preferences" | "prompt-sources" | "webdav";
 
-export const CONFIG_STORE_KEY = "yzcanvas:ai_config_store";
-export const AITUDOU_OFFICIAL_BASE_URL = "https://api.aitudou.net";
-export const AITUDOU_CHANNEL_ID = "tdcanvas-aitudou";
+// Provider credentials must not be reused automatically across different hosts.
+export const CONFIG_STORE_KEY = "yzcanvas:jinyu_config_store";
+export const AITUDOU_OFFICIAL_BASE_URL = JINYU_API_BASE_URL;
+export const AITUDOU_CHANNEL_ID = "yzcanvas-jinyu";
 const CHANNEL_MODEL_SEPARATOR = "::";
 
 function createOfficialAitudouChannel(apiKey = ""): ModelChannel {
     return {
         id: AITUDOU_CHANNEL_ID,
-        name: "YZCanvas",
+        name: "Jinyu API",
         baseUrl: AITUDOU_OFFICIAL_BASE_URL,
         apiKey,
         apiFormat: "aitudou",
@@ -193,9 +195,10 @@ function createAitudouOnlyConfig(apiKey: string): AiConfig {
 }
 
 function persistedAitudouApiKey(config: Partial<AiConfig>) {
-    const channel = Array.isArray(config.channels) ? config.channels.find((item) => item?.apiFormat === "aitudou") : undefined;
+    const isJinyu = (url: string | undefined) => url?.replace(/\/+$/, "") === JINYU_API_BASE_URL;
+    const channel = Array.isArray(config.channels) ? config.channels.find((item) => item?.apiFormat === "aitudou" && isJinyu(item.baseUrl)) : undefined;
     if (channel?.apiKey) return channel.apiKey;
-    return config.apiFormat === "aitudou" ? config.apiKey || "" : "";
+    return config.apiFormat === "aitudou" && isJinyu(config.baseUrl) ? config.apiKey || "" : "";
 }
 
 export const useConfigStore = create<ConfigStore>()(

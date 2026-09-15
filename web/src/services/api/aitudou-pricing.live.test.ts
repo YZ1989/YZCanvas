@@ -1,35 +1,31 @@
 import { describe, expect, it } from "vitest";
-
 import { AITUDOU_PRICING_URL, formatAitudouPriceQuote, parseAitudouPricingCatalog, quoteAitudouPrice } from "./aitudou-pricing";
-
-const live = process.env.AITUDOU_LIVE_PRICING === "1" ? describe : describe.skip;
-
-live("Aitudou live pricing contract", () => {
-    it("quotes representative image, video, audio and Midjourney parameters from the current official feed", async () => {
+const live = process.env.JINYU_LIVE_PRICING === "1" ? describe : describe.skip;
+live("Jinyu public pricing feed", () => {
+    it("parses current image and video prices without inventing a price for sparse samples", async () => {
         const response = await fetch(AITUDOU_PRICING_URL, { headers: { Accept: "application/json" } });
         expect(response.ok).toBe(true);
-        const catalog = parseAitudouPricingCatalog(await response.json());
-
+        const raw = await response.json();
+        expect(raw.success).toBe(true);
+        const catalog = parseAitudouPricingCatalog(raw);
         expect(catalog.pricingVersion).not.toBe("");
-        expect(Object.keys(catalog.observedPrices).length).toBeGreaterThan(50);
-        expect(Object.values(catalog.priceEstimates).filter((profile) => profile.status === "ready").length).toBeGreaterThan(20);
-
-        const image = quoteAitudouPrice(catalog, "image.generate", { model: "qwen-image-3.0-global-pro-i2i", n: 4, metadata: { resolution: "1k" } }, { imageReferences: 1 });
-        expect(image).toEqual(expect.objectContaining({ source: "estimate", status: "exact" }));
-        expect(image.amount).toBeGreaterThan(0);
-
-        const video = quoteAitudouPrice(catalog, "video.generate", { model: "aitudou-video-gk-v15", seconds: "8", metadata: { resolution: "720p" } });
-        expect(video).toEqual(expect.objectContaining({ source: "estimate", status: "range" }));
-        expect(video.max).toBeGreaterThanOrEqual(video.min || 0);
-
-        const seedance = quoteAitudouPrice(catalog, "video.generate", { model: "seedance-2.5-standard-t2v", seconds: "6", metadata: { resolution: "720p", generate_audio: true } });
-        expect(seedance).toEqual(expect.objectContaining({ status: "range", currency: "CNY" }));
-        expect(formatAitudouPriceQuote(seedance)).not.toContain("Token");
-
-        const audio = quoteAitudouPrice(catalog, "audio.generate", { model: "doubao-seed-audio-1.0" }, { audioReferences: 2 });
-        expect(audio).toEqual(expect.objectContaining({ source: "estimate", status: "range" }));
-
-        const midjourney = quoteAitudouPrice(catalog, "midjourney.imagine", { speed: "fast", hd: true });
-        expect(midjourney).toEqual(expect.objectContaining({ source: "estimate", status: "range" }));
+        for (const [operation, model] of [
+            ["image.generate", "jinyu-image-g2-t2i"],
+            ["video.generate", "jinyu-video-gk-v15"],
+            ["video.generate", "seedance-2.0-standard-t2v"],
+        ]) {
+            expect(raw.observed_prices[model] || raw.price_estimates[model]).toBeTruthy();
+            const quote = quoteAitudouPrice(catalog, operation, { model, seconds: "5", metadata: { resolution: operation === "image.generate" ? "1k" : "720p" } });
+            expect(quote.sku).toBe(model);
+            expect(quote.currency).toBe("CNY");
+            expect(["exact", "range", "rate", "dynamic"]).toContain(quote.status);
+            if (quote.status === "exact") expect(quote.amount).toBeGreaterThan(0);
+            if (quote.status === "range") {
+                expect(quote.min).toBeGreaterThanOrEqual(0);
+                expect(quote.max).toBeGreaterThanOrEqual(quote.min!);
+            }
+            if (quote.status === "dynamic") expect(quote.amount).toBeUndefined();
+            expect(formatAitudouPriceQuote(quote)).not.toMatch(/NaN|Infinity/);
+        }
     });
 });

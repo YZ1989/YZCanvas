@@ -459,7 +459,7 @@ export function AitudouNativeGenerationPanel({
                 <Tooltip
                     title={
                         pricingLoading
-                            ? "正在读取 Aitudou 官方价格清单"
+                            ? "正在读取 Jinyu 官方价格清单"
                             : pricingFailed
                               ? `${pricingCatalog ? "官方价格刷新失败，当前保留上次成功读取的价格。" : "官方动态价格暂时不可用，当前显示文档计费规则。"}${priceQuote.explanation}`
                               : priceQuote.explanation

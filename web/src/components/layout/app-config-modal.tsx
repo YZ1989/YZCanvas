@@ -7,6 +7,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { runAitudouOperation } from "@/services/api/aitudou";
 import { formatAitudouWalletAmount, parseAitudouWalletSummary, type AitudouWalletSummary } from "@/services/api/aitudou-wallet";
 import { AITUDOU_OFFICIAL_BASE_URL, useConfigStore, type ConfigTabKey } from "@/stores/use-config-store";
+import { JINYU_DOCS_URL } from "@/constant/provider";
 
 type AppConfigPanelProps = {
     showDoneButton?: boolean;
@@ -72,21 +73,25 @@ export function AppConfigPanel({ showDoneButton = false }: AppConfigPanelProps) 
 
             <div className="mt-5 flex flex-col gap-4 rounded-[14px] border p-5" style={{ background: token.colorFillAlter, borderColor: token.colorBorder }}>
                 <div className="min-w-0">
-                    <div className="text-base font-semibold" style={{ color: token.colorText }}>{t("config.apiKeyGuideTitle")}</div>
-                    <p className="mt-2 text-sm leading-6" style={{ color: token.colorTextSecondary }}>{t("config.apiKeyGuideDescription")}</p>
+                    <div className="text-base font-semibold" style={{ color: token.colorText }}>
+                        {t("config.apiKeyGuideTitle")}
+                    </div>
+                    <p className="mt-2 text-sm leading-6" style={{ color: token.colorTextSecondary }}>
+                        {t("config.apiKeyGuideDescription")}
+                    </p>
                 </div>
                 <Button
                     type="primary"
                     size="large"
                     block
-                    href="https://api.aitudou.net/"
+                    href={`${AITUDOU_OFFICIAL_BASE_URL}/`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="!h-12 !font-semibold"
                     onClick={(event) => {
                         if (!("__TAURI_INTERNALS__" in window)) return;
                         event.preventDefault();
-                        void invoke("open_aitudou_registration").catch(() => message.error(t("config.apiKeyGuideOpenFailed")));
+                        void invoke("open_jinyu_page", { docs: false }).catch(() => message.error(t("config.apiKeyGuideOpenFailed")));
                     }}
                 >
                     <span className="inline-flex items-center gap-1.5">
@@ -94,6 +99,20 @@ export function AppConfigPanel({ showDoneButton = false }: AppConfigPanelProps) 
                         <ArrowUpRight className="size-4" />
                     </span>
                 </Button>
+                <a
+                    href={JINYU_DOCS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm"
+                    style={{ color: token.colorLink }}
+                    onClick={(event) => {
+                        if (!("__TAURI_INTERNALS__" in window)) return;
+                        event.preventDefault();
+                        void invoke("open_jinyu_page", { docs: true }).catch(() => message.error(t("config.apiKeyGuideOpenFailed")));
+                    }}
+                >
+                    {t("config.apiDocs")}
+                </a>
             </div>
 
             <Form.Item label={t("config.apiKeyConnectStep")} className="mb-0 mt-6">

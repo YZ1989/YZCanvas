@@ -3,8 +3,10 @@ import { getAitudouModelProfile, type AitudouModelFamily } from "./aitudou-model
 import { extractAitudouCreateTaskIds, extractAitudouOutputs, parseAitudouSse, pollPathForAitudouTask, normalizeAitudouTaskResponse, type AitudouOutput, type AitudouTaskState } from "./aitudou-protocol";
 import { isDesktopAssetUrl, isTauriRuntime, platformFetch, readDesktopFileBlob } from "@/services/platform/desktop-runtime";
 
-export const AITUDOU_OFFICIAL_BASE_URL = "https://api.aitudou.net";
-export const AITUDOU_LOCAL_PROXY_PREFIX = "/tdtv-api/aitudou";
+import { JINYU_API_BASE_URL, JINYU_PROXY_PREFIX } from "@/constant/provider";
+
+export const AITUDOU_OFFICIAL_BASE_URL = JINYU_API_BASE_URL;
+export const AITUDOU_LOCAL_PROXY_PREFIX = JINYU_PROXY_PREFIX;
 
 export type AitudouReference = {
     kind: "image" | "video" | "audio" | "text" | "task";
@@ -88,7 +90,7 @@ export type AitudouErrorDescription = {
     details: string;
 };
 
-export function describeAitudouError(error: unknown, context: { operationId?: string; payload?: Record<string, unknown>; taskIds?: string[] } = {}, fallback = "Aitudou 请求失败"): AitudouErrorDescription {
+export function describeAitudouError(error: unknown, context: { operationId?: string; payload?: Record<string, unknown>; taskIds?: string[] } = {}, fallback = "Jinyu 请求失败"): AitudouErrorDescription {
     const summary = redact(error instanceof Error && error.message.trim() ? error.message : fallback);
     const contextLines = [context.operationId ? `操作：${context.operationId}` : "", context.taskIds?.length ? `Task ID：${context.taskIds.join(", ")}` : ""].filter(Boolean);
     const sections = [contextLines.join("\n")];
@@ -102,7 +104,7 @@ export class AitudouPollingStoppedError extends Error {
     readonly remoteContinues = true;
 
     constructor(submission: AitudouSubmission) {
-        super("已停止本地轮询；Aitudou 远端任务仍会继续执行，并可能继续计费。可稍后从此节点恢复查询。");
+        super("已停止本地轮询；Jinyu 远端任务仍会继续执行，并可能继续计费。可稍后从此节点恢复查询。");
         this.name = "AitudouPollingStoppedError";
         this.submission = submission;
     }
@@ -110,7 +112,7 @@ export class AitudouPollingStoppedError extends Error {
 
 export async function runAitudouOperation(config: AitudouRequestConfig, operationId: string, payloadInput: string | Record<string, unknown>, options: AitudouRunOptions = {}): Promise<AitudouRunResult> {
     const operation = getAitudouOperation(operationId);
-    if (operation.id !== operationId) throw new Error(`未知 Aitudou 操作：${operationId}`);
+    if (operation.id !== operationId) throw new Error(`未知 Jinyu 操作：${operationId}`);
     const fetchImpl = options.fetchImpl || platformFetch;
     const references = options.references || [];
     const payload = parsePayload(payloadInput);
@@ -157,7 +159,7 @@ export async function runAitudouOperation(config: AitudouRequestConfig, operatio
     const immediateOutputs = extractAitudouOutputs(raw, operation.outputHint);
     if (!taskIds.length) {
         if (operation.sync || immediateOutputs.length) return immediateResult(operationId, immediateOutputs.length ? immediateOutputs : [{ kind: "text", text: prettyJson(raw) }], raw);
-        throw new Error("Aitudou 已接受请求，但响应中没有文档规定的 task_id，无法安全轮询。原始响应已保留在节点错误详情中。");
+        throw new Error("Jinyu 已接受请求，但响应中没有文档规定的 task_id，无法安全轮询。原始响应已保留在节点错误详情中。");
     }
 
     const submissions = taskIds.map(
@@ -239,7 +241,7 @@ export async function resumeAitudouTask(config: AitudouRequestConfig, operationI
 
 export async function resumeAitudouTasks(config: AitudouRequestConfig, operationId: string, taskIds: string[], options: AitudouRunOptions = {}): Promise<AitudouRunResult> {
     const operation = getAitudouOperation(operationId);
-    if (operation.id !== operationId || !operation.taskFamily) throw new Error(`操作 ${operationId} 不是可轮询的 Aitudou 任务。`);
+    if (operation.id !== operationId || !operation.taskFamily) throw new Error(`操作 ${operationId} 不是可轮询的 Jinyu 任务。`);
     const uniqueTaskIds = Array.from(
         new Set(
             taskIds
@@ -411,10 +413,10 @@ function validateAitudouModelPayload(operation: AitudouOperationDefinition, payl
     const modelId = String(payload.model || "").trim();
     if (!modelId) return;
     const profile = getAitudouModelProfile(modelId);
-    if (!profile) throw new Error(`模型 ${modelId} 不在本次从 Aitudou 官方文档核对出的模型目录中；为避免猜测，已阻止提交。`);
+    if (!profile) throw new Error(`模型 ${modelId} 不在本次从 Jinyu 官方文档核对出的模型目录中；为避免猜测，已阻止提交。`);
     if (profile.family !== expectedFamily) throw new Error(`模型 ${modelId} 属于 ${profile.family}，不能用于 ${operation.label}。`);
-    if (operation.id === "video.upscale" && profile.inputKind !== "video-upscale") throw new Error("视频超分节点只能使用官方 aitudou-upscaler 模型。");
-    if (operation.id === "video.generate" && profile.inputKind === "video-upscale") throw new Error("aitudou-upscaler 请使用“视频超分”操作。");
+    if (operation.id === "video.upscale" && profile.inputKind !== "video-upscale") throw new Error("视频超分节点只能使用官方 jinyu-upscaler 模型。");
+    if (operation.id === "video.generate" && profile.inputKind === "video-upscale") throw new Error("jinyu-upscaler 请使用“视频超分”操作。");
 
     const topImages = Array.isArray(payload.images) ? payload.images.length : isMissing(payload.image) ? 0 : 1;
     const content = getPath(payload, ["metadata", "content"]);
@@ -435,7 +437,7 @@ function validateAitudouModelPayload(operation: AitudouOperationDefinition, payl
     if ((modelId === "flux-3-video-draft-enhance" || modelId === "flux-3-video-global-draft-enhance") && isMissing(getPath(payload, ["metadata", "draft_cache"]))) {
         throw new Error(`${modelId} 按官方文档要求提供 metadata.draft_cache。`);
     }
-    if (modelId === "aitudou-video-g-omni-flash") {
+    if (modelId === "jinyu-video-g-omni-flash") {
         const videoUrl = getPath(payload, ["metadata", "video_url"]);
         const extendFromTaskId = getPath(payload, ["metadata", "extend_from_task_id"]);
         if (isMissing(payload.prompt) && imageCount < 1 && isMissing(videoUrl) && isMissing(extendFromTaskId)) throw new Error(`${modelId} 至少需要 prompt、images、metadata.video_url 或 metadata.extend_from_task_id 之一。`);
@@ -477,7 +479,7 @@ function validateAitudouModelPayload(operation: AitudouOperationDefinition, payl
     const size = payload.size;
     if (!isMissing(size) && constraints.sizeRatios) {
         if (typeof size !== "string") throw new Error(`${modelId} 的 size 必须是比例字符串。`);
-        const allowedSizeRatios = modelId === "aitudou-image-g-v2-lowprice" && String(resolution).toLowerCase() === "4k" ? constraints.sizeRatios.filter((value) => ["16:9", "9:16", "21:9", "9:21"].includes(value)) : constraints.sizeRatios;
+        const allowedSizeRatios = modelId === "jinyu-image-g-v2-lowprice" && String(resolution).toLowerCase() === "4k" ? constraints.sizeRatios.filter((value) => ["16:9", "9:16", "21:9", "9:21"].includes(value)) : constraints.sizeRatios;
         if (!includesCaseInsensitive(allowedSizeRatios, size)) throw new Error(`${modelId} 当前分辨率的 size 只允许：${allowedSizeRatios.join("、")}。`);
     }
     const format = getPath(payload, ["metadata", "format"]);
@@ -529,7 +531,7 @@ async function settleAitudouSubmissions(config: AitudouRequestConfig, operationI
     if (!productiveStates.length) {
         if (interruptions.length) throw interruptions[0].error;
         const failed = states.filter((state) => state.phase === "failed");
-        const message = failed.map((state) => state.message || `${state.taskId}: ${state.status}`).join("；") || "Aitudou 任务执行失败。";
+        const message = failed.map((state) => state.message || `${state.taskId}: ${state.status}`).join("；") || "Jinyu 任务执行失败。";
         throw new AitudouApiError(message, {
             code: failed[0]?.status,
             details: `任务执行失败\n\n${diagnosticJson(
@@ -587,7 +589,7 @@ async function pollAitudouSubmission(config: AitudouRequestConfig, submission: A
         if (state.phase === "failed") return state;
         await delay(pollIntervalMs, options.signal, submission);
     }
-    throw new Error(`Aitudou 任务 ${submission.taskId} 轮询超过 ${Math.round(timeoutMs / 60000)} 分钟；远端任务可能仍在执行，可稍后恢复查询。`);
+    throw new Error(`Jinyu 任务 ${submission.taskId} 轮询超过 ${Math.round(timeoutMs / 60000)} 分钟；远端任务可能仍在执行，可稍后恢复查询。`);
 }
 
 async function uploadAitudouReference(config: AitudouRequestConfig, reference: AitudouReference, fetchImpl: typeof fetch, signal?: AbortSignal) {
@@ -598,7 +600,7 @@ async function uploadAitudouReference(config: AitudouRequestConfig, reference: A
     form.append("file", blob, reference.name || fileNameForBlob(blob, reference.kind));
     const raw = await requestAitudou(config, "/v1/files/upload", { method: "POST", headers: { Accept: "application/json" }, body: form, signal }, fetchImpl);
     const url = findCanonicalUploadUrl(raw);
-    if (!url) throw new Error("Aitudou 上传响应中缺少文档规定的 url 字段。");
+    if (!url) throw new Error("Jinyu 上传响应中缺少文档规定的 url 字段。");
     const record = raw && typeof raw === "object" ? (raw as Record<string, unknown>) : {};
     return { url, expiresIn: numberValue(record.expires_in), raw };
 }
@@ -645,7 +647,7 @@ function canReuseExternalReference(reference: AitudouReference) {
 }
 
 function validateUploadBlob(blob: Blob, name: string, transcription = false) {
-    if (!transcription && blob.size > 50 * 1024 * 1024) throw new Error(`${name} 超过 Aitudou 上传上限 50MB。`);
+    if (!transcription && blob.size > 50 * 1024 * 1024) throw new Error(`${name} 超过 Jinyu 上传上限 50MB。`);
     if (transcription) {
         const allowedExtensions = new Set(["mp3", "wav", "flac", "m4a", "mp4", "ogg", "opus", "aac", "aiff"]);
         const extension = name
@@ -677,7 +679,7 @@ function validateUploadBlob(blob: Blob, name: string, transcription = false) {
         return;
     }
     const allowed = new Set(["image/jpeg", "image/png", "image/webp", "audio/mpeg", "audio/mp3", "audio/wav", "audio/x-wav", "audio/flac", "audio/x-flac", "video/mp4", "video/x-msvideo", "video/quicktime", "video/x-matroska"]);
-    if (blob.type && !allowed.has(blob.type.toLowerCase())) throw new Error(`${name} 的格式 ${blob.type} 不在 Aitudou 文档允许列表中。`);
+    if (blob.type && !allowed.has(blob.type.toLowerCase())) throw new Error(`${name} 的格式 ${blob.type} 不在 Jinyu 文档允许列表中。`);
 }
 
 async function requestAitudou(config: AitudouRequestConfig, path: string, init: RequestInit, fetchImpl: typeof fetch, authenticated = true): Promise<unknown> {
@@ -719,7 +721,7 @@ function parsePayload(input: string | Record<string, unknown>) {
         if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error();
         return value as Record<string, unknown>;
     } catch {
-        throw new Error("Aitudou 参数必须是合法的 JSON 对象。");
+        throw new Error("Jinyu 参数必须是合法的 JSON 对象。");
     }
 }
 
@@ -750,7 +752,7 @@ function parsePlaceholder(value: string): { kind: AitudouReference["kind"]; inde
 }
 
 function placeholderLabel(kind: AitudouReference["kind"]) {
-    return { image: "图片", video: "视频", audio: "音频", text: "文本", task: "Aitudou 任务" }[kind];
+    return { image: "图片", video: "视频", audio: "音频", text: "文本", task: "Jinyu 任务" }[kind];
 }
 
 function firstReference(references: AitudouReference[], kinds: AitudouReference["kind"][]) {
@@ -935,11 +937,11 @@ function httpStatusMessage(status: number) {
         404: "任务或接口不存在",
         422: "内容审核未通过或参数无法处理",
         429: "请求过于频繁",
-        500: "Aitudou 服务内部错误",
-        502: "Aitudou 上游服务异常",
-        503: "Aitudou 服务暂时不可用",
+        500: "Jinyu 服务内部错误",
+        502: "Jinyu 上游服务异常",
+        503: "Jinyu 服务暂时不可用",
     };
-    return messages[status] || "Aitudou 请求失败";
+    return messages[status] || "Jinyu 请求失败";
 }
 
 function parseRetryAfter(value: string | null) {

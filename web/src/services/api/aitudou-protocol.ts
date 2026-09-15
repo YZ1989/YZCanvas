@@ -96,7 +96,7 @@ export function assertAitudouEnvelope(raw: unknown): void {
     if (!body) return;
     const code = body.code;
     const explicitFailure = code === false || (typeof code === "number" && code !== 0 && code !== 200) || (typeof code === "string" && ["error", "failed", "failure", "unauthorized", "forbidden"].includes(code.toLowerCase()));
-    if (explicitFailure) throw new Error(readMessage(body) || `Aitudou API 返回错误代码：${String(code)}`);
+    if (explicitFailure) throw new Error(readMessage(body) || `Jinyu API 返回错误代码：${String(code)}`);
 }
 
 export function extractAitudouOutputs(raw: unknown, outputHint: AitudouOutputKind, taskId?: string): AitudouOutput[] {

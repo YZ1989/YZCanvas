@@ -27,7 +27,7 @@ Windows 轻量桌面 Fork，基线 TDCanvas `16b31273633f983cdbd8de05694ec36d471
 
 ## 已知边界
 
-- AI 配置仍使用上游 Aitudou 渠道，不宣称已完成任意 Base URL/模型支持。
+- AI 配置已切换至 Jinyu API；详见 [接入说明](JINYU-API.md)，尚未开放任意 Base URL。
 - 当前不改变上游的本地 Key 存储机制；后续应独立评估凭据存储。
 - 安装包未做 Windows 代码签名，未启用自动更新。
 - 不支持的扩展节点只能保留/导出，不能执行。

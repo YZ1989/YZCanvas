@@ -25,10 +25,10 @@ const jsonResponse = (value: unknown, init: ResponseInit = {}) =>
         ...init,
     });
 
-describe("Aitudou request transport", () => {
+describe("Jinyu request transport", () => {
     it("normalizes official/custom root URLs without appending v1 to /api routes", () => {
         expect(resolveAitudouApiBase("")).toBe(AITUDOU_OFFICIAL_BASE_URL);
-        expect(resolveAitudouApiBase("https://api.aitudou.net/v1/")).toBe(AITUDOU_OFFICIAL_BASE_URL);
+        expect(resolveAitudouApiBase("https://api.yz-jinyu.com/v1/")).toBe(AITUDOU_OFFICIAL_BASE_URL);
         expect(resolveAitudouApiBase("https://proxy.example/root/")).toBe("https://proxy.example/root");
     });
 
@@ -124,7 +124,7 @@ describe("Aitudou request transport", () => {
         const fetchImpl = vi.fn<typeof fetch>(async (input, init) => {
             if (String(input) === expiredSoonUrl) return new Response(new Blob(["local-image-copy"], { type: "image/png" }));
             expect(init?.body).toBeInstanceOf(FormData);
-            return jsonResponse({ url: "https://api.aitudou.net/fresh-reference.png", expires_in: 86400 });
+            return jsonResponse({ url: "https://api.yz-jinyu.com/fresh-reference.png", expires_in: 86400 });
         });
 
         const payload = await prepareAitudouPayload(
@@ -135,7 +135,7 @@ describe("Aitudou request transport", () => {
             fetchImpl,
         );
 
-        expect(payload.images).toEqual(["https://api.aitudou.net/fresh-reference.png"]);
+        expect(payload.images).toEqual(["https://api.yz-jinyu.com/fresh-reference.png"]);
         expect(fetchImpl).toHaveBeenCalledTimes(2);
     });
 
@@ -169,7 +169,7 @@ describe("Aitudou request transport", () => {
         );
         expect(payload.images).toEqual(["https://cdn.example/upload.png"]);
         expect(calls).toHaveLength(2);
-        expect(calls[1].input).toBe("https://api.aitudou.net/v1/files/upload");
+        expect(calls[1].input).toBe("https://api.yz-jinyu.com/v1/files/upload");
         expect(calls[1].init?.body).toBeInstanceOf(FormData);
         expect(new Headers(calls[1].init?.headers).has("Content-Type")).toBe(false);
         expect(new Headers(calls[1].init?.headers).get("Authorization")).toBe("Bearer sk-test");
@@ -216,7 +216,7 @@ describe("Aitudou request transport", () => {
         const submitted = vi.fn();
         const updates = vi.fn();
         const result = await runAitudouOperation({ apiKey: "sk-test" }, "image.generate", { model: "seedream-v5-pro-t2i", prompt: "test prompt" }, { fetchImpl, pollIntervalMs: 0, onSubmitted: submitted, onUpdate: updates });
-        expect(urls).toEqual(["https://api.aitudou.net/v1/image/generations", "https://api.aitudou.net/v1/image/generations/img_1", "https://api.aitudou.net/v1/image/generations/img_1"]);
+        expect(urls).toEqual(["https://api.yz-jinyu.com/v1/image/generations", "https://api.yz-jinyu.com/v1/image/generations/img_1", "https://api.yz-jinyu.com/v1/image/generations/img_1"]);
         expect(submitted).toHaveBeenCalledWith(expect.objectContaining({ taskId: "img_1", remoteRunning: true }));
         expect(updates).toHaveBeenCalledTimes(2);
         expect(result.status).toBe("succeeded");
@@ -311,7 +311,7 @@ describe("Aitudou request transport", () => {
             setItem: (key: string, value: string) => void values.set(key, value),
             removeItem: (key: string) => void values.delete(key),
         };
-        const node = { id: "node_1", type: "aitudou", title: "AI 土豆任务", position: { x: 10, y: 20 }, width: 320, height: 220, metadata: { aitudouOperation: "image.generate" } };
+        const node = { id: "node_1", type: "aitudou", title: "Jinyu任务", position: { x: 10, y: 20 }, width: 320, height: 220, metadata: { aitudouOperation: "image.generate" } };
         for (const taskId of ["img_1", "img_2"]) {
             expect(
                 journalAitudouSubmission(
@@ -408,7 +408,7 @@ describe("Aitudou request transport", () => {
     });
 });
 
-describe("Aitudou payload constraints", () => {
+describe("Jinyu payload constraints", () => {
     it("enforces exact documented mutually exclusive/reference constraints", () => {
         expect(() =>
             validateAitudouPayload(getAitudouOperation("audio.generate"), {
@@ -438,9 +438,9 @@ describe("Aitudou payload constraints", () => {
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "seedance-2.0-standard-multi", prompt: "hello" })).toThrow("metadata.content");
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "hailuo-h3-multi", prompt: "hello", images: ["https://example/image.png"], seconds: "5", metadata: { resolution: "768P" } })).not.toThrow();
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "hailuo-h3-multi", prompt: "hello", seconds: "5" })).toThrow("images、video_url 或 audio_url");
-        expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "aitudou-video-g-omni-flash", prompt: "hello", metadata: { resolution: "720p", ratio: "16:9" } })).not.toThrow();
-        expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "aitudou-video-g-omni-flash", metadata: { video_url: "https://example/video.mp4", extend_from_task_id: "task" } })).toThrow("互斥");
-        expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "aitudou-video-g-omni-flash", prompt: "hello", seconds: "5" })).toThrow("不可指定时长");
+        expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "jinyu-video-g-omni-flash", prompt: "hello", metadata: { resolution: "720p", ratio: "16:9" } })).not.toThrow();
+        expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "jinyu-video-g-omni-flash", metadata: { video_url: "https://example/video.mp4", extend_from_task_id: "task" } })).toThrow("互斥");
+        expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "jinyu-video-g-omni-flash", prompt: "hello", seconds: "5" })).toThrow("不可指定时长");
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "happyhorse-1.1-r2v", prompt: "hello" })).toThrow("至少 1 张参考图片");
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "happyhorse-1.1-r2v", prompt: "hello", images: ["https://example/image.png"], seconds: "5" })).not.toThrow();
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "flux-3-video-v2v", prompt: "hello" })).toThrow("metadata.video_url");
@@ -458,8 +458,8 @@ describe("Aitudou payload constraints", () => {
         expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "seedream-v5-pro-t2i", prompt: "valid prompt", metadata: { width: 1024 } })).toThrow("必须成对提供");
         expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "seedream-v5-pro-t2i", prompt: "valid prompt", metadata: { width: 1024, height: 1024, resolution: "1k" } })).toThrow("不能与 metadata.resolution 同时提供");
         expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "seedream-v5-pro-t2i", prompt: "valid prompt", metadata: { width: 1024, height: 1024 } })).not.toThrow();
-        expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "aitudou-image-g2-t2i", prompt: "valid prompt", metadata: { resolution: "1k", ratio: "16:9" } })).not.toThrow();
-        expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "aitudou-image-g2-t2i", prompt: "valid prompt", metadata: { resolution: "1k", ratio: "4:3" } })).toThrow("16:9、9:16、1:1");
+        expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "jinyu-image-g2-t2i", prompt: "valid prompt", metadata: { resolution: "1k", ratio: "16:9" } })).not.toThrow();
+        expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "jinyu-image-g2-t2i", prompt: "valid prompt", metadata: { resolution: "1k", ratio: "4:3" } })).toThrow("16:9、9:16、1:1");
         expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "qwen-image-3.0-pro-t2i", prompt: "valid prompt", metadata: { resolution: "2k", ratio: "21:9" } })).not.toThrow();
         expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "qwen-image-3.0-pro-t2i", prompt: "valid prompt", metadata: { resolution: "2k", ratio: "7:5" } })).toThrow("ratio 只允许");
         expect(() => validateAitudouPayload(getAitudouOperation("image.generate"), { model: "qwen-image-3.0-pro-t2i", prompt: "valid prompt", metadata: { resolution: "2k", ratio: "wide" } })).toThrow("ratio 只允许");
@@ -472,7 +472,7 @@ describe("Aitudou payload constraints", () => {
         expect(() => validateAitudouPayload(getAitudouOperation("midjourney.imagine"), { prompt: "valid prompt", repeat: 41 })).toThrow("2 到 40");
         expect(() =>
             validateAitudouPayload(getAitudouOperation("image.generate"), {
-                model: "aitudou-image-g-v2-lowprice",
+                model: "jinyu-image-g-v2-lowprice",
                 prompt: "valid prompt",
                 n: 10,
                 size: "21:9",
@@ -481,7 +481,7 @@ describe("Aitudou payload constraints", () => {
         ).not.toThrow();
         expect(() =>
             validateAitudouPayload(getAitudouOperation("image.generate"), {
-                model: "aitudou-image-g-v2-lowprice",
+                model: "jinyu-image-g-v2-lowprice",
                 prompt: "valid prompt",
                 n: 1,
                 size: "1:1",
@@ -490,7 +490,7 @@ describe("Aitudou payload constraints", () => {
         ).toThrow("当前分辨率的 size 只允许");
         expect(() => validateAitudouPayload(getAitudouOperation("video.generate"), { model: "hailuo-h3-t2v", prompt: "valid prompt", seconds: "5", metadata: { resolution: "768P", ratio: "7:5" } })).not.toThrow();
         expect(getAitudouModelProfile("hailuo-h3-multi")?.constraints?.allowCustomRatio).toBe(true);
-        expect(getAitudouModelProfile("aitudou-video-g-omni-flash")?.constraints?.allowCustomRatio).toBe(true);
+        expect(getAitudouModelProfile("jinyu-video-g-omni-flash")?.constraints?.allowCustomRatio).toBe(true);
         expect(() => validateAitudouPayload(getAitudouOperation("audio.generate"), { model: "doubao-seed-audio-1.0", prompt: "valid prompt", metadata: { speech_rate: 101 } })).toThrow("-50 到 100");
         expect(() => validateAitudouPayload(getAitudouOperation("audio.generate"), { model: "doubao-seed-audio-1.0", prompt: "valid prompt", metadata: { sample_rate: 24000 } })).toThrow("必须是字符串");
         expect(() => validateAitudouPayload(getAitudouOperation("suno.generate"), { model: "suno", version: "v5.5" })).toThrow("必须提供 prompt");

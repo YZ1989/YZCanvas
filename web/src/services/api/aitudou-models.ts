@@ -73,7 +73,7 @@ const FLUX_RATIOS = ["auto", "21:9", "2:1", "16:9", "4:3", "1:1", "3:4", "9:16"]
 const MINIMAX_RATIOS = ["1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", "21:9"] as const;
 export const TD_CANVAS_COMMON_IMAGE_RATIOS = ["1:1", "2:3", "3:2", "4:5", "5:4", "4:3", "3:4", "16:9", "9:16", "21:9", "9:21", "2:1", "1:2", "3:1", "1:3"] as const;
 const AITUDOU_IMAGE_G2_RATIOS = ["16:9", "9:16", "1:1"] as const;
-const AITUDOU_IMAGE_G2_NOTE = "Aitudou 官方接口仅开放 1k，未提供图像质量、2k 或 4k 参数。";
+const AITUDOU_IMAGE_G2_NOTE = "Jinyu 官方接口仅开放 1k，未提供图像质量、2k 或 4k 参数。";
 const QWEN_IMAGE_RATIOS = ["1:1", "4:3", "3:4", "3:2", "2:3", "16:9", "9:16", "21:9"] as const;
 
 const seedance20 = (tier: "standard" | "fast" | "mini", inputKind: AitudouModelInputKind): AitudouModelConstraints => ({
@@ -136,9 +136,9 @@ export const AITUDOU_MODEL_PROFILES: readonly AitudouModelProfile[] = [
         ["dola-seedream-5.0-pro-t2i", "text-to-image", { resolutions: ["1k", "2k"], minPromptLength: 5, maxPromptLength: 2000 }],
         ["dola-seedream-5.0-pro-i2i", "image-to-image", { resolutions: ["1k", "2k"], maxImages: 10, minPromptLength: 5, maxPromptLength: 2000 }],
     ]),
-    ...defineModels("image", "Aitudou Image G-2", [
-        ["aitudou-image-g2-t2i", "text-to-image", { resolutions: ["1k"], ratios: AITUDOU_IMAGE_G2_RATIOS, maxPromptLength: 20000, notes: [AITUDOU_IMAGE_G2_NOTE] }],
-        ["aitudou-image-g2-i2i", "image-to-image", { resolutions: ["1k"], ratios: AITUDOU_IMAGE_G2_RATIOS, maxImages: 10, maxPromptLength: 20000, notes: [AITUDOU_IMAGE_G2_NOTE] }],
+    ...defineModels("image", "Jinyu Image G-2", [
+        ["jinyu-image-g2-t2i", "text-to-image", { resolutions: ["1k"], ratios: AITUDOU_IMAGE_G2_RATIOS, maxPromptLength: 20000, notes: [AITUDOU_IMAGE_G2_NOTE] }],
+        ["jinyu-image-g2-i2i", "image-to-image", { resolutions: ["1k"], ratios: AITUDOU_IMAGE_G2_RATIOS, maxImages: 10, maxPromptLength: 20000, notes: [AITUDOU_IMAGE_G2_NOTE] }],
     ]),
     ...defineModels("image", "Qwen Image 3.0", [
         ["qwen-image-3.0-t2i", "text-to-image", { resolutions: ["1k", "2k"], ratios: QWEN_IMAGE_RATIOS, maxOutputs: 6, maxPromptLength: 3000 }],
@@ -151,7 +151,7 @@ export const AITUDOU_MODEL_PROFILES: readonly AitudouModelProfile[] = [
         ["qwen-image-3.0-global-pro-i2i", "image-to-image", { resolutions: ["1k", "2k"], ratios: QWEN_IMAGE_RATIOS, maxImages: 3, maxOutputs: 6, maxPromptLength: 3000 }],
     ]),
     ...defineModels("video", "Wan 2.7 Spicy", [["wan-2.7-spicy-i2v", "image-to-video", { seconds: { min: 2, max: 15, defaultValue: 2 }, resolutions: ["720p", "1080p"] }]]),
-    ...defineModels("video", "Aitudou Upscaler", [["aitudou-upscaler", "video-upscale", { resolutions: ["720p", "1080p", "2k", "4k"], maxVideos: 1 }]]),
+    ...defineModels("video", "Jinyu Upscaler", [["jinyu-upscaler", "video-upscale", { resolutions: ["720p", "1080p", "2k", "4k"], maxVideos: 1 }]]),
     ...defineModels("video", "HappyHorse 1.1", [
         ["happyhorse-1.1-t2v", "text-to-video", { seconds: { min: 3, max: 15, defaultValue: 5 }, resolutions: ["720p", "1080p"] }],
         ["happyhorse-1.1-i2v", "image-to-video", { seconds: { min: 3, max: 15, defaultValue: 5 }, resolutions: ["720p", "1080p"] }],
@@ -235,26 +235,26 @@ export const AITUDOU_MODEL_PROFILES: readonly AitudouModelProfile[] = [
         ["vidu-q3-drama-short-play", "special"],
         ["vidu-q3-ad-short-play", "special"],
     ]),
-    ...defineModels("video", "Aitudou Video", [
-        ["aitudou-video-gk-v15", "special", { seconds: { min: 6, max: 30, defaultValue: 6 }, resolutions: ["480p", "720p"], ratios: ["16:9", "9:16", "1:1", "3:2", "2:3"], maxImages: 7 }],
-        ["aitudou-video-v31-fast", "special", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], maxImages: 3 }],
-        ["aitudou-video-v31-quality", "special", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], notes: ["Reference mode and three-image reference input are not supported."] }],
-        ["aitudou-video-v31-lite", "text-to-video", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], maxImages: 0 }],
+    ...defineModels("video", "Jinyu Video", [
+        ["jinyu-video-gk-v15", "special", { seconds: { min: 6, max: 30, defaultValue: 6 }, resolutions: ["480p", "720p"], ratios: ["16:9", "9:16", "1:1", "3:2", "2:3"], maxImages: 7 }],
+        ["jinyu-video-v31-fast", "special", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], maxImages: 3 }],
+        ["jinyu-video-v31-quality", "special", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], notes: ["Reference mode and three-image reference input are not supported."] }],
+        ["jinyu-video-v31-lite", "text-to-video", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], maxImages: 0 }],
         [
-            "aitudou-video-g-omni-flash",
+            "jinyu-video-g-omni-flash",
             "special",
             { resolutions: ["720p"], ratios: TD_CANVAS_COMMON_IMAGE_RATIOS, allowCustomRatio: true, maxImages: 16, maxVideos: 1, notes: ["Duration cannot be specified.", "metadata.video_url and metadata.extend_from_task_id are mutually exclusive."] },
         ],
     ]),
-    ...defineModels("image", "Aitudou Image", [
-        ["aitudou-image-g-v2-lowprice", "special", { resolutions: ["1k", "2k", "4k"], sizeRatios: TD_CANVAS_COMMON_IMAGE_RATIOS, maxImages: 16, maxOutputs: 10 }],
-        ["aitudou-image-gk-v15", "text-to-image", { sizeRatios: ["1:1", "16:9", "9:16", "3:2", "2:3"], maxOutputs: 10 }],
-        ["aitudou-image-gk-v15-edit", "image-to-image", { maxImages: 1, maxOutputs: 10 }],
-        ["aitudou-image-gk-v2", "text-to-image", { sizeRatios: ["1:1", "16:9", "9:16", "3:2", "2:3"], maxOutputs: 10 }],
-        ["aitudou-image-nb-flash", "special", { resolutions: ["1k"], maxImages: 14, maxOutputs: 1, maxPromptLength: 1000 }],
-        ["aitudou-image-nb-2", "special", { resolutions: ["0.5k", "1k", "2k", "4k"], maxImages: 14, maxOutputs: 1 }],
-        ["aitudou-image-nb-2-lite", "special", { resolutions: ["1k"], maxImages: 14, maxOutputs: 4 }],
-        ["aitudou-image-nb-pro", "special", { resolutions: ["1k", "2k", "4k"], maxImages: 14, maxOutputs: 1 }],
+    ...defineModels("image", "Jinyu Image", [
+        ["jinyu-image-g-v2-lowprice", "special", { resolutions: ["1k", "2k", "4k"], sizeRatios: TD_CANVAS_COMMON_IMAGE_RATIOS, maxImages: 16, maxOutputs: 10 }],
+        ["jinyu-image-gk-v15", "text-to-image", { sizeRatios: ["1:1", "16:9", "9:16", "3:2", "2:3"], maxOutputs: 10 }],
+        ["jinyu-image-gk-v15-edit", "image-to-image", { maxImages: 1, maxOutputs: 10 }],
+        ["jinyu-image-gk-v2", "text-to-image", { sizeRatios: ["1:1", "16:9", "9:16", "3:2", "2:3"], maxOutputs: 10 }],
+        ["jinyu-image-nb-flash", "special", { resolutions: ["1k"], maxImages: 14, maxOutputs: 1, maxPromptLength: 1000 }],
+        ["jinyu-image-nb-2", "special", { resolutions: ["0.5k", "1k", "2k", "4k"], maxImages: 14, maxOutputs: 1 }],
+        ["jinyu-image-nb-2-lite", "special", { resolutions: ["1k"], maxImages: 14, maxOutputs: 4 }],
+        ["jinyu-image-nb-pro", "special", { resolutions: ["1k", "2k", "4k"], maxImages: 14, maxOutputs: 1 }],
     ]),
     ...defineModels("audio", "Doubao Seed Audio 1.0", [
         ["doubao-seed-audio-1.0", "audio-generation", { maxImages: 1, maxAudios: 3, minPromptLength: 5, maxPromptLength: 2048, formats: ["wav", "mp3", "pcm", "ogg_opus"], sampleRates: ["8000", "16000", "24000", "32000", "44100"] }],

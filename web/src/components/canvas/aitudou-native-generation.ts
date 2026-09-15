@@ -90,8 +90,8 @@ const VIDEO_MODEL_CATEGORIES = [
     { id: "seedance", label: "Seedance", groups: ["Seedance 2.0", "Seedance 2.5 Standard"] },
     { id: "minimax", label: "MiniMax", groups: ["Hailuo 2.3", "Hailuo H3", "Minimax H3 OW"] },
     { id: "flux", label: "Flux", groups: ["Flux 3 Video"] },
-    { id: "aitudou-video", label: "Aitudou Video", groups: ["Aitudou Video"] },
-    { id: "video-processing", label: "视频处理", groups: ["Aitudou Upscaler"] },
+    { id: "aitudou-video", label: "Jinyu Video", groups: ["Jinyu Video"] },
+    { id: "video-processing", label: "视频处理", groups: ["Jinyu Upscaler"] },
 ] as const;
 
 const HIDDEN_VIDEO_MODEL_PREFIXES = ["happyhorse-", "wan-", "kling-", "vidu-"] as const;
@@ -150,7 +150,7 @@ const DEFAULT_OPERATION_BY_KIND: Readonly<Record<AitudouNativeNodeKind, string>>
     text: "text.chat",
 };
 
-export type AitudouNativeSpecialAdapter = "unsupported-official-contract" | "hailuo-multi" | "flux-draft" | "vidu-short-play" | "aitudou-video-images" | "aitudou-video-quality" | "aitudou-video-omni" | "aitudou-image-images";
+export type AitudouNativeSpecialAdapter = "unsupported-official-contract" | "hailuo-multi" | "flux-draft" | "vidu-short-play" | "jinyu-video-images" | "jinyu-video-quality" | "jinyu-video-omni" | "jinyu-image-images";
 
 /**
  * Every model which the official model catalogue marks as `special` or
@@ -168,15 +168,15 @@ export const AITUDOU_NATIVE_SPECIAL_MODEL_ADAPTERS: Readonly<Record<string, Aitu
     "flux-3-video-global-draft-enhance": "flux-draft",
     "vidu-q3-drama-short-play": "vidu-short-play",
     "vidu-q3-ad-short-play": "vidu-short-play",
-    "aitudou-video-gk-v15": "aitudou-video-images",
-    "aitudou-video-v31-fast": "aitudou-video-images",
-    "aitudou-video-v31-quality": "aitudou-video-quality",
-    "aitudou-video-g-omni-flash": "aitudou-video-omni",
-    "aitudou-image-g-v2-lowprice": "aitudou-image-images",
-    "aitudou-image-nb-flash": "aitudou-image-images",
-    "aitudou-image-nb-2": "aitudou-image-images",
-    "aitudou-image-nb-2-lite": "aitudou-image-images",
-    "aitudou-image-nb-pro": "aitudou-image-images",
+    "jinyu-video-gk-v15": "jinyu-video-images",
+    "jinyu-video-v31-fast": "jinyu-video-images",
+    "jinyu-video-v31-quality": "jinyu-video-quality",
+    "jinyu-video-g-omni-flash": "jinyu-video-omni",
+    "jinyu-image-g-v2-lowprice": "jinyu-image-images",
+    "jinyu-image-nb-flash": "jinyu-image-images",
+    "jinyu-image-nb-2": "jinyu-image-images",
+    "jinyu-image-nb-2-lite": "jinyu-image-images",
+    "jinyu-image-nb-pro": "jinyu-image-images",
 };
 
 export const AITUDOU_NATIVE_UNSUPPORTED_MODEL_IDS = Object.freeze(
@@ -371,7 +371,7 @@ export function aitudouNativeVideoModelCategories(operationId: string): readonly
                         value,
                         group: entry.profile.group,
                         capabilities: Array.from(entry.inputKinds, (inputKind) => aitudouInputKindLabel(inputKind)),
-                        ...(disabled ? { disabled: true, disabledReason: "Aitudou 官方尚未公开完整请求参数" } : {}),
+                        ...(disabled ? { disabled: true, disabledReason: "Jinyu 官方尚未公开完整请求参数" } : {}),
                     };
                 }),
             },
@@ -572,7 +572,7 @@ export function aitudouNativeParameterDefinitions(operationId: string, payload: 
         if (sizeRatios.length) parameters.push(selectParameter(AITUDOU_NATIVE_SIZE_RATIO_PATH, "比例", ["adaptive", ...sizeRatios]));
         else if (constraints?.ratios?.length) parameters.push(selectParameter("metadata.ratio", "比例", profile?.family === "image" ? ["adaptive", ...constraints.ratios] : constraints.ratios));
         if (constraints?.resolutions?.length) {
-            const resolutions = profile?.id === "aitudou-image-g-v2-lowprice" ? ["adaptive", ...constraints.resolutions] : constraints.resolutions;
+            const resolutions = profile?.id === "jinyu-image-g-v2-lowprice" ? ["adaptive", ...constraints.resolutions] : constraints.resolutions;
             parameters.push(selectParameter("metadata.resolution", "分辨率", resolutions));
         }
     }
@@ -630,7 +630,7 @@ export function aitudouNativeParameterDefinitions(operationId: string, payload: 
     }
     if (specialAdapter === "hailuo-multi" && !constraints?.ratios?.length) parameters.push({ path: "metadata.ratio", label: "画面比例", control: "text", optional: true });
     if (specialAdapter === "vidu-short-play") parameters.push({ path: "metadata.script_name", label: "剧本名称", control: "text", optional: true });
-    if (specialAdapter === "aitudou-video-omni") {
+    if (specialAdapter === "jinyu-video-omni") {
         parameters.push({ path: "metadata.extend_from_task_id", label: "续写任务 ID", control: "text", optional: true });
         if (!constraints?.ratios?.length) parameters.push({ path: "metadata.ratio", label: "画面比例", control: "text", optional: true });
     }
@@ -740,7 +740,7 @@ export function validateAitudouNativePayload(kind: AitudouNativeNodeKind, operat
     if (!isAitudouNativeOperation(kind, operationId)) return `操作 ${operationId} 不属于${nativeKindLabel(kind)}节点。`;
     const model = typeof payload.model === "string" ? getAitudouModelProfile(payload.model) : undefined;
     if (specialAdapterFor(model) === "unsupported-official-contract") {
-        return `${model?.id} 的官方 Aitudou 文档未公开完整请求字段，原生节点已阻止按猜测参数提交。`;
+        return `${model?.id} 的官方 Jinyu 文档未公开完整请求字段，原生节点已阻止按猜测参数提交。`;
     }
     if (referenceCounts) {
         const missingReference = findMissingPlaceholder(payload, referenceCounts);
@@ -873,12 +873,12 @@ function sanitizeModelParameters(payload: Record<string, unknown>, profile: Aitu
 
         const resolutionCandidate = previousSeedreamGeometry.dimensions ? previousSeedreamGeometry.resolution : previousResolution;
         const documentedResolution = findCaseInsensitive(constraints?.resolutions, resolutionCandidate);
-        const pinnedG2Resolution = profile.id.startsWith("aitudou-image-g2-") ? "1k" : undefined;
+        const pinnedG2Resolution = profile.id.startsWith("jinyu-image-g2-") ? "1k" : undefined;
         setPath(payload, "metadata.resolution", documentedResolution || pinnedG2Resolution);
         setPath(payload, "metadata.output_format", undefined);
         setPath(payload, "metadata.width", undefined);
         setPath(payload, "metadata.height", undefined);
-        if (profile.id.startsWith("aitudou-image-g2-")) {
+        if (profile.id.startsWith("jinyu-image-g2-")) {
             delete payload.quality;
             setPath(payload, "metadata.quality", undefined);
         }
@@ -911,14 +911,14 @@ function sanitizeModelParameters(payload: Record<string, unknown>, profile: Aitu
     } else delete payload.seconds;
     if (specialAdapter !== "flux-draft") setPath(payload, "metadata.draft_cache", undefined);
     if (specialAdapter !== "vidu-short-play") setPath(payload, "metadata.script_name", undefined);
-    if (specialAdapter !== "aitudou-video-omni") setPath(payload, "metadata.extend_from_task_id", undefined);
+    if (specialAdapter !== "jinyu-video-omni") setPath(payload, "metadata.extend_from_task_id", undefined);
     if (!constraints?.sizeRatios?.length) delete payload.size;
-    if (specialAdapter === "aitudou-video-quality") {
+    if (specialAdapter === "jinyu-video-quality") {
         delete payload.image;
         delete payload.images;
         delete payload.type;
     }
-    if (specialAdapter === "aitudou-video-omni") {
+    if (specialAdapter === "jinyu-video-omni") {
         delete payload.seconds;
         delete payload.duration;
         setPath(payload, "metadata.duration", undefined);
@@ -927,7 +927,7 @@ function sanitizeModelParameters(payload: Record<string, unknown>, profile: Aitu
 
 function allowedTopLevelSizeRatios(profile: AitudouModelProfile | undefined, payload: Record<string, unknown>): readonly string[] {
     const ratios = profile?.constraints?.sizeRatios || [];
-    if (profile?.id !== "aitudou-image-g-v2-lowprice") return ratios;
+    if (profile?.id !== "jinyu-image-g-v2-lowprice") return ratios;
     const resolution = String(getPath(payload, "metadata.resolution") || "").toLowerCase();
     if (resolution !== "4k") return ratios;
     const supportedAt4k = new Set(["16:9", "9:16", "21:9", "9:21"]);
@@ -979,12 +979,12 @@ function injectConnectedReferences(payload: Record<string, unknown>, operationId
         if (images.length) payload.images = images;
         if (videos.length) payload.video_url = videos;
         if (audios.length) payload.audio_url = audios;
-    } else if (specialAdapter === "aitudou-video-omni") {
+    } else if (specialAdapter === "jinyu-video-omni") {
         if (images.length) payload.images = images;
         const explicitExtendTaskId = getPath(payload, "metadata.extend_from_task_id");
         if (videos.length && isMissing(explicitExtendTaskId)) setPath(payload, "metadata.video_url", videos[0]);
         else if (!videos.length && isMissing(explicitExtendTaskId) && counts.task > 0) setPath(payload, "metadata.extend_from_task_id", "@Task 1");
-    } else if (specialAdapter === "aitudou-video-images" || specialAdapter === "aitudou-image-images") {
+    } else if (specialAdapter === "jinyu-video-images" || specialAdapter === "jinyu-image-images") {
         if (images.length) payload.images = images;
     } else if (profile.inputKind === "image-to-image" || profile.inputKind === "image-to-video" || profile.inputKind === "reference-to-video") {
         if (images.length) payload.images = images;

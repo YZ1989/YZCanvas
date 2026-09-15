@@ -68,7 +68,7 @@ export function AitudouVideoModelPicker({ categories, value, priceLabels, pricin
             <button
                 ref={anchorRef}
                 type="button"
-                data-aitudou-video-model-picker
+                data-jinyu-video-model-picker
                 className="flex min-h-8 min-w-0 max-w-[340px] flex-1 items-center gap-2 rounded-full border px-3 py-1.5 text-left text-xs outline-none transition-colors duration-150 hover:bg-white/5 focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-45"
                 style={{ background: theme.node.fill, borderColor: theme.toolbar.border, color: theme.node.text }}
                 aria-haspopup="dialog"
@@ -185,7 +185,7 @@ export function AitudouVideoModelMenu({
             id={id}
             role="dialog"
             aria-label="选择视频模型"
-            data-aitudou-video-model-menu
+            data-jinyu-video-model-menu
             className="grid size-full min-h-0 overflow-hidden rounded-[14px] border shadow-2xl"
             style={{ background: theme.toolbar.panel, borderColor: theme.toolbar.border, color: theme.node.text, gridTemplateColumns: "minmax(164px, 190px) minmax(0, 1fr)", boxShadow: "0 16px 48px rgba(0,0,0,.32)" }}
             onKeyDown={onKeyDown}

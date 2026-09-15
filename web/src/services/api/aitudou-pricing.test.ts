@@ -25,7 +25,7 @@ const catalog = parseAitudouPricingCatalog({
     },
 });
 
-describe("Aitudou pricing catalog", () => {
+describe("Jinyu pricing catalog", () => {
     it("loads pricing through the same-origin proxy in browsers and shares one in-flight request", async () => {
         const originalWindow = globalThis.window;
         Object.defineProperty(globalThis, "window", { configurable: true, value: {} });
@@ -97,7 +97,7 @@ describe("Aitudou pricing catalog", () => {
         const liveCatalog = parseAitudouPricingCatalog({
             pricing_version: "trained",
             price_estimates: {
-                "aitudou-video-gk-v15": {
+                "jinyu-video-gk-v15": {
                     status: "ready",
                     active_features: ["duration_seconds", "resolution"],
                     sample_count: 703,
@@ -110,10 +110,10 @@ describe("Aitudou pricing catalog", () => {
                 },
             },
             observed_prices: {
-                "aitudou-video-gk-v15": { entries: [{ params: {}, price_cny: 9, last_seen_at: 1 }], price_min: 9, price_max: 9 },
+                "jinyu-video-gk-v15": { entries: [{ params: {}, price_cny: 9, last_seen_at: 1 }], price_min: 9, price_max: 9 },
             },
         });
-        const quote = quoteAitudouPrice(liveCatalog, "video.generate", { model: "aitudou-video-gk-v15", seconds: "8", metadata: { resolution: "720p" } });
+        const quote = quoteAitudouPrice(liveCatalog, "video.generate", { model: "jinyu-video-gk-v15", seconds: "8", metadata: { resolution: "720p" } });
         expect(quote).toEqual(expect.objectContaining({ source: "estimate", status: "range", min: 1.37664, max: 2.2944 }));
         expect(quote.explanation).toContain("83 次");
     });
@@ -149,7 +149,7 @@ describe("Aitudou pricing catalog", () => {
                     price_min: 0.192,
                     price_max: 0.24,
                 },
-                "aitudou-image-gk-v2": {
+                "jinyu-image-gk-v2": {
                     status: "ready",
                     active_features: [],
                     entries: [{ params: {}, price_cny: 0.1575, low_cny: 0.1575, high_cny: 0.1575, last_seen_at: 1 }],
@@ -159,7 +159,7 @@ describe("Aitudou pricing catalog", () => {
             },
         });
         expect(quoteAitudouPrice(liveCatalog, "image.generate", { model: "qwen-image-3.0-t2i", n: 6 })).toEqual(expect.objectContaining({ min: 1.152, max: 1.44 }));
-        const unknownFormula = quoteAitudouPrice(liveCatalog, "image.generate", { model: "aitudou-image-gk-v2", n: 4 });
+        const unknownFormula = quoteAitudouPrice(liveCatalog, "image.generate", { model: "jinyu-image-gk-v2", n: 4 });
         expect(unknownFormula).toEqual(expect.objectContaining({ status: "range", min: 0.1575, max: 0.63 }));
         expect(unknownFormula.explanation).toContain("未公开该模型多图数量公式");
     });
@@ -221,6 +221,11 @@ describe("Aitudou pricing catalog", () => {
 });
 
 describe("documented pricing fallbacks", () => {
+    it("does not reuse another provider's fixed Qwen price when Jinyu history is unavailable", () => {
+        const quote = quoteAitudouPrice(null, "image.generate", { model: "qwen-image-3.0-pro-t2i", metadata: { resolution: "1k" } });
+        expect(quote.status).toBe("dynamic");
+        expect(quote.amount).toBeUndefined();
+    });
     it("does not expose Seedance's million-token rate as a user-facing price when live history is unavailable", () => {
         const quote = quoteAitudouPrice(null, "video.generate", { model: "seedance-2.0-standard-t2v", seconds: "5", metadata: { resolution: "1080p" } });
         expect(quote).toEqual(expect.objectContaining({ status: "dynamic", unit: "task", currency: "CNY" }));
@@ -263,6 +268,6 @@ describe("documented pricing fallbacks", () => {
     });
 
     it("keeps upscaler guidance as a per-second rate when the input video duration is unknown", () => {
-        expect(quoteAitudouPrice(null, "video.upscale", { model: "aitudou-upscaler", seconds: "20", metadata: { resolution: "1080p" } })).toEqual(expect.objectContaining({ status: "rate", amount: 0.21, unit: "second" }));
+        expect(quoteAitudouPrice(null, "video.upscale", { model: "jinyu-upscaler", seconds: "20", metadata: { resolution: "1080p" } })).toEqual(expect.objectContaining({ status: "rate", amount: 0.21, unit: "second" }));
     });
 });

@@ -1,7 +1,8 @@
 import { isTauriRuntime, platformFetch } from "@/services/platform/desktop-runtime";
+import { JINYU_API_BASE_URL, JINYU_PROXY_PREFIX } from "@/constant/provider";
 
-export const AITUDOU_PRICING_URL = "https://api.aitudou.net/api/pricing";
-export const AITUDOU_PRICING_PROXY_URL = "/tdtv-api/aitudou/api/pricing";
+export const AITUDOU_PRICING_URL = `${JINYU_API_BASE_URL}/api/pricing`;
+export const AITUDOU_PRICING_PROXY_URL = `${JINYU_PROXY_PREFIX}/api/pricing`;
 
 export type AitudouPriceStatus = "exact" | "range" | "rate" | "dynamic" | "unknown";
 export type AitudouPriceUnit = "task" | "image" | "track" | "second" | "million_tokens" | "audio_minute";
@@ -73,7 +74,7 @@ export async function loadAitudouPricingCatalog(force = false): Promise<AitudouP
         cache: "no-store",
     })
         .then(async (response) => {
-            if (!response.ok) throw new Error(`Aitudou pricing request failed: HTTP ${response.status}`);
+            if (!response.ok) throw new Error(`Jinyu pricing request failed: HTTP ${response.status}`);
             return parseAitudouPricingCatalog(await response.json());
         })
         .then((catalog) => {
@@ -99,7 +100,7 @@ export function resolveAitudouPricingUrl() {
 }
 
 export function parseAitudouPricingCatalog(raw: unknown): AitudouPricingCatalog {
-    if (!isRecord(raw)) throw new Error("Invalid Aitudou pricing response");
+    if (!isRecord(raw)) throw new Error("Invalid Jinyu pricing response");
     const pricingVersion = typeof raw.pricing_version === "string" ? raw.pricing_version : "";
     const observedPrices = parseHistoricalPrices(raw.observed_prices, false);
     const priceEstimates = parseHistoricalPrices(raw.price_estimates, true);
@@ -163,7 +164,7 @@ export function resolveAitudouPricingSku(operationId: string, payload: Record<st
         const action = operationId.slice("suno.".length);
         return `suno-${action === "generate" ? "generation" : action}`;
     }
-    if (operationId === "video.upscale") return "aitudou-upscaler";
+    if (operationId === "video.upscale") return "jinyu-upscaler";
     if (operationId === "audio.transcribe") return "whisper-1";
     if (typeof payload.model === "string" && payload.model.trim()) return payload.model.trim();
     if (operationId === "text.chat") return "kimi-k3";
@@ -268,8 +269,8 @@ function quoteHistoricalPrice(source: "estimate" | "observed", sku: string, prof
         pricingVersion,
         explanation:
             source === "estimate"
-                ? `来自 Aitudou 官方价格清单按${sampleCount ? ` ${sampleCount} 次` : ""}已结算任务生成的${narrowedByParameters ? "同参数" : "历史"}估价${confidenceText}${quantityNote}${hdNote}；最终以任务完成后的实扣为准。`
-                : `来自 Aitudou 官方价格清单中的近期${narrowedByParameters ? "同参数" : "同模型"}人民币实扣${quantityNote}${hdNote}；最终以任务完成后的实扣为准。`,
+                ? `来自 Jinyu 官方价格清单按${sampleCount ? ` ${sampleCount} 次` : ""}已结算任务生成的${narrowedByParameters ? "同参数" : "历史"}估价${confidenceText}${quantityNote}${hdNote}；最终以任务完成后的实扣为准。`
+                : `来自 Jinyu 官方价格清单中的近期${narrowedByParameters ? "同参数" : "同模型"}人民币实扣${quantityNote}${hdNote}；最终以任务完成后的实扣为准。`,
     };
 
     min = roundPrice(min);
@@ -378,13 +379,13 @@ function quoteDocumentedPrice(sku: string, operationId: string, payload: Record<
     const secondRates: Record<string, Record<string, number>> = {
         "happyhorse-1.1": { "720p": 0.69, "1080p": 0.92 },
         "wan-2.7-spicy": { "720p": 0.91, "1080p": 1.4 },
-        "aitudou-upscaler": { "720p": 0.14, "1080p": 0.21, "2k": 0.35, "4k": 0.56 },
+        "jinyu-upscaler": { "720p": 0.14, "1080p": 0.21, "2k": 0.35, "4k": 0.56 },
     };
-    const rateKey = sku.startsWith("happyhorse-1.1-") ? "happyhorse-1.1" : sku.startsWith("wan-2.7-spicy-") ? "wan-2.7-spicy" : sku === "aitudou-upscaler" ? sku : "";
+    const rateKey = sku.startsWith("happyhorse-1.1-") ? "happyhorse-1.1" : sku.startsWith("wan-2.7-spicy-") ? "wan-2.7-spicy" : sku === "jinyu-upscaler" ? sku : "";
     const rateTable = secondRates[rateKey];
     if (rateTable) {
         const rate = rateTable[resolution];
-        if (rate !== undefined && seconds !== null && rateKey !== "aitudou-upscaler") {
+        if (rate !== undefined && seconds !== null && rateKey !== "jinyu-upscaler") {
             return docs({ status: "exact", unit: "task", currency: "CNY", amount: roundPrice(rate * seconds), approximate: true, explanation: `官方文档指导价：¥${rate}/秒 × ${seconds} 秒；最终以任务结算为准。` });
         }
         if (rate !== undefined)
@@ -394,7 +395,7 @@ function quoteDocumentedPrice(sku: string, operationId: string, payload: Record<
                 currency: "CNY",
                 amount: rate,
                 approximate: true,
-                explanation: rateKey === "aitudou-upscaler" ? "官方文档按输入视频的真实时长计费；输入素材时长未进入请求参数，因此不能提前伪造总价。" : "官方文档按输出视频时长计费；选择时长后才能得到指导总价。",
+                explanation: rateKey === "jinyu-upscaler" ? "官方文档按输入视频的真实时长计费；输入素材时长未进入请求参数，因此不能提前伪造总价。" : "官方文档按输出视频时长计费；选择时长后才能得到指导总价。",
             });
         const rates = Object.values(rateTable);
         return docs({ status: "range", unit: "second", currency: "CNY", min: Math.min(...rates), max: Math.max(...rates), approximate: true, explanation: "官方文档指导单价范围；具体单价由分辨率决定。" });
@@ -414,25 +415,7 @@ function quoteDocumentedPrice(sku: string, operationId: string, payload: Record<
     if (sku === "whisper-1") return docs({ status: "rate", unit: "audio_minute", currency: "TOKENS", amount: 1000, explanation: "官方文档：每分钟音频消耗 1000 Token，未公布固定人民币换算价。" });
     if (sku === "kimi-k3" || operationId === "text.chat") return docs({ status: "dynamic", unit: "million_tokens", currency: "TOKENS", explanation: "按输入与输出 Token 结算；固定人民币单价以官方控制台为准。" });
 
-    const qwenPro = /^qwen-image-3\.0(?:-global)?-pro-(t2i|i2i)$/.exec(sku);
-    if (qwenPro) {
-        const unitPrice = resolution === "2k" ? 0.45 : 0.23;
-        const inputCost = qwenPro[1] === "i2i" ? 0.02 * (imageReferences || 1) : 0;
-        return docs({ status: "exact", unit: "task", currency: "CNY", amount: unitPrice * outputs + inputCost, approximate: true, explanation: "官方文档 Qwen Pro 参考价；图像编辑还会按输入参考图计费，最终以上游实扣为准。" });
-    }
-    const qwenStandard = /^qwen-image-3\.0(?:-global)?-(t2i|i2i)$/.exec(sku);
-    if (qwenStandard) {
-        const inputCost = qwenStandard[1] === "i2i" ? 0.02 * (imageReferences || 1) : 0;
-        return docs({
-            status: "exact",
-            unit: "task",
-            currency: "CNY",
-            amount: roundPrice(0.16 * outputs + inputCost),
-            approximate: true,
-            explanation: `官方文档标准版参考价：输出约 ¥0.16/张${inputCost ? `，输入参考图约 ¥0.02/张` : ""}；当前按 ${outputs} 张估算，最终以上游实扣为准。`,
-        });
-    }
-
+    // Jinyu documents settlement-based Qwen pricing; do not reuse upstream fixed rates.
     if (sku === "seedream-v5-pro-t2i" || sku === "seedream-v5-pro-i2i") {
         if (sku.endsWith("-t2i") && resolution === "2k") return docs({ status: "rate", unit: "image", currency: "CNY", amount: 0.54, approximate: true, explanation: "官方文档公布的 Seedream 实测参考价：2K 文生图约 ¥0.54/张；最终以上游实扣为准。" });
         if (sku.endsWith("-i2i") && resolution === "1k") return docs({ status: "rate", unit: "image", currency: "CNY", amount: 0.27, approximate: true, explanation: "官方文档公布的 Seedream 实测参考价：1K 图生图约 ¥0.27/张；最终以上游实扣为准。" });

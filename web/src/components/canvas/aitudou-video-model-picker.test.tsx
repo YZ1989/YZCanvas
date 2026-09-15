@@ -6,19 +6,19 @@ import { canvasThemes } from "@/lib/canvas-theme";
 import { aitudouNativeVideoModelCategories } from "./aitudou-native-generation";
 import { AitudouVideoModelMenu, AitudouVideoModelPicker } from "./aitudou-video-model-picker";
 
-describe("Aitudou video model picker", () => {
+describe("Jinyu video model picker", () => {
     const categories = aitudouNativeVideoModelCategories("video.generate");
     const prices = new Map([["seedance-2.0-standard", "约 ¥0.40"]]);
 
     it("keeps the closed trigger compact and identifies it as a two-level model picker", () => {
         const html = renderToStaticMarkup(<AitudouVideoModelPicker categories={categories} value="seedance-2.0-standard" priceLabels={prices} automaticMode="文生视频" theme={canvasThemes.dark} onChange={vi.fn()} />);
 
-        expect(html).toContain("data-aitudou-video-model-picker");
+        expect(html).toContain("data-jinyu-video-model-picker");
         expect(html).toContain("Seedance 2.0 Standard");
         expect(html).toMatch(/data-video-model-selected-label="true"[^>]*whitespace-normal/);
         expect(html).not.toMatch(/data-video-model-selected-label="true"[^>]*truncate/);
         expect(html).toContain('aria-haspopup="dialog"');
-        expect(html).not.toContain("data-aitudou-video-model-menu");
+        expect(html).not.toContain("data-jinyu-video-model-menu");
     });
 
     it("renders provider categories separately from the active provider's versions", () => {
@@ -36,7 +36,7 @@ describe("Aitudou video model picker", () => {
             />,
         );
 
-        expect(html).toContain("data-aitudou-video-model-menu");
+        expect(html).toContain("data-jinyu-video-model-menu");
         for (const category of ["seedance", "minimax", "flux", "aitudou-video"]) expect(html).toContain(`data-video-model-category="${category}"`);
         for (const category of ["happyhorse", "wan", "kling", "vidu"]) expect(html).not.toContain(`data-video-model-category="${category}"`);
         expect(html).toContain('data-video-model-option="seedance-2.0-standard"');

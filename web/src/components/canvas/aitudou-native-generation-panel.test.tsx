@@ -31,7 +31,7 @@ const exactQuote = (amount: number): AitudouPriceQuote => ({
     explanation: "candidate quote",
 });
 
-describe("Aitudou native image panel", () => {
+describe("Jinyu native image panel", () => {
     it("keeps the RHTV-style basic action row without a more-operations entry", () => {
         const node: CanvasNodeData = {
             id: "image-node",
@@ -91,12 +91,12 @@ describe("Aitudou native image panel", () => {
 
     it("scales every candidate quote with the batch count produced by that candidate model", () => {
         const seedreamPayload = writeAitudouNativeParameter(createAitudouNativePayload("image.generate", { model: "seedream-v5-pro-t2i", prompt: "cinematic lake" }), AITUDOU_NATIVE_CANVAS_BATCH_COUNT_PATH, 4);
-        const lowPriceCandidate = changeAitudouNativeModelChoice("image", "image.generate", seedreamPayload, "aitudou-image-g-v2-lowprice");
+        const lowPriceCandidate = changeAitudouNativeModelChoice("image", "image.generate", seedreamPayload, "jinyu-image-g-v2-lowprice");
 
         expect(lowPriceCandidate.payload.n).toBe(4);
         expect(scaleCanvasBatchQuoteFromPayload(exactQuote(0.2), lowPriceCandidate.payload).amount).toBe(0.2);
 
-        const lowPricePayload = createAitudouNativePayload("image.generate", { model: "aitudou-image-g-v2-lowprice", prompt: "cinematic lake", n: 4 });
+        const lowPricePayload = createAitudouNativePayload("image.generate", { model: "jinyu-image-g-v2-lowprice", prompt: "cinematic lake", n: 4 });
         const seedreamCandidate = changeAitudouNativeModelChoice("image", "image.generate", lowPricePayload, "seedream-v5-pro");
 
         expect(seedreamCandidate.payload.n).toBeUndefined();

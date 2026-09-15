@@ -4,7 +4,7 @@ import { AITUDOU_OPERATIONS, getAitudouOperation } from "./aitudou-contract";
 import { AITUDOU_DOCUMENTED_MEDIA_MODEL_COUNT, AITUDOU_MODEL_COUNT, AITUDOU_MODEL_PROFILES } from "./aitudou-models";
 import { assertAitudouEnvelope, extractAitudouCreateTaskIds, extractAitudouOutputs, extractAitudouText, normalizeAitudouTaskResponse, parseAitudouSse, pollPathForAitudouTask } from "./aitudou-protocol";
 
-describe("Aitudou official contract snapshot", () => {
+describe("Jinyu official contract snapshot", () => {
     it("contains every documented operation without camelCase upstream action paths", () => {
         expect(AITUDOU_OPERATIONS).toHaveLength(55);
         expect(AITUDOU_OPERATIONS.filter((item) => item.group === "general")).toHaveLength(8);
@@ -33,7 +33,7 @@ describe("Aitudou official contract snapshot", () => {
     });
 });
 
-describe("Aitudou family decoders", () => {
+describe("Jinyu family decoders", () => {
     it("extracts task ids from all documented create envelopes", () => {
         expect(extractAitudouCreateTaskIds("video", { id: "vid_1", status: "queued" })).toEqual(["vid_1"]);
         expect(extractAitudouCreateTaskIds("image", { id: "img_1", task_id: "img_1", status: "queued" })).toEqual(["img_1"]);
@@ -70,7 +70,7 @@ describe("Aitudou family decoders", () => {
     });
 });
 
-describe("Aitudou result mapping", () => {
+describe("Jinyu result mapping", () => {
     it("maps video and last-frame URLs to their corresponding canvas media types", () => {
         const outputs = extractAitudouOutputs({ id: "vid_1", status: "completed", metadata: { url: "https://example/video.mp4", last_frame_url: "https://example/last.png" } }, "video", "vid_1");
         expect(outputs.map((item) => [item.kind, item.url])).toEqual([
@@ -125,7 +125,7 @@ describe("Aitudou result mapping", () => {
     });
 });
 
-describe("Aitudou transport helpers", () => {
+describe("Jinyu transport helpers", () => {
     it("uses only canonical task query paths", () => {
         expect(pollPathForAitudouTask("video", "a/b")).toBe("/v1/videos/a%2Fb");
         expect(pollPathForAitudouTask("image", "1")).toBe("/v1/image/generations/1");
