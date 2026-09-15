@@ -8,7 +8,7 @@
 
 0.1.0 开发预览版：保留画布、图片工具、视频节点、素材与工程保存；移除 Agent 界面、ComfyUI 集成和远程节点插件执行链，使用独立的 YZCanvas 应用与存储标识。
 
-Windows x64 安装包本机实测 **3.58 MiB**，比同机上游基线减少 **26.9%**；不含共享 WebView2 运行时和用户媒体。详见 [测量记录](docs/measurements/README.md)。
+Windows x64 安装包本机实测 **3.58 MiB**，比同机上游基线减少 **26.8%**；不含共享 WebView2 运行时和用户媒体。详见 [测量记录](docs/measurements/README.md)。
 
 AI 生成默认接入 **[Jinyu API](https://api.yz-jinyu.com/)**；[接口文档](https://api.yz-jinyu.com/docs/)。生成按提供商实际计费。没有 API Key 也可以编辑画布、导入图片和使用本地裁剪等工具。远程生成尚待真实 API 验收。
 
