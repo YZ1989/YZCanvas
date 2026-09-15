@@ -38,7 +38,7 @@ describe("Jinyu video model picker", () => {
 
         expect(html).toContain("data-jinyu-video-model-menu");
         for (const category of ["seedance", "minimax", "flux", "aitudou-video"]) expect(html).toContain(`data-video-model-category="${category}"`);
-        for (const category of ["happyhorse", "wan", "kling", "vidu"]) expect(html).not.toContain(`data-video-model-category="${category}"`);
+        for (const category of ["happyhorse", "wan", "kling", "vidu"]) expect(html).toContain(`data-video-model-category="${category}"`);
         expect(html).toContain('data-video-model-option="seedance-2.0-standard"');
         expect(html).toContain("文生视频");
         expect(html).toContain("图生视频");
@@ -86,7 +86,7 @@ describe("Jinyu video model picker", () => {
             <AitudouVideoModelMenu
                 id="video-model-menu"
                 categories={categories}
-                activeCategoryId="kling"
+                activeCategoryId="removed-provider"
                 selectedValue="seedance-2.0-standard"
                 priceLabels={prices}
                 automaticMode="文生视频"
@@ -97,7 +97,7 @@ describe("Jinyu video model picker", () => {
         );
 
         expect(html).toContain('data-video-model-option="seedance-2.0-standard"');
-        expect(html).not.toContain('data-video-model-category="kling"');
+        expect(html).toContain('data-video-model-category="kling"');
         expect(html).not.toMatch(/data-video-model-option="kling-/);
     });
 });

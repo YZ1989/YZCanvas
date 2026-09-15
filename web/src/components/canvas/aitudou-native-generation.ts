@@ -89,12 +89,15 @@ const MIDJOURNEY_MODEL_CHOICES = [
 const VIDEO_MODEL_CATEGORIES = [
     { id: "seedance", label: "Seedance", groups: ["Seedance 2.0", "Seedance 2.5 Standard"] },
     { id: "minimax", label: "MiniMax", groups: ["Hailuo 2.3", "Hailuo H3", "Minimax H3 OW"] },
+    { id: "kling", label: "可灵 Kling", groups: ["Kling"] },
+    { id: "vidu", label: "Vidu", groups: ["Vidu Q3"] },
+    { id: "wan", label: "Wan", groups: ["Wan 2.7 Spicy"] },
+    { id: "happyhorse", label: "HappyHorse", groups: ["HappyHorse 1.1"] },
     { id: "flux", label: "Flux", groups: ["Flux 3 Video"] },
     { id: "aitudou-video", label: "Jinyu Video", groups: ["Jinyu Video"] },
     { id: "video-processing", label: "视频处理", groups: ["Jinyu Upscaler"] },
 ] as const;
 
-const HIDDEN_VIDEO_MODEL_PREFIXES = ["happyhorse-", "wan-", "kling-", "vidu-"] as const;
 
 export const EMPTY_AITUDOU_NATIVE_REFERENCE_COUNTS: AitudouNativeReferenceCounts = {
     image: 0,
@@ -150,7 +153,7 @@ const DEFAULT_OPERATION_BY_KIND: Readonly<Record<AitudouNativeNodeKind, string>>
     text: "text.chat",
 };
 
-export type AitudouNativeSpecialAdapter = "unsupported-official-contract" | "hailuo-multi" | "flux-draft" | "vidu-short-play" | "jinyu-video-images" | "jinyu-video-quality" | "jinyu-video-omni" | "jinyu-image-images";
+export type AitudouNativeSpecialAdapter = "unsupported-official-contract" | "hailuo-multi" | "flux-draft" | "vidu-short-play" | "jinyu-video-images" | "jinyu-video-quality" | "jinyu-video-omni" | "jinyu-image-images" | "jinyu-video-omni-lowprice";
 
 /**
  * Every model which the official model catalogue marks as `special` or
@@ -172,6 +175,11 @@ export const AITUDOU_NATIVE_SPECIAL_MODEL_ADAPTERS: Readonly<Record<string, Aitu
     "jinyu-video-v31-fast": "jinyu-video-images",
     "jinyu-video-v31-quality": "jinyu-video-quality",
     "jinyu-video-g-omni-flash": "jinyu-video-omni",
+    "jinyu-video-g-omni-flash-lowprice": "jinyu-video-omni-lowprice",
+    "jinyu-video-g-omni-1.1-flash-lowprice": "jinyu-video-omni-lowprice",
+    "jinyu-image-g-v2.5-flare": "jinyu-image-images",
+    "jinyu-image-g-v2.5-sunburst": "jinyu-image-images",
+    "jinyu-image-g-v2.5-lowprice": "jinyu-image-images",
     "jinyu-image-g-v2-lowprice": "jinyu-image-images",
     "jinyu-image-nb-flash": "jinyu-image-images",
     "jinyu-image-nb-2": "jinyu-image-images",
@@ -236,7 +244,6 @@ export function aitudouNativeModels(operationId: string): readonly AitudouModelP
     if (!family) return [];
     return AITUDOU_MODEL_PROFILES.filter((profile) => {
         if (profile.family !== family) return false;
-        if (operationId === "video.generate" && HIDDEN_VIDEO_MODEL_PREFIXES.some((prefix) => profile.id.startsWith(prefix))) return false;
         if (operationId === "video.upscale") return profile.inputKind === "video-upscale";
         if (operationId === "video.generate") return profile.inputKind !== "video-upscale";
         return true;
@@ -576,6 +583,9 @@ export function aitudouNativeParameterDefinitions(operationId: string, payload: 
             parameters.push(selectParameter("metadata.resolution", "分辨率", resolutions));
         }
     }
+    if (profile?.id === "jinyu-image-g-v2.5-flare" || profile?.id === "jinyu-image-g-v2.5-sunburst") {
+        parameters.push(selectParameter("quality", "图像质量", ["auto", "low", "medium", "high", "xhigh", "max"]));
+    }
     if (constraints?.seconds) {
         const options = constraints.seconds.values?.map((value) => ({ label: `${value}秒`, value: String(value) }));
         parameters.push({
@@ -884,6 +894,7 @@ function sanitizeModelParameters(payload: Record<string, unknown>, profile: Aitu
         }
     }
 
+    if (!/^jinyu-image-g-v2\.5-(flare|sunburst)$/.test(profile.id)) delete payload.quality;
     const format = getPath(payload, "metadata.format");
     if (!constraints?.formats?.some((value) => String(value).toLowerCase() === String(format).toLowerCase())) setPath(payload, "metadata.format", undefined);
     const sampleRate = getPath(payload, "metadata.sample_rate");
@@ -909,6 +920,7 @@ function sanitizeModelParameters(payload: Record<string, unknown>, profile: Aitu
         delete payload.duration;
         setPath(payload, "metadata.duration", undefined);
     } else delete payload.seconds;
+    if (specialAdapter !== "jinyu-video-omni-lowprice") delete payload.generation_type;
     if (specialAdapter !== "flux-draft") setPath(payload, "metadata.draft_cache", undefined);
     if (specialAdapter !== "vidu-short-play") setPath(payload, "metadata.script_name", undefined);
     if (specialAdapter !== "jinyu-video-omni") setPath(payload, "metadata.extend_from_task_id", undefined);
@@ -979,6 +991,13 @@ function injectConnectedReferences(payload: Record<string, unknown>, operationId
         if (images.length) payload.images = images;
         if (videos.length) payload.video_url = videos;
         if (audios.length) payload.audio_url = audios;
+    } else if (specialAdapter === "jinyu-video-omni-lowprice") {
+        if (images.length) payload.images = images;
+        payload.generation_type = images.length === 3 ? "reference" : "frame";
+        if (videos.length) {
+            setPath(payload, "metadata.video_url", videos[0]);
+            delete payload.seconds;
+        }
     } else if (specialAdapter === "jinyu-video-omni") {
         if (images.length) payload.images = images;
         const explicitExtendTaskId = getPath(payload, "metadata.extend_from_task_id");

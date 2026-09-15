@@ -16,11 +16,11 @@ describe("Jinyu official contract snapshot", () => {
         ).toEqual([]);
     });
 
-    it("contains the 123 media model ids plus Kimi, Whisper and Suno", () => {
-        expect(AITUDOU_DOCUMENTED_MEDIA_MODEL_COUNT).toBe(123);
-        expect(AITUDOU_MODEL_COUNT).toBe(126);
-        expect(AITUDOU_MODEL_PROFILES).toHaveLength(126);
-        expect(new Set(AITUDOU_MODEL_PROFILES.map((item) => item.id)).size).toBe(126);
+    it("contains the 129 media model ids plus Kimi, Whisper and Suno", () => {
+        expect(AITUDOU_DOCUMENTED_MEDIA_MODEL_COUNT).toBe(129);
+        expect(AITUDOU_MODEL_COUNT).toBe(132);
+        expect(AITUDOU_MODEL_PROFILES).toHaveLength(132);
+        expect(new Set(AITUDOU_MODEL_PROFILES.map((item) => item.id)).size).toBe(132);
         expect(AITUDOU_MODEL_PROFILES.find((item) => item.id === "kimi-k3")?.family).toBe("text");
         expect(AITUDOU_MODEL_PROFILES.find((item) => item.id === "whisper-1")?.family).toBe("transcription");
         expect(AITUDOU_MODEL_PROFILES.find((item) => item.id === "suno")?.family).toBe("music");

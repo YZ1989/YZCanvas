@@ -317,6 +317,12 @@ export async function prepareAitudouPayload(config: AitudouRequestConfig, operat
         return value;
     };
     const prepared = (await resolveValue(payload)) as Record<string, unknown>;
+    // Jinyu's new image/video endpoints require these fields at the top level.
+    if (/^jinyu-image-g-v2\.5-/.test(String(prepared.model)) || prepared.model === "jinyu-image-gk-v2-edit" || prepared.model === "jinyu-image-gk-v2" || /^jinyu-video-g-omni-.*lowprice$/.test(String(prepared.model))) {
+        const metadata = prepared.metadata as Record<string, unknown> | undefined;
+        if (metadata?.resolution !== undefined) { prepared.resolution = metadata.resolution; delete metadata.resolution; }
+        if (metadata?.ratio !== undefined) { prepared.aspect_ratio = metadata.ratio; delete metadata.ratio; }
+    }
     if (operation.id === "text.chat") prepared.stream = Boolean(prepared.stream);
     return prepared;
 }
@@ -437,6 +443,12 @@ function validateAitudouModelPayload(operation: AitudouOperationDefinition, payl
     if ((modelId === "flux-3-video-draft-enhance" || modelId === "flux-3-video-global-draft-enhance") && isMissing(getPath(payload, ["metadata", "draft_cache"]))) {
         throw new Error(`${modelId} 按官方文档要求提供 metadata.draft_cache。`);
     }
+    if (/^jinyu-video-g-omni-.*lowprice$/.test(modelId)) {
+        if (isMissing(payload.prompt)) throw new Error("Omni 视频需要填写提示词。");
+        if (![0, 1, 3].includes(topImages)) throw new Error("Omni 低价版支持 0、1 或 3 张图片；三图使用参考模式。");
+        if (!isMissing(getPath(payload, ["metadata", "video_url"])) && !isMissing(payload.seconds)) throw new Error("参考视频模式请省略生成时长。");
+    }
+    if (/^jinyu-image-g-v2\.5-(flare|sunburst)$/.test(modelId) && !isMissing(payload.quality) && !["auto", "low", "medium", "high", "xhigh", "max"].includes(String(payload.quality))) throw new Error("不支持此图像质量档位。");
     if (modelId === "jinyu-video-g-omni-flash") {
         const videoUrl = getPath(payload, ["metadata", "video_url"]);
         const extendFromTaskId = getPath(payload, ["metadata", "extend_from_task_id"]);
@@ -468,10 +480,10 @@ function validateAitudouModelPayload(operation: AitudouOperationDefinition, payl
         if (constraints.seconds.max !== undefined && seconds > constraints.seconds.max) throw new Error(`${modelId} 的 seconds 不能大于 ${constraints.seconds.max}。`);
     }
 
-    const resolution = getPath(payload, ["metadata", "resolution"]);
+    const resolution = payload.resolution ?? getPath(payload, ["metadata", "resolution"]);
     if (!isMissing(resolution) && typeof resolution !== "string") throw new Error(`${modelId} 的 metadata.resolution 必须是字符串。`);
     if (!isMissing(resolution) && constraints.resolutions && !includesCaseInsensitive(constraints.resolutions, String(resolution))) throw new Error(`${modelId} 的 resolution 只允许：${constraints.resolutions.join("、")}。`);
-    const ratio = getPath(payload, ["metadata", "ratio"]);
+    const ratio = payload.aspect_ratio ?? getPath(payload, ["metadata", "ratio"]);
     if (!isMissing(ratio) && typeof ratio !== "string") throw new Error(`${modelId} 的 metadata.ratio 必须是字符串。`);
     if (!isMissing(ratio) && constraints.ratios && !includesCaseInsensitive(constraints.ratios, String(ratio))) {
         if (!constraints.allowCustomRatio || !isPositiveAspectRatio(String(ratio))) throw new Error(`${modelId} 的 ratio 只允许：${constraints.ratios.join("、")}${constraints.allowCustomRatio ? "，或合法的正数宽高比 w:h" : ""}。`);

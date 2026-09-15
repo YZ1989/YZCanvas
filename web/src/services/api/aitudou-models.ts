@@ -236,6 +236,7 @@ export const AITUDOU_MODEL_PROFILES: readonly AitudouModelProfile[] = [
         ["vidu-q3-ad-short-play", "special"],
     ]),
     ...defineModels("video", "Jinyu Video", [
+        ...["jinyu-video-g-omni-flash-lowprice", "jinyu-video-g-omni-1.1-flash-lowprice"].map((id): ModelSeed => [id, "special", { seconds: { values: [4, 6, 8, 10], defaultValue: 6 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], maxImages: 3, maxVideos: 1 }]),
         ["jinyu-video-gk-v15", "special", { seconds: { min: 6, max: 30, defaultValue: 6 }, resolutions: ["480p", "720p"], ratios: ["16:9", "9:16", "1:1", "3:2", "2:3"], maxImages: 7 }],
         ["jinyu-video-v31-fast", "special", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], maxImages: 3 }],
         ["jinyu-video-v31-quality", "special", { seconds: { values: [8], defaultValue: 8 }, resolutions: ["720p", "1080p", "4k"], ratios: ["16:9", "9:16"], notes: ["Reference mode and three-image reference input are not supported."] }],
@@ -246,11 +247,17 @@ export const AITUDOU_MODEL_PROFILES: readonly AitudouModelProfile[] = [
             { resolutions: ["720p"], ratios: TD_CANVAS_COMMON_IMAGE_RATIOS, allowCustomRatio: true, maxImages: 16, maxVideos: 1, notes: ["Duration cannot be specified.", "metadata.video_url and metadata.extend_from_task_id are mutually exclusive."] },
         ],
     ]),
+    ...defineModels("image", "Jinyu Image G v2.5", [
+        ["jinyu-image-g-v2.5-flare", "special", { resolutions: ["1k", "2k", "4k"], sizeRatios: TD_CANVAS_COMMON_IMAGE_RATIOS, maxImages: 16, maxOutputs: 4 }],
+        ["jinyu-image-g-v2.5-sunburst", "special", { resolutions: ["1k", "2k", "4k"], sizeRatios: TD_CANVAS_COMMON_IMAGE_RATIOS, maxImages: 16, maxOutputs: 4 }],
+        ["jinyu-image-g-v2.5-lowprice", "special", { resolutions: ["1k", "2k", "4k"], sizeRatios: TD_CANVAS_COMMON_IMAGE_RATIOS, maxImages: 15, maxOutputs: 1, maxPromptLength: 5000 }],
+    ]),
     ...defineModels("image", "Jinyu Image", [
+        ["jinyu-image-gk-v2-edit", "image-to-image", { resolutions: ["1k", "2k"], ratios: ["auto", "1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9", "2:1", "1:2", "4:5", "5:4", "21:9", "9:21"], maxImages: 3, maxOutputs: 10 }],
         ["jinyu-image-g-v2-lowprice", "special", { resolutions: ["1k", "2k", "4k"], sizeRatios: TD_CANVAS_COMMON_IMAGE_RATIOS, maxImages: 16, maxOutputs: 10 }],
         ["jinyu-image-gk-v15", "text-to-image", { sizeRatios: ["1:1", "16:9", "9:16", "3:2", "2:3"], maxOutputs: 10 }],
         ["jinyu-image-gk-v15-edit", "image-to-image", { maxImages: 1, maxOutputs: 10 }],
-        ["jinyu-image-gk-v2", "text-to-image", { sizeRatios: ["1:1", "16:9", "9:16", "3:2", "2:3"], maxOutputs: 10 }],
+        ["jinyu-image-gk-v2", "text-to-image", { sizeRatios: ["1:1", "2:3", "3:2", "3:4", "4:3", "9:16", "16:9"], resolutions: ["quality"], maxImages: 0, maxOutputs: 12 }],
         ["jinyu-image-nb-flash", "special", { resolutions: ["1k"], maxImages: 14, maxOutputs: 1, maxPromptLength: 1000 }],
         ["jinyu-image-nb-2", "special", { resolutions: ["0.5k", "1k", "2k", "4k"], maxImages: 14, maxOutputs: 1 }],
         ["jinyu-image-nb-2-lite", "special", { resolutions: ["1k"], maxImages: 14, maxOutputs: 4 }],
@@ -264,7 +271,7 @@ export const AITUDOU_MODEL_PROFILES: readonly AitudouModelProfile[] = [
     ...defineModels("music", "Suno", [["suno", "music", { notes: ["Version constraints are action-specific and must come from the Suno action registry."] }]]),
 ];
 
-export const AITUDOU_DOCUMENTED_MEDIA_MODEL_COUNT = 123;
+export const AITUDOU_DOCUMENTED_MEDIA_MODEL_COUNT = 129;
 export const AITUDOU_MODEL_COUNT = AITUDOU_MODEL_PROFILES.length;
 
 const MODEL_FAMILIES: readonly AitudouModelFamily[] = ["image", "video", "audio", "text", "transcription", "music"];

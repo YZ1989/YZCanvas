@@ -55,13 +55,13 @@ describe("native Jinyu canvas classification", () => {
 
     it("builds the RHTV-style provider to version hierarchy without exposing transport variants", () => {
         const categories = aitudouNativeVideoModelCategories("video.generate");
-        expect(categories.map((category) => category.label)).toEqual(["Seedance", "MiniMax", "Flux", "Jinyu Video"]);
+        expect(categories.map((category) => category.label)).toEqual(["Seedance", "MiniMax", "可灵 Kling", "Vidu", "Wan", "HappyHorse", "Flux", "Jinyu Video"]);
 
         const flatChoices = categories.flatMap((category) => category.options);
         const legacyChoices = aitudouNativeModelGroups("video.generate").flatMap((group) => group.options);
         expect(flatChoices.map((choice) => choice.value).sort()).toEqual(legacyChoices.map((choice) => choice.value).sort());
         expect(new Set(flatChoices.map((choice) => choice.value)).size).toBe(flatChoices.length);
-        expect(flatChoices.some((choice) => ["happyhorse-", "wan-", "kling-", "vidu-"].some((prefix) => choice.value.startsWith(prefix)))).toBe(false);
+        expect(flatChoices.some((choice) => ["happyhorse-", "wan-", "kling-", "vidu-"].some((prefix) => choice.value.startsWith(prefix)))).toBe(true);
 
         const seedance = categories.find((category) => category.id === "seedance")!;
         expect(seedance.options.find((choice) => choice.value === "seedance-2.0-standard")?.capabilities).toEqual(["文生视频", "图生视频", "全能参考"]);
@@ -72,9 +72,9 @@ describe("native Jinyu canvas classification", () => {
         expect(categories.find((category) => category.id === "aitudou-video")?.options.map((choice) => choice.value)).toEqual(expect.arrayContaining(["jinyu-video-gk-v15", "jinyu-video-v31-fast", "jinyu-video-g-omni-flash"]));
     });
 
-    it.each(["happyhorse-1.1-t2v", "wan-2.7-spicy-i2v", "kling-v3.0-std", "vidu-q3-pro-t2v"])("migrates the removed video model %s to the first available model", (modelId) => {
+    it.each(["happyhorse-1.1-t2v", "wan-2.7-spicy-i2v", "kling-v3.0-std-t2v", "vidu-q3-pro-t2v"])("preserves the restored video model %s", (modelId) => {
         const payload = createAitudouNativePayload("video.generate", { model: modelId, prompt: "旧项目提示词", seconds: "5" });
-        expect(payload.model).toBe("seedance-2.0-standard-t2v");
+        expect(payload.model).toBe(modelId);
         expect(payload.prompt).toBe("旧项目提示词");
     });
 });
@@ -398,7 +398,7 @@ describe("native Jinyu payload adapter", () => {
             .map((profile) => profile.id)
             .sort();
         expect(Object.keys(AITUDOU_NATIVE_SPECIAL_MODEL_ADAPTERS).sort()).toEqual(documented);
-        expect(documented).toHaveLength(19);
+        expect(documented).toHaveLength(24);
         expect(AITUDOU_NATIVE_UNSUPPORTED_MODEL_IDS.slice().sort()).toEqual(["kling-elements-advanced", "kling-lip-sync-identify-face", "kling-lip-sync-tts", "kling-lip-sync-video"]);
     });
 
@@ -553,9 +553,9 @@ describe("native Jinyu payload adapter", () => {
         expect(validateAitudouNativePayload("video", "video.generate", draftPayload)).toBeNull();
     });
 
-    it.each(["kling-elements-advanced", "kling-lip-sync-identify-face", "kling-lip-sync-tts", "kling-lip-sync-video"])("does not allow the removed Kling model %s to remain selected", (modelId) => {
+    it.each(["kling-elements-advanced", "kling-lip-sync-identify-face", "kling-lip-sync-tts", "kling-lip-sync-video"])("blocks submission for the unsupported Kling model %s", (modelId) => {
         let payload = createAitudouNativePayload("video.generate");
         payload = changeAitudouNativeModel("video.generate", payload, modelId);
-        expect(payload.model).toBe("seedance-2.0-standard-t2v");
+        expect(validateAitudouNativePayload("video", "video.generate", payload, EMPTY_AITUDOU_NATIVE_REFERENCE_COUNTS)).toBeTruthy();
     });
 });
