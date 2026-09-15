@@ -61,11 +61,7 @@ import { AssetPickerModal, type InsertAssetPayload } from "@/components/canvas/a
 import { CanvasSidePanel } from "@/components/canvas/canvas-side-panel";
 import { CanvasZoomControls } from "@/components/canvas/canvas-zoom-controls";
 import { CanvasEmptyGuide } from "@/components/canvas/canvas-empty-guide";
-import { useAgentStore } from "@/stores/use-agent-store";
 import { useCanvasStore } from "@/stores/canvas/use-canvas-store";
-import { useAgentBridge } from "@/pages/canvas/hooks/use-agent-bridge";
-import { usePluginHost } from "@/pages/canvas/hooks/use-plugin-host";
-import { COMFY_WORKFLOW_NODE_TYPE } from "@/integrations/comfyui-local/canvas-node";
 import { buildNodeMentionReferences, reorderCanvasConnections, reorderCanvasObjectReferences, type CanvasResourceReference } from "@/lib/canvas/canvas-resource-references";
 import { applyNodeConfigPatch, audioMetadata, buildAudioGenerationMetadata, buildImageGenerationMetadata, createCanvasNode, imageMetadata, videoMetadata } from "@/lib/canvas/canvas-node-factory";
 import { readLastUsedNodeConfig, rememberLastUsedNodeConfig } from "@/lib/canvas/canvas-node-preferences";
@@ -193,11 +189,6 @@ function TDCanvasProjectPage() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const projectId = params.id || "";
-    const localAgentConnected = useAgentStore((state) => state.connected);
-    const localAgentActivity = useAgentStore((state) => state.activity);
-    const localAgentEnabled = useAgentStore((state) => state.enabled);
-    const agentPanelOpen = useAgentStore((state) => state.panelOpen);
-    const toggleAgentPanel = useAgentStore((state) => state.togglePanel);
     const containerRef = useRef<HTMLDivElement>(null);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const uploadTargetRef = useRef<{ nodeId?: string; position?: Position; expectedKind?: CanvasMaterialKind; removeOnCancel?: boolean; returnToNodeId?: string } | null>(null);
@@ -295,7 +286,6 @@ function TDCanvasProjectPage() {
     const selectedNodeIdsRef = useRef(selectedNodeIds);
     const viewportRef = useRef(viewport);
     const focusAnimRef = useRef<number | null>(null);
-    const generateNodeRef = useRef<((nodeId: string, mode: CanvasNodeGenerationMode, prompt: string) => Promise<void>) | null>(null);
     const connectingParamsRef = useRef(connectingParams);
     const selectionBoxRef = useRef(selectionBox);
     const pendingConnectionCreateRef = useRef(pendingConnectionCreate);
@@ -719,39 +709,6 @@ function TDCanvasProjectPage() {
         nodes.forEach((node) => map.set(node.id, buildNodeMentionReferences(node, nodes, connections)));
         return map;
     }, [connections, nodes]);
-    const { applyAgentOps } = useAgentBridge({
-        projectId,
-        title: currentProject?.title,
-        nodes,
-        connections,
-        selectedNodeIds,
-        viewport,
-        nodesRef,
-        connectionsRef,
-        selectedNodeIdsRef,
-        viewportRef,
-        generateNodeRef,
-        setNodes,
-        setConnections,
-        setSelectedNodeIds,
-        setSelectedConnectionId,
-        setViewport,
-        setContextMenu,
-    });
-
-    const { pluginHost, renderPluginPanel, buildNodeToolbarItems } = usePluginHost({
-        canvasTitle: currentProject?.title || t("canvas.projectPage.untitledCanvas"),
-        effectiveConfig,
-        isAiConfigReady,
-        openConfigDialog,
-        theme,
-        nodesRef,
-        connectionsRef,
-        viewportRef,
-        setNodes,
-        setDialogNodeId,
-        applyAgentOps,
-    });
     const createNode = useCallback(
         (type: CanvasNodeTypeId, position?: Position) => {
             const targetPosition = position || getCanvasCenter();
@@ -3237,16 +3194,9 @@ function TDCanvasProjectPage() {
         },
         [effectiveConfig, finishGenerationRequest, isAiConfigReady, message, openConfigDialog, startGenerationRequest, t],
     );
-    useEffect(() => {
-        generateNodeRef.current = handleGenerateNode;
-    }, [handleGenerateNode]);
 
     const handleRetryNode = useCallback(
         async (node: CanvasNodeData) => {
-            if (node.type === COMFY_WORKFLOW_NODE_TYPE) {
-                buildNodeToolbarItems(node).find((item) => item.id === "comfy-run")?.onClick();
-                return;
-            }
             const sourceNode = findRetrySourceNode(node.id, nodesRef.current, connectionsRef.current) || node;
             const nativeRetryNode = isNativeGenerationNode(node) ? node : isNativeGenerationNode(sourceNode) ? sourceNode : null;
             const aitudouNode = nativeRetryNode && (nativeRetryNode.metadata?.providerTask?.provider === "aitudou" || nativeRetryNode.metadata?.aitudouOperation) ? nativeRetryNode : null;
@@ -3419,7 +3369,7 @@ function TDCanvasProjectPage() {
                 setRunningNodeId(null);
             }
         },
-        [buildNodeToolbarItems, effectiveConfig, finishGenerationRequest, handleResumeAitudou, handleRunAitudou, isAiConfigReady, message, openConfigDialog, startGenerationRequest, t],
+        [effectiveConfig, finishGenerationRequest, handleResumeAitudou, handleRunAitudou, isAiConfigReady, message, openConfigDialog, startGenerationRequest, t],
     );
 
     const generateImageFromTextNode = useCallback(
@@ -3542,7 +3492,6 @@ function TDCanvasProjectPage() {
     const renderNodePanel = useCallback(
         (panelNode: CanvasNodeData) => {
             const definition = getNodeDefinition(panelNode.type);
-            if (definition?.Panel) return renderPluginPanel(panelNode);
             const nativeKind = aitudouNativeNodeKind(panelNode.type);
             if (nativeKind) {
                 const hasSubmittedTask = Boolean(panelNode.metadata?.providerTask?.taskId || panelNode.metadata?.providerTask?.taskIds?.length);
@@ -3627,7 +3576,6 @@ function TDCanvasProjectPage() {
             handleRunAitudou,
             focusNode,
             mentionReferencesByNodeId,
-            renderPluginPanel,
             runningAitudouNodeIds,
             runningNodeId,
         ],
@@ -3674,9 +3622,6 @@ function TDCanvasProjectPage() {
                     onImportImage={() => handleUploadRequest()}
                     onUndo={undoCanvas}
                     onRedo={redoCanvas}
-                    agentOpen={agentPanelOpen}
-                    compactAgentStatus={{ connected: localAgentConnected, enabled: localAgentEnabled, activity: localAgentActivity }}
-                    onToggleAgent={toggleAgentPanel}
                 />
 
                 <TDCanvasSurface
@@ -3771,7 +3716,6 @@ function TDCanvasProjectPage() {
                             batchMotion={batchMotionById.get(node.id)}
                             showImageInfo={showImageInfo}
                             mentionReferences={mentionReferencesByNodeId.get(node.id) || EMPTY_REFERENCES}
-                            pluginHost={pluginHost}
                             registryVersion={nodeRegistryVersion}
                             renderPanel={renderNodePanel}
                             renderNodeContent={renderNodeContentPanel}
@@ -3832,7 +3776,6 @@ function TDCanvasProjectPage() {
                 <CanvasNodeHoverToolbar
                     node={isNodeDragging || isNodeResizing || nodeImageSettingsOpen ? null : toolbarNode}
                     viewport={viewport}
-                    extraTools={toolbarNode ? buildNodeToolbarItems(toolbarNode) : undefined}
                     onKeep={keepNodeToolbar}
                     onLeave={hideNodeToolbar}
                     onInfo={(node) => setInfoNodeId(node.id)}
@@ -4198,7 +4141,7 @@ function hasUnresolvedAitudouTask(node: CanvasNodeData) {
 function migrateCanvasBackgroundMode(projectId: string, mode: CanvasBackgroundMode) {
     if (mode !== "lines") return mode;
     try {
-        const key = `tdcanvas:dots-grid-v1:${projectId}`;
+        const key = `yzcanvas:dots-grid-v1:${projectId}`;
         if (localStorage.getItem(key)) return mode;
         localStorage.setItem(key, "1");
         return "dots";

@@ -1,7 +1,7 @@
 import localforage from "localforage";
 import type { StateStorage } from "zustand/middleware";
 
-const store = localforage.createInstance({ name: "tdcanvas", storeName: "app_state" });
+const store = localforage.createInstance({ name: "yzcanvas", storeName: "app_state" });
 
 export const localForageStorage: StateStorage = {
     getItem: async (name) => {

@@ -1,13 +1,9 @@
-import { Cpu, FileText, Images, Maximize2, Settings2 } from "lucide-react";
+import { FileText, Images, Maximize2, Settings2 } from "lucide-react";
 
 export const navigationTools = [
     {
         slug: "canvas",
         icon: Maximize2,
-    },
-    {
-        slug: "comfyui-local",
-        icon: Cpu,
     },
     {
         slug: "prompts",

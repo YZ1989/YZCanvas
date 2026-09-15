@@ -22,7 +22,7 @@ export const platformFetch: typeof fetch = async (input, init) => {
 };
 
 export async function invokeDesktop<T>(command: string, args?: Record<string, unknown>) {
-    if (!isTauriRuntime()) throw new Error("当前不是 TDCanvas 桌面客户端");
+    if (!isTauriRuntime()) throw new Error("当前不是 YZCanvas 桌面客户端");
     return invoke<T>(command, args);
 }
 
@@ -64,7 +64,7 @@ export async function saveBlobToDownloads(blob: Blob, filename: string) {
     return target;
 }
 
-export const CUSTOM_DOWNLOAD_DIRECTORY_STORAGE_KEY = "tdcanvas:download-directory";
+export const CUSTOM_DOWNLOAD_DIRECTORY_STORAGE_KEY = "yzcanvas:download-directory";
 
 export function readCustomDownloadDirectory() {
     if (typeof window === "undefined") return "";

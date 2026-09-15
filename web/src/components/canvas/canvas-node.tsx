@@ -790,7 +790,7 @@ function EmptyImageContent({ node, theme, isBatchRoot, batchCount, batchExpanded
 function VideoNodeContent({ node, theme, onUpload }: NodeContentRendererProps) {
     const { t } = useTranslation();
     if (!node.metadata?.content) return <EmptyMediaContent node={node} theme={theme} icon={<Video className="size-9 opacity-35" />} label={t("canvas.node.emptyVideo")} onUpload={onUpload} />;
-    return <video src={node.metadata.content} controls className="h-full w-full rounded-[18px] bg-black object-cover" data-canvas-no-zoom />;
+    return <video src={node.metadata.content} controls preload="metadata" playsInline className="h-full w-full rounded-[18px] bg-black object-cover" data-canvas-no-zoom />;
 }
 
 function EmptyMediaContent({ node, theme, icon, label, onUpload }: { node: CanvasNodeData; theme: (typeof canvasThemes)[keyof typeof canvasThemes]; icon: ReactNode; label: string; onUpload?: (node: CanvasNodeData) => void }) {

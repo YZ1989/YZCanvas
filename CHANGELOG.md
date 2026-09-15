@@ -2,6 +2,12 @@
 
 ## Unreleased
 
++ [新增] YZCanvas Windows 轻量版 Fork，使用独立应用和本地存储标识。
++ [调整] 移除 Agent/ComfyUI 前端与远程插件执行链，聚焦图片编辑生成和视频创作。
++ [优化] 清理未使用的前端依赖，视频按元数据预载，启用 Rust Release 体积优化。
+
+## TDCanvas upstream history (reference only)
+
 - [新增] ComfyUI 工作流关闭媒体输入后同步隐藏画布端口，剩余输入按媒体类型和名称数字自然排序。
 - [修复] ComfyUI 生成的视频统一保存到所选环境的 `output/<画布名>/`，节点直接引用该文件，不再按运行 ID 重复缓存到 TDCanvas 应用数据目录。
 - [优化] ComfyUI 工作流把只连接到可选下游参数的媒体加载节点标记为可绕过；画布端口未连线时从提交图中移除该加载节点及可选引用，连线后正常上传并执行。

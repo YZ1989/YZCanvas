@@ -63,7 +63,7 @@ export function CanvasSidePanel({ nodes, selectedNodeIds, onFocusNode, onPreview
     const [resizing, setResizing] = useState(false);
 
     useEffect(() => {
-        const compactShellKey = "tdcanvas:compact-shell-v1";
+        const compactShellKey = "yzcanvas:compact-shell-v1";
         if (localStorage.getItem(compactShellKey)) return;
         localStorage.setItem(compactShellKey, "1");
         closePanel();
@@ -79,7 +79,7 @@ export function CanvasSidePanel({ nodes, selectedNodeIds, onFocusNode, onPreview
             setWidth(nextWidth);
         };
         const onUp = () => {
-            localStorage.setItem("tdcanvas:side-panel-width", String(nextWidth));
+            localStorage.setItem("yzcanvas:side-panel-width", String(nextWidth));
             window.removeEventListener("pointermove", onMove);
             window.removeEventListener("pointerup", onUp);
             setResizing(false);

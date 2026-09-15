@@ -73,7 +73,7 @@ export function DesktopTitlebar() {
                         WebkitMask: "url(/logo.svg) center / contain no-repeat",
                     }}
                 />
-                <span className="pointer-events-none text-[13px] font-semibold tracking-[-0.01em] text-[#292524] dark:text-[#f4f4f5]">TDCanvas</span>
+                <span className="pointer-events-none text-[13px] font-semibold tracking-[-0.01em] text-[#292524] dark:text-[#f4f4f5]">YZCanvas</span>
             </div>
 
             <div id="td-desktop-titlebar-navigation-slot" className="td-desktop-titlebar-slot flex h-full min-w-0 shrink items-stretch" />

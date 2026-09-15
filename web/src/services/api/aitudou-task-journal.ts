@@ -2,7 +2,7 @@ import type { CanvasNodeData } from "@/types/canvas";
 
 import type { AitudouSubmission } from "./aitudou";
 
-const JOURNAL_KEY = "tdcanvas:aitudou_task_journal:v1";
+const JOURNAL_KEY = "yzcanvas:aitudou_task_journal:v1";
 
 type JournalStorage = Pick<Storage, "getItem" | "setItem" | "removeItem">;
 

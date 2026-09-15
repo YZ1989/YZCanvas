@@ -62,7 +62,7 @@ export type WebdavSyncConfig = {
 };
 export type ConfigTabKey = "channels" | "preferences" | "prompt-sources" | "webdav";
 
-export const CONFIG_STORE_KEY = "tdcanvas:ai_config_store";
+export const CONFIG_STORE_KEY = "yzcanvas:ai_config_store";
 export const AITUDOU_OFFICIAL_BASE_URL = "https://api.aitudou.net";
 export const AITUDOU_CHANNEL_ID = "tdcanvas-aitudou";
 const CHANNEL_MODEL_SEPARATOR = "::";

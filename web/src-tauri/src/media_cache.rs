@@ -37,7 +37,7 @@ impl MediaCacheState {
         let client = Client::builder()
             .redirect(Policy::none())
             .timeout(Duration::from_secs(180))
-            .user_agent("TDCanvas/0.14 desktop-media-cache")
+            .user_agent("YZCanvas/0.1 desktop-media-cache")
             .build()?;
         Ok(Self {
             cache_dir,
@@ -149,7 +149,7 @@ impl MediaCacheState {
         if legacy_dir.file_name().and_then(|value| value.to_str()) != Some("media-cache")
             || data_dir.file_name().and_then(|value| value.to_str()) != Some("data")
         {
-            return Err("旧缓存路径不属于 TDCanvas data/media-cache".into());
+            return Err("旧缓存路径不属于 YZCanvas data/media-cache".into());
         }
 
         let manifest_bytes = fs::read(legacy_dir.join(MANIFEST_FILENAME))

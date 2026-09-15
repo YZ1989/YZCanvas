@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Bot, Home, Images, Menu, Plus, Redo2, Sparkles, Trash2, Undo2, Upload } from "lucide-react";
+import { BookOpen, Home, Images, Menu, Plus, Redo2, Sparkles, Trash2, Undo2, Upload } from "lucide-react";
 import { Dropdown, Modal, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -26,9 +26,6 @@ export function CanvasTopBar({
     onImportImage,
     onUndo,
     onRedo,
-    agentOpen,
-    compactAgentStatus,
-    onToggleAgent,
 }: {
     title: string;
     titleDraft: string;
@@ -46,9 +43,6 @@ export function CanvasTopBar({
     onImportImage: () => void;
     onUndo: () => void;
     onRedo: () => void;
-    agentOpen: boolean;
-    compactAgentStatus: { connected: boolean; enabled: boolean; activity: string };
-    onToggleAgent: () => void;
 }) {
     const colorTheme = useThemeStore((state) => state.theme);
     const { t } = useTranslation();
@@ -124,24 +118,11 @@ export function CanvasTopBar({
                             </button>
                         )}
                     </div>
-                    <CompactAgentStatus status={compactAgentStatus} onClick={onToggleAgent} />
                 </div>
 
                 <div className="pointer-events-auto flex items-center gap-1 opacity-70 transition-opacity duration-150 hover:opacity-100 focus-within:opacity-100">
                     <CanvasWalletBalance />
                     <UserStatusActions variant="canvas" onOpenShortcuts={() => setShortcutsOpen(true)} />
-                    <span className="h-4 w-px opacity-60" style={{ background: theme.toolbar.border }} />
-                    <Tooltip title="Agent">
-                        <button
-                            type="button"
-                            className="grid size-8 place-items-center rounded-[10px] transition-colors duration-150 hover:bg-black/5 dark:hover:bg-white/10"
-                            style={{ background: agentOpen ? theme.toolbar.activeBg : "transparent", color: theme.node.text }}
-                            onClick={onToggleAgent}
-                            aria-label="Agent"
-                        >
-                            <Bot className="size-4" />
-                        </button>
-                    </Tooltip>
                 </div>
             </div>
             <Modal title={t("canvas.shortcuts")} open={shortcutsOpen} onCancel={() => setShortcutsOpen(false)} footer={null} centered>
@@ -171,19 +152,6 @@ function MenuLabel({ text, shortcut }: { text: string; shortcut: string }) {
             <span>{text}</span>
             <span className="text-xs opacity-45">{shortcut}</span>
         </span>
-    );
-}
-
-function CompactAgentStatus({ status, onClick }: { status: { connected: boolean; enabled: boolean; activity: string }; onClick: () => void }) {
-    const colorTheme = useThemeStore((state) => state.theme);
-    const theme = canvasThemes[colorTheme];
-    const { t } = useTranslation();
-    const label = status.connected ? t("canvas.agentConnected") : status.enabled ? t("canvas.agentConnecting", { activity: status.activity || t("canvas.connecting") }) : t("canvas.agentDisconnected");
-    const dotColor = status.connected ? "#22c55e" : status.enabled ? "#f59e0b" : theme.node.muted;
-    return (
-        <button type="button" className="grid size-7 place-items-center rounded-[9px] transition-colors duration-150 hover:bg-black/5 dark:hover:bg-white/10" onClick={onClick} title={label} aria-label={`${t("canvas.openAgent")}: ${label}`}>
-            <span className={`size-1.5 rounded-full ${status.enabled && !status.connected ? "animate-pulse" : ""}`} style={{ background: dotColor }} />
-        </button>
     );
 }
 

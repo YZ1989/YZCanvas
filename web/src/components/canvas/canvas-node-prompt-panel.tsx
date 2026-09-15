@@ -80,7 +80,7 @@ export function CanvasNodePromptPanel({ node, isRunning, onPromptChange, onConfi
             onWheel={(event) => event.stopPropagation()}
         >
             {mentionReferences.some((reference) => reference.active && reference.nodeId !== node.id) ? (
-                <CanvasResizableArea storageKey={`tdcanvas:node-reference-height:${node.id}`} defaultHeight={84} minHeight={72} maxHeight={220} resizeLabel={t("canvas.references.resizePreview")} className="mb-2.5">
+                <CanvasResizableArea storageKey={`yzcanvas:node-reference-height:${node.id}`} defaultHeight={84} minHeight={72} maxHeight={220} resizeLabel={t("canvas.references.resizePreview")} className="mb-2.5">
                     <CanvasConnectedReferences
                         references={mentionReferences}
                         currentNodeId={node.id}
@@ -94,7 +94,7 @@ export function CanvasNodePromptPanel({ node, isRunning, onPromptChange, onConfi
                 </CanvasResizableArea>
             ) : null}
 
-            <CanvasResizableArea storageKey={`tdcanvas:node-prompt-height:${node.id}`} defaultHeight={160} minHeight={96} maxHeight={420} resizeLabel={t("canvas.promptPanel.resizeInput")}>
+            <CanvasResizableArea storageKey={`yzcanvas:node-prompt-height:${node.id}`} defaultHeight={160} minHeight={96} maxHeight={420} resizeLabel={t("canvas.promptPanel.resizeInput")}>
                 <CanvasPromptChipInput
                     value={prompt}
                     references={mentionReferences}

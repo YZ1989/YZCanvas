@@ -34,7 +34,7 @@ export type ImageQuickToolsConfig = {
     showLabels: boolean;
 };
 
-export const IMAGE_QUICK_TOOLS_STORAGE_KEY = "tdcanvas:image-quick-tools-v6";
+export const IMAGE_QUICK_TOOLS_STORAGE_KEY = "yzcanvas:image-quick-tools-v6";
 
 const defaultBaseToolIds: ImageQuickToolId[] = ["info", "delete", "saveAsset", "download", "edit"];
 

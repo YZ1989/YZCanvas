@@ -151,7 +151,6 @@ pub fn run() {
     let builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
 
     builder
-        .plugin(tdcanvas_comfyui_local::init())
         .setup(|app| {
             #[cfg(target_os = "windows")]
             if let Some(main) = app.get_webview_window("main") {
@@ -200,5 +199,5 @@ pub fn run() {
             media_cache::import_legacy_cached_media
         ])
         .run(tauri::generate_context!())
-        .expect("TDCanvas desktop client failed to start");
+        .expect("YZCanvas desktop client failed to start");
 }

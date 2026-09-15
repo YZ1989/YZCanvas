@@ -36,7 +36,7 @@ type AssetStore = {
     cleanupImages: (extra?: unknown) => void;
 };
 
-const ASSET_STORE_KEY = "tdcanvas:asset_store";
+const ASSET_STORE_KEY = "yzcanvas:asset_store";
 
 const assetStorage: PersistStorage<AssetStore> = {
     getItem: async (name) => {

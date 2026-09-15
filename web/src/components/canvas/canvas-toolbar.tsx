@@ -273,7 +273,6 @@ export function CanvasToolbar({
                         <CreateMenuItem icon={<Type />} label={t("canvas.toolbar.text")} theme={theme} onClick={() => runCreateAction(onAddText)} />
                         <CreateMenuItem icon={<ImageIcon />} label={t("canvas.toolbar.image")} theme={theme} onClick={() => runCreateAction(onAddImage)} />
                         <CreateMenuItem icon={<Video />} label={t("canvas.toolbar.video")} theme={theme} onClick={() => runCreateAction(onAddVideo)} />
-                        <CreateMenuItem icon={<Music2 />} label={t("canvas.toolbar.audio")} theme={theme} onClick={() => runCreateAction(onAddAudio)} />
                         {primaryExtensionDefs.map((definition) => (
                             <CreateMenuItem key={definition.type} icon={definition.icon} label={definition.title} theme={theme} onClick={() => runCreateAction(() => onAddExtensionNode(definition.type))} />
                         ))}

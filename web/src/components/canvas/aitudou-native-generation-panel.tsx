@@ -299,7 +299,7 @@ export function AitudouNativeGenerationPanel({
 
             <div>
                 {isMediaKind ? (
-                    <CanvasResizableArea storageKey={`tdcanvas:node-reference-height:${node.id}`} defaultHeight={84} minHeight={72} maxHeight={220} resizeLabel={t("canvas.references.resizePreview")} className="mx-3 mt-2 border-b">
+                    <CanvasResizableArea storageKey={`yzcanvas:node-reference-height:${node.id}`} defaultHeight={84} minHeight={72} maxHeight={220} resizeLabel={t("canvas.references.resizePreview")} className="mx-3 mt-2 border-b">
                         <div className="flex h-full min-w-0 items-center gap-2 pb-1" title={connectedReferences.length > 1 ? t("canvas.references.reorder") : undefined}>
                             <CanvasConnectedReferences
                                 references={mentionReferences}
@@ -345,7 +345,7 @@ export function AitudouNativeGenerationPanel({
                         </div>
                     </CanvasResizableArea>
                 ) : connectedReferences.length ? (
-                    <CanvasResizableArea storageKey={`tdcanvas:node-reference-height:${node.id}`} defaultHeight={84} minHeight={72} maxHeight={220} resizeLabel={t("canvas.references.resizePreview")} className="mx-3 mt-2.5">
+                    <CanvasResizableArea storageKey={`yzcanvas:node-reference-height:${node.id}`} defaultHeight={84} minHeight={72} maxHeight={220} resizeLabel={t("canvas.references.resizePreview")} className="mx-3 mt-2.5">
                         <CanvasConnectedReferences
                             references={mentionReferences}
                             currentNodeId={node.id}
@@ -363,7 +363,7 @@ export function AitudouNativeGenerationPanel({
 
                 {promptEnabled ? (
                     <CanvasResizableArea
-                        storageKey={`tdcanvas:node-prompt-height:${node.id}`}
+                        storageKey={`yzcanvas:node-prompt-height:${node.id}`}
                         defaultHeight={kind === "text" ? 180 : kind === "video" ? 148 : 128}
                         minHeight={96}
                         maxHeight={420}

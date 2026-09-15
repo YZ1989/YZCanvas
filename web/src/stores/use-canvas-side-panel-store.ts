@@ -6,8 +6,8 @@ export const CANVAS_SIDE_PANEL_MAX_WIDTH = 480;
 export const CANVAS_SIDE_PANEL_DEFAULT_WIDTH = 280;
 export type CanvasSidePanelTab = "canvas" | "assets" | "prompts";
 
-const WIDTH_KEY = "tdcanvas:side-panel-width";
-const OPEN_KEY = "tdcanvas:side-panel-open";
+const WIDTH_KEY = "yzcanvas:side-panel-width";
+const OPEN_KEY = "yzcanvas:side-panel-open";
 
 function initialWidth() {
     if (typeof window === "undefined") return CANVAS_SIDE_PANEL_DEFAULT_WIDTH;

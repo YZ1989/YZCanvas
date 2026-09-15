@@ -6,7 +6,7 @@ import {
 } from "@/components/canvas/aitudou-native-generation";
 import type { CanvasNodeData, CanvasNodeMetadata, CanvasNodeTypeId } from "@/types/canvas";
 
-export const LAST_USED_NODE_CONFIG_KEY = "tdcanvas:last-used-node-config:v1";
+export const LAST_USED_NODE_CONFIG_KEY = "yzcanvas:last-used-node-config:v1";
 
 type LastUsedNodeConfigMap = Partial<Record<"image" | "video" | "audio" | "text", CanvasNodeMetadata>>;
 

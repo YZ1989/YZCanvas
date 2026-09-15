@@ -1,4 +1,4 @@
-export const AITUDOU_WALLET_REFRESH_EVENT = "tdcanvas:aitudou-wallet-refresh";
+export const AITUDOU_WALLET_REFRESH_EVENT = "yzcanvas:aitudou-wallet-refresh";
 
 export type AitudouWalletSummary = {
     amount: number;

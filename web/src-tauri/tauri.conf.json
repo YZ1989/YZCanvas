@@ -1,11 +1,11 @@
 {
     "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-    "productName": "TDCanvas",
-    "version": "0.14.0",
-    "identifier": "com.tdtv.tdcanvas",
+    "productName": "YZCanvas",
+    "version": "0.1.0",
+    "identifier": "io.github.yz1989.yzcanvas",
     "build": {
         "frontendDist": "../dist",
-        "devUrl": "http://127.0.0.1:3000",
+        "devUrl": "http://127.0.0.1:3010",
         "beforeDevCommand": "npm run dev",
         "beforeBuildCommand": "npm run build"
     },
@@ -14,7 +14,7 @@
         "windows": [
             {
                 "label": "main",
-                "title": "TDCanvas",
+                "title": "YZCanvas",
                 "url": "/",
                 "width": 1440,
                 "height": 900,
@@ -34,7 +34,7 @@
             },
             {
                 "label": "splashscreen",
-                "title": "TDCanvas 正在启动",
+                "title": "YZCanvas 正在启动",
                 "url": "/splashscreen.html",
                 "width": 680,
                 "height": 360,
@@ -59,15 +59,28 @@
             "devCsp": null,
             "assetProtocol": {
                 "enable": true,
-                "scope": ["$APPLOCALDATA/media-cache/**/*", "$APPLOCALDATA/comfyui-local/results/**/*"]
+                "scope": [
+                    "$APPLOCALDATA/media-cache/**/*"
+                ]
             },
-            "capabilities": ["main-window", "splashscreen"]
+            "capabilities": [
+                "main-window",
+                "splashscreen"
+            ]
         }
     },
     "bundle": {
         "active": true,
-        "targets": "all",
-        "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+        "targets": [
+            "nsis"
+        ],
+        "icon": [
+            "icons/32x32.png",
+            "icons/128x128.png",
+            "icons/128x128@2x.png",
+            "icons/icon.icns",
+            "icons/icon.ico"
+        ],
         "android": {
             "debugApplicationIdSuffix": ".debug"
         },
@@ -77,7 +90,10 @@
             },
             "nsis": {
                 "displayLanguageSelector": true,
-                "languages": ["SimpChinese", "English"],
+                "languages": [
+                    "SimpChinese",
+                    "English"
+                ],
                 "installMode": "currentUser"
             }
         },

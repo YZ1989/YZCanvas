@@ -14,6 +14,6 @@ export const useThemeStore = create<ThemeStore>()(
             theme: "dark",
             setTheme: (theme) => set({ theme }),
         }),
-        { name: "tdcanvas:theme_store" },
+        { name: "yzcanvas:theme_store" },
     ),
 );

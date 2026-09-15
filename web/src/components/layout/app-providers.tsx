@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import { useEffect } from "react";
-import { ProConfigProvider } from "@ant-design/pro-components";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { App, ConfigProvider } from "antd";
 import enUS from "antd/es/locale/en_US";
@@ -49,19 +48,17 @@ export function AppProviders({ children }: { children: ReactNode }) {
 
     return (
         <ConfigProvider locale={locale === "zh-CN" ? zhCN : enUS} theme={getAntThemeConfig(dark)}>
-            <ProConfigProvider dark={dark}>
-                <App>
-                    <QueryClientProvider client={queryClient}>
-                        <DesktopStartupReady />
-                        <div className="td-desktop-window-frame flex h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground" data-desktop-platform={windowsDesktop ? "windows" : undefined}>
-                            <DesktopTitlebar />
-                            <div className="min-h-0 flex-1 overflow-hidden">
-                                <ClientRootInit>{children}</ClientRootInit>
-                            </div>
+            <App>
+                <QueryClientProvider client={queryClient}>
+                    <DesktopStartupReady />
+                    <div className="td-desktop-window-frame flex h-dvh min-h-0 flex-col overflow-hidden bg-background text-foreground" data-desktop-platform={windowsDesktop ? "windows" : undefined}>
+                        <DesktopTitlebar />
+                        <div className="min-h-0 flex-1 overflow-hidden">
+                            <ClientRootInit>{children}</ClientRootInit>
                         </div>
-                    </QueryClientProvider>
-                </App>
-            </ProConfigProvider>
+                    </div>
+                </QueryClientProvider>
+            </App>
         </ConfigProvider>
     );
 }

@@ -10,7 +10,6 @@ const quickActions: Array<{ type: CanvasNodeType; label: "text" | "image" | "vid
     { type: CanvasNodeType.Text, label: "text", icon: FileText },
     { type: CanvasNodeType.Image, label: "image", icon: ImageIcon },
     { type: CanvasNodeType.Video, label: "video", icon: Video },
-    { type: CanvasNodeType.Audio, label: "audio", icon: Music2 },
 ];
 
 export function CanvasEmptyGuide({ onCreate, onUploadMaterial }: { onCreate: (type: CanvasNodeType) => void; onUploadMaterial: () => void }) {

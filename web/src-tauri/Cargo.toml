@@ -1,17 +1,17 @@
 [package]
-name = "tdcanvas"
-version = "0.14.0"
-description = "TDCanvas AI infinite canvas desktop client"
-authors = ["TDTV"]
+name = "yzcanvas"
+version = "0.1.0"
+description = "YZCanvas lightweight AI image and video canvas"
+authors = ["YZ1989", "TDTV (upstream)"]
 license = "AGPL-3.0-only"
-repository = ""
+repository = "https://github.com/YZ1989/YZCanvas"
 edition = "2024"
 rust-version = "1.85"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "tdcanvas_lib"
+name = "yzcanvas_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [features]
@@ -38,4 +38,9 @@ tauri-plugin-log = "2"
 tauri-plugin-process = "2"
 tauri-plugin-updater = "2"
 tokio = { version = "1", features = ["fs", "io-util", "net", "sync", "time"] }
-tdcanvas-comfyui-local = { path = "../../modules/comfyui-local/tauri-plugin" }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

@@ -1,6 +1,6 @@
 import type { DownloadableMediaKind } from "@/services/media-download";
 
-export const DOWNLOAD_COMPLETE_EVENT = "tdcanvas:download-complete";
+export const DOWNLOAD_COMPLETE_EVENT = "yzcanvas:download-complete";
 
 export type DownloadFeedbackDetail = {
     id: string;

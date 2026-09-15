@@ -19,3 +19,4 @@ web/public/plugins
 # Local development/runtime artifacts
 .agents/runtime/
 modules/comfyui-local/tauri-plugin/target/
+artifacts/

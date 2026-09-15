@@ -1,0 +1,8 @@
+{
+  "commit": "16b31273633f983cdbd8de05694ec36d471b2650",
+  "nativeExeBytes": 19650560,
+  "installerBytes": 5133737,
+  "frontendBytes": 3382853.0,
+  "nodeVersion": "v25.8.2",
+  "rustVersion": "rustc 1.98.1 (48a229cea 2026-09-01)"
+}
