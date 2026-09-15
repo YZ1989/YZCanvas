@@ -13,3 +13,7 @@
 ## 重新生成图标
 
 在 `web` 目录运行 `npx tauri icon src-tauri/icons/app-icon.svg`。该命令还可能生成暂未使用的移动端图标；Windows 包使用 Tauri 配置中列出的桌面图标。
+
+## 验证
+
+类型检查与 3 项启动流程测试通过；浏览器检查了启动页布局。Windows 安装包构建成功，并从实际生成的 exe 中提取图标，确认是新 YZ 标识。桌面启动交互、快捷方式及 Windows 图标缓存表现仍待安装验收。
