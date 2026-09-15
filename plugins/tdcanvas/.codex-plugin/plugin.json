@@ -1,7 +1,7 @@
 {
   "name": "tdcanvas",
   "version": "0.1.0",
-  "description": "Use Codex to read and operate TDCanvas through the local TDCanvas Agent MCP server.",
+  "description": "Use Codex to read and operate YZCanvas through the local YZCanvas Agent MCP server.",
   "author": {
     "name": "TDTV"
   },
@@ -10,14 +10,14 @@
   "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
-    "displayName": "TDCanvas",
-    "shortDescription": "Use Codex to operate the current TDCanvas board.",
-    "longDescription": "Connects Codex to the local TDCanvas Agent MCP server so Codex can inspect the current board, create nodes, connect flows, and trigger generation through the web canvas confirmation flow.",
+    "displayName": "YZCanvas",
+    "shortDescription": "Use Codex to operate the current YZCanvas board.",
+    "longDescription": "Connects Codex to the local YZCanvas Agent MCP server so Codex can inspect the current board, create nodes, connect flows, and trigger generation through the web canvas confirmation flow.",
     "developerName": "TDTV",
     "category": "Productivity",
     "capabilities": ["Canvas", "MCP", "Creative Workflow"],
     "defaultPrompt": [
-      "打开 TDCanvas",
+      "打开 YZCanvas",
       "读取当前画布并总结节点结构",
       "根据选中节点创建一组生图提示词"
     ],

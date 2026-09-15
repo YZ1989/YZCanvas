@@ -1,45 +1,45 @@
-# TDCanvas「ComfyUI 本地模式」产品需求文档
+# YZCanvas「ComfyUI 本地模式」产品需求文档
 
 > 状态：Phase 0–2 与 Phase 3 基础执行闭环已完成并通过本地验收；实时内部节点进度与运行历史待增强
 > 产品形态：Tauri 2 桌面客户端独立功能模块
 > 支持平台：Windows、macOS
-> 第一版定位：将一个 ComfyUI API 工作流封装为一个可复用、可连接、可配置的 TDCanvas 宏节点
+> 第一版定位：将一个 ComfyUI API 工作流封装为一个可复用、可连接、可配置的 YZCanvas 宏节点
 
 ## 1. 背景
 
-TDCanvas 当前主要通过内置模型节点完成图片、视频、音频和文本生成。部分用户已经在本地维护了成熟的 ComfyUI 环境、自定义节点、模型和工作流，但仍需要进入 ComfyUI 浏览器界面修改参数、执行工作流，再手动把结果导回画布。
+YZCanvas 当前主要通过内置模型节点完成图片、视频、音频和文本生成。部分用户已经在本地维护了成熟的 ComfyUI 环境、自定义节点、模型和工作流，但仍需要进入 ComfyUI 浏览器界面修改参数、执行工作流，再手动把结果导回画布。
 
-本功能新增独立的「ComfyUI 本地模式」。用户选择本机 ComfyUI 环境后，由 TDCanvas 在后台启动 ComfyUI 服务，但不打开 ComfyUI 浏览器。用户上传 ComfyUI 的 API JSON，选择希望暴露的输入参数和输出结果，系统自动生成一个 TDCanvas 工作流节点。此后用户可通过画布连线、参数面板和运行按钮使用该工作流。
+本功能新增独立的「ComfyUI 本地模式」。用户选择本机 ComfyUI 环境后，由 YZCanvas 在后台启动 ComfyUI 服务，但不打开 ComfyUI 浏览器。用户上传 ComfyUI 的 API JSON，选择希望暴露的输入参数和输出结果，系统自动生成一个 YZCanvas 工作流节点。此后用户可通过画布连线、参数面板和运行按钮使用该工作流。
 
 ## 2. 产品目标
 
 1. 用户不需要打开 ComfyUI 浏览器，即可启动、停止和检查本地 ComfyUI 环境。
 2. 用户可以导入 ComfyUI API JSON，并可靠识别工作流中的全部节点及其参数定义。
 3. 用户可以自由选择需要暴露的输入参数、媒体输入和输出结果。
-4. 每个已导入工作流在 TDCanvas 中表现为一个独立的宏节点，而不是复制一套固定 UI。
-5. 多个宏节点可以在画布中连接，并复用 TDCanvas 的文本、图片、视频、音频和素材节点。
-6. ComfyUI 模块发生启动、解析或执行错误时，不影响 TDCanvas 主画布与 Aitudou 节点。
+4. 每个已导入工作流在 YZCanvas 中表现为一个独立的宏节点，而不是复制一套固定 UI。
+5. 多个宏节点可以在画布中连接，并复用 YZCanvas 的文本、图片、视频、音频和素材节点。
+6. ComfyUI 模块发生启动、解析或执行错误时，不影响 YZCanvas 主画布与 Aitudou 节点。
 7. Windows 与 macOS 使用同一份工作流定义和前端交互，仅原生环境发现与进程控制按平台适配。
 
 ## 3. 非目标
 
 第一版不包含以下范围：
 
-1. 不把 ComfyUI 内部每个 `MODEL`、`LATENT`、`CONDITIONING` 等运行时节点逐一映射成 TDCanvas 节点。
+1. 不把 ComfyUI 内部每个 `MODEL`、`LATENT`、`CONDITIONING` 等运行时节点逐一映射成 YZCanvas 节点。
 2. 不内置 ComfyUI、Python、PyTorch、模型或自定义节点的安装器。
 3. 不提供 ComfyUI-Manager 的浏览器 UI，也不代替其安装自定义节点。
 4. 不编辑 ComfyUI 内部连线拓扑；工作流拓扑以导入的 API JSON 为准。
 5. 不支持 ComfyUI 普通 UI 工作流 JSON。用户必须导入“Save (API Format)”产生的 API JSON。
 6. 不连接公网 ComfyUI 实例；第一版仅管理本机 `127.0.0.1` 服务。
-7. 不在 TDCanvas 中复刻 ComfyUI 的节点编辑器。
+7. 不在 YZCanvas 中复刻 ComfyUI 的节点编辑器。
 
 ## 4. 关键产品决定
 
-### 4.1 一个 API 工作流对应一个 TDCanvas 宏节点
+### 4.1 一个 API 工作流对应一个 YZCanvas 宏节点
 
 用户导入的整个工作流封装为一个宏节点。工作流内部节点仍完整保存在 JSON 中，用户只选择需要显示在宏节点上的参数和输出。
 
-原因：ComfyUI 的 `MODEL`、`LATENT`、`CONDITIONING` 等对象只存在于单次 Python 执行上下文，不能作为普通文件跨 TDCanvas 节点或跨任务传输。把内部节点强行拆散会改变缓存、执行顺序和自定义节点行为。
+原因：ComfyUI 的 `MODEL`、`LATENT`、`CONDITIONING` 等对象只存在于单次 Python 执行上下文，不能作为普通文件跨 YZCanvas 节点或跨任务传输。把内部节点强行拆散会改变缓存、执行顺序和自定义节点行为。
 
 后续如需拆分，只支持用户在 ComfyUI 中预先拆成多个可独立执行的 API 工作流，再分别导入为多个宏节点。
 
@@ -55,7 +55,7 @@ API JSON 只保存节点 ID、`class_type`、输入值和内部连线。参数�
 
 ### 4.3 主项目只增加通用端口能力
 
-当前 TDCanvas 连线只记录 `fromNodeId` 和 `toNodeId`，每个节点只有一个通用输入和输出。ComfyUI 宏节点需要多个有名称、有类型的输入和输出端口。
+当前 YZCanvas 连线只记录 `fromNodeId` 和 `toNodeId`，每个节点只有一个通用输入和输出。ComfyUI 宏节点需要多个有名称、有类型的输入和输出端口。
 
 主画布需要新增与供应商无关的通用能力：
 
@@ -72,7 +72,7 @@ API JSON 只保存节点 ID、`class_type`、输入值和内部连线。参数�
 
 ### 5.1 ComfyUI 工作流作者
 
-已经在本地调通工作流，希望把常用参数暴露给 TDCanvas，而不重复进入 ComfyUI 修改。
+已经在本地调通工作流，希望把常用参数暴露给 YZCanvas，而不重复进入 ComfyUI 修改。
 
 ### 5.2 画布创作者
 
@@ -86,7 +86,7 @@ Windows 上可能同时拥有便携版和源码版 ComfyUI；macOS 上可能拥�
 
 ### 6.1 模式入口
 
-TDCanvas 顶部工作区增加模式切换入口：
+YZCanvas 顶部工作区增加模式切换入口：
 
 - `AI 画布`
 - `ComfyUI 本地模式`
@@ -124,7 +124,7 @@ ComfyUI 本地模式包含三块：
 9. 轮询 `/system_stats`，成功后获取 `/object_info`。
 10. 状态变为“运行中”，显示 Python、PyTorch、设备和显存信息。
 
-用户可手动停止、重启、打开日志。TDCanvas 只停止由自己启动的 ComfyUI 子进程。
+用户可手动停止、重启、打开日志。YZCanvas 只停止由自己启动的 ComfyUI 子进程。
 
 ### 7.2 导入 API 工作流
 
@@ -162,7 +162,7 @@ ComfyUI 本地模式包含三块：
 
 第一版控件映射：
 
-| ComfyUI 定义 | TDCanvas 控件 |
+| ComfyUI 定义 | YZCanvas 控件 |
 | --- | --- |
 | `STRING` | 单行输入或多行文本框 |
 | `INT` | 数字输入；有范围时可选滑块 |
@@ -186,7 +186,7 @@ ComfyUI 本地模式包含三块：
 - 文件
 - 原始 JSON
 
-`MODEL`、`LATENT`、`CONDITIONING` 等内存对象不能作为 TDCanvas 输出端口。
+`MODEL`、`LATENT`、`CONDITIONING` 等内存对象不能作为 YZCanvas 输出端口。
 
 每个输出可设置：
 
@@ -217,7 +217,7 @@ ComfyUI 本地模式包含三块：
 7. `POST /prompt` 提交任务并保存 `prompt_id`。
 8. 使用 `/ws?clientId=...` 接收排队、执行节点、进度、完成与错误事件。
 9. WebSocket 异常时自动通过 `/history/{prompt_id}` 轮询兜底。
-10. 完成后读取所选输出，下载并缓存到 TDCanvas 应用数据目录。
+10. 完成后读取所选输出，下载并缓存到 YZCanvas 应用数据目录。
 11. 宏节点显示最新结果、运行状态和运行历史；所选输出端口可继续连接下游节点。
 
 ## 8. 宏节点交互
@@ -248,7 +248,7 @@ ComfyUI 本地模式包含三块：
 
 - 多输出使用紧凑标签切换，不遮挡主要预览。
 - 同一输出的多次运行进入历史记录。
-- 图片、视频、音频沿用 TDCanvas 现有查看、下载、裁剪和素材保存能力。
+- 图片、视频、音频沿用 YZCanvas 现有查看、下载、裁剪和素材保存能力。
 - 输出文件先缓存到本地，再向画布下游提供稳定地址。
 
 ## 9. 工作流库
@@ -297,7 +297,7 @@ web/src/integrations/comfyui-local/
 模块边界：
 
 ```text
-TDCanvas Host
+YZCanvas Host
   ├─ 通用画布端口协议
   ├─ 模式/路由注册接口
   └─ Tauri 插件注册
@@ -387,7 +387,7 @@ type ComfyWorkflowDefinition = {
 4. 必须添加 `--disable-auto-launch`，即使 Windows 便携版参数隐式开启浏览器也要覆盖。
 5. 启动超时默认 120 秒，可在日志中继续观察，不将慢启动误判为永久失败。
 6. 捕获 stdout/stderr，保留最近日志并支持导出。
-7. 应用正常退出时终止由 TDCanvas 启动的子进程；异常退出后下次启动检查遗留 PID 与端口，但不得误杀非 TDCanvas 进程。
+7. 应用正常退出时终止由 YZCanvas 启动的子进程；异常退出后下次启动检查遗留 PID 与端口，但不得误杀非 YZCanvas 进程。
 8. 环境路径和 Python 路径通过原生文件选择器授权。
 9. 不启用 CORS，不开放局域网访问，不在 URL 中传递本地文件路径。
 
@@ -451,8 +451,8 @@ type ComfyWorkflowDefinition = {
 4. 不自动安装 requirements、自定义节点或模型。
 5. 自定义启动参数采用受控数组；危险或会开放网络的参数需要明确警告。
 6. ComfyUI 服务只绑定 loopback。
-7. 读取和写入路径限制在用户选定的 ComfyUI 环境与 TDCanvas 模块数据目录。
-8. 输出文件进入 TDCanvas 前记录来源、工作流 ID、`prompt_id` 和 ComfyUI 文件定位信息。
+7. 读取和写入路径限制在用户选定的 ComfyUI 环境与 YZCanvas 模块数据目录。
+8. 输出文件进入 YZCanvas 前记录来源、工作流 ID、`prompt_id` 和 ComfyUI 文件定位信息。
 
 ## 17. MVP 验收标准
 
@@ -479,7 +479,7 @@ type ComfyWorkflowDefinition = {
 - 运行状态、当前内部节点和错误可追踪。
 - 成功结果自动缓存到本地，并能连接到下游图片节点。
 - 多次运行保留历史且不额外创建重复的宏节点。
-- 停止运行不会关闭 TDCanvas，也不会影响 Aitudou 节点。
+- 停止运行不会关闭 YZCanvas，也不会影响 Aitudou 节点。
 
 ### 17.4 隔离
 
@@ -541,8 +541,8 @@ type ComfyWorkflowDefinition = {
 
 ### 19.1 已解决的歧义
 
-1. “工作流变成画布节点”定义为：一个 API 工作流对应一个 TDCanvas 宏节点。
-2. “读取所有节点”定义为：读取内部全部节点用于参数和依赖选择，但不把内部运行时节点逐个显示到 TDCanvas。
+1. “工作流变成画布节点”定义为：一个 API 工作流对应一个 YZCanvas 宏节点。
+2. “读取所有节点”定义为：读取内部全部节点用于参数和依赖选择，但不把内部运行时节点逐个显示到 YZCanvas。
 3. “自由控制”通过可选择字面量参数、媒体参数、多输入/多输出端口和高级 JSON 映射实现。
 4. “独立模块”定义为独立 contracts、core、frontend、Tauri plugin、store 和错误边界；主项目只提供通用端口与模式注册能力。
 5. “选择 ComfyUI 目录环境”包含 ComfyUI 根目录和 Python 解释器识别；无法唯一识别时由用户补选解释器。
@@ -553,7 +553,7 @@ type ComfyWorkflowDefinition = {
 2. 宏节点参数默认直接展开多少项，超过多少项折叠到参数面板。
 3. 是否在后续版本支持连接一个已经由用户手动启动的本地 ComfyUI。
 
-默认方案：顶部模式切换；宏节点直接展示最多 6 个常用参数，其余进入展开面板；第一版只管理 TDCanvas 自己启动的 ComfyUI。
+默认方案：顶部模式切换；宏节点直接展示最多 6 个常用参数，其余进入展开面板；第一版只管理 YZCanvas 自己启动的 ComfyUI。
 
 ### 19.3 审查结果
 

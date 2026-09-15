@@ -4,7 +4,7 @@ import { AGENT_PROMPT } from "../config.js";
 import { errorMessage } from "../utils/value.js";
 import type { AgentEmit } from "./types.js";
 
-/** 使用 Claude CLI 执行一次带 TDCanvas Agent 工具的任务。 */
+/** 使用 Claude CLI 执行一次带 YZCanvas Agent 工具的任务。 */
 export function runClaudeTurn(prompt: string, emit: AgentEmit) {
     const fullPrompt = withAgentPrompt(prompt);
     if (!fullPrompt) return;
@@ -12,7 +12,7 @@ export function runClaudeTurn(prompt: string, emit: AgentEmit) {
     if (child) pipeJsonLines(child, emit, "claude");
 }
 
-/** 为 Claude CLI 请求拼接 TDCanvas Agent 指令。 */
+/** 为 Claude CLI 请求拼接 YZCanvas Agent 指令。 */
 function withAgentPrompt(prompt: string) {
     return prompt.trim() ? `${AGENT_PROMPT}\n\n用户请求：${prompt}` : "";
 }

@@ -1,8 +1,8 @@
-# TDCanvas Security Policy
+# YZCanvas Security Policy
 
 ## Supported versions
 
-TDCanvas is under active development. Security fixes target the `main` branch and the latest tagged release. Older versions are supported on a best-effort basis.
+YZCanvas is under active development. Security fixes target the `main` branch and the latest tagged release. Older versions are supported on a best-effort basis.
 
 ## Reporting a vulnerability
 
@@ -18,22 +18,21 @@ Include the affected version or commit, reproduction steps, impact, relevant red
 
 ## Scope
 
-TDCanvas supports third-party node plugins loaded from remote URLs. Installed plugin code runs in the web application and can access page data, including locally stored provider credentials. This is an intentional extensibility trade-off, so only install plugins from sources you trust.
+YZCanvas Windows preview removes the remote node-plugin execution chain. Optional upstream module sources remain in the repository but are not included in the desktop build. Provider credentials are stored locally using the inherited configuration mechanism.
 
 In-scope reports include:
 
 - Cross-site scripting or unintended credential exposure in project code.
-- Plugin code running without the required installation confirmation.
+- Unexpected execution of remote plugin code in the lightweight desktop build.
 - Unsafe file handling, import/export behavior, WebDAV proxy behavior, or access control.
 - An exploitable supply-chain issue in code or default configuration shipped by this repository.
 
 Usually out of scope:
 
-- Malicious behavior by a plugin the user explicitly trusted and installed.
 - Vulnerabilities in third-party providers, hosting platforms, or browser extensions.
-- Compromise of a user's credentials outside TDCanvas.
+- Compromise of a user's credentials outside YZCanvas.
 - Reports without a practical security impact.
 
 ## Disclosure
 
-TDTV maintainers aim to acknowledge valid reports within seven days and coordinate a fix before public disclosure. Timelines are best effort. Please allow time for investigation and remediation before publishing details.
+YZCanvas maintainers coordinate fixes before public disclosure on a best-effort basis. Please allow time for investigation and remediation before publishing details.

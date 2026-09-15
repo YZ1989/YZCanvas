@@ -1,17 +1,17 @@
 ---
 title: Codex App Plugin
-description: Install and use the local TDCanvas plugin in Codex App
+description: Install and use the local YZCanvas plugin in Codex App
 ---
 
 # Codex App Plugin
 
-The TDCanvas plugin connects Codex to a local TDCanvas Agent, allowing Codex to open the local canvas, read and create nodes, connect workflows, and start generation tasks. Its source is in `plugins/tdcanvas/`.
+The YZCanvas plugin connects Codex to a local YZCanvas Agent, allowing Codex to open the local canvas, read and create nodes, connect workflows, and start generation tasks. Its source is in `plugins/tdcanvas/`.
 
-The plugin intentionally uses local source and a locally linked command. It does not depend on a remote npm package or a hosted TDCanvas site.
+The plugin intentionally uses local source and a locally linked command. It does not depend on a remote npm package or a hosted YZCanvas site.
 
-## Prepare TDCanvas Agent
+## Prepare YZCanvas Agent
 
-Build TDCanvas Agent and register its local command once:
+Build YZCanvas Agent and register its local command once:
 
 ```bash
 cd canvas-agent
@@ -20,14 +20,14 @@ npm run build
 npm link
 ```
 
-This makes the `tdcanvas-agent` command available to the plugin. Run `npm run build` again after changing TDCanvas Agent source.
+This makes the `tdcanvas-agent` command available to the plugin. Run `npm run build` again after changing YZCanvas Agent source.
 
 ## Ask Codex to install it
 
-Open Codex in the TDCanvas source checkout and send this request:
+Open Codex in the YZCanvas source checkout and send this request:
 
 ```text
-Install the local TDCanvas plugin from this source checkout. Build and link canvas-agent,
+Install the local YZCanvas plugin from this source checkout. Build and link canvas-agent,
 register the repository root as a local marketplace, install tdcanvas@tdcanvas-local,
 validate the plugin and tell me whether a new conversation is required to load its Skill
 and tdcanvas MCP tools.
@@ -56,10 +56,10 @@ The repository marketplace entry points to `./plugins/tdcanvas`. Start a new Cod
 In a new Codex conversation, ask:
 
 ```text
-Open TDCanvas, create a canvas, and connect Codex.
+Open YZCanvas, create a canvas, and connect Codex.
 ```
 
-The plugin starts the local `web/` frontend and TDCanvas Agent, reads its connection URL and token, opens the local frontend, and creates and connects a canvas. You can then ask Codex to summarize the current canvas, create prompts from selected nodes, or organize nodes into a generation workflow.
+The plugin starts the local `web/` frontend and YZCanvas Agent, reads its connection URL and token, opens the local frontend, and creates and connects a canvas. You can then ask Codex to summarize the current canvas, create prompts from selected nodes, or organize nodes into a generation workflow.
 
 ## Update the plugin
 
@@ -74,7 +74,7 @@ Start a new Codex conversation after reinstalling to avoid using cached Skills a
 
 ## Manual troubleshooting
 
-The plugin starts TDCanvas Agent through this locally linked MCP command:
+The plugin starts YZCanvas Agent through this locally linked MCP command:
 
 ```bash
 tdcanvas-agent mcp
@@ -88,7 +88,7 @@ npm install
 npm run dev
 ```
 
-Then start TDCanvas Agent in another terminal:
+Then start YZCanvas Agent in another terminal:
 
 ```bash
 cd canvas-agent
@@ -97,10 +97,10 @@ npm run build
 node dist/index.js
 ```
 
-Read `Local URL` and `Connect token` from the TDCanvas Agent output or `http://127.0.0.1:17371/config`, then open:
+Read `Local URL` and `Connect token` from the YZCanvas Agent output or `http://127.0.0.1:17371/config`, then open:
 
 ```text
 http://localhost:3000/canvas?mode=new&agentUrl=<Local URL>&agentToken=<Connect token>
 ```
 
-`mode=new` creates a canvas and connects it to the local TDCanvas Agent automatically.
+`mode=new` creates a canvas and connects it to the local YZCanvas Agent automatically.

@@ -1,4 +1,4 @@
-# TDCanvas documentation
+# YZCanvas documentation
 
 This is a Next.js application generated with
 [Create Fumadocs](https://github.com/fuma-nama/fumadocs).
@@ -19,7 +19,7 @@ bun run build
 bun run start
 ```
 
-Run an already-built local `tdcanvas-docs:local` image with Docker Compose:
+Run an already-built local `yzcanvas-docs:local` image with Docker Compose:
 
 ```bash
 docker compose up -d

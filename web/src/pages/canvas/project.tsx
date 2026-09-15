@@ -52,7 +52,7 @@ import {
     prepareAitudouNativeRun,
     writeAitudouNativePrompt,
 } from "@/components/canvas/aitudou-native-generation";
-import { TDCanvasSurface } from "@/components/canvas/td-canvas-surface";
+import { YZCanvasSurface } from "@/components/canvas/yz-canvas-surface";
 import { Minimap } from "@/components/canvas/canvas-mini-map";
 import { CanvasNode } from "@/components/canvas/canvas-node";
 import { CanvasNodePromptPanel, type CanvasNodeGenerationMode } from "@/components/canvas/canvas-node-prompt-panel";
@@ -177,10 +177,10 @@ export default function CanvasPage() {
 
     if (!mounted) return <CanvasRefreshShell />;
 
-    return <TDCanvasProjectPage />;
+    return <YZCanvasProjectPage />;
 }
 
-function TDCanvasProjectPage() {
+function YZCanvasProjectPage() {
     const { message, modal } = App.useApp();
     const { t } = useTranslation();
     // Subscribe to the registry version so plugin registration changes rerender the canvas.
@@ -1911,7 +1911,7 @@ function TDCanvasProjectPage() {
             }
             const channel = {
                 id: AITUDOU_CHANNEL_ID,
-                name: "TDCanvas",
+                name: "YZCanvas",
                 baseUrl: AITUDOU_OFFICIAL_BASE_URL,
                 apiKey,
                 apiFormat: "aitudou" as const,
@@ -3624,7 +3624,7 @@ function TDCanvasProjectPage() {
                     onRedo={redoCanvas}
                 />
 
-                <TDCanvasSurface
+                <YZCanvasSurface
                     containerRef={containerRef}
                     viewport={viewport}
                     backgroundMode={backgroundMode}
@@ -3769,7 +3769,7 @@ function TDCanvasProjectPage() {
                             onClose={() => setNodeCreatePosition(null)}
                         />
                     ) : null}
-                </TDCanvasSurface>
+                </YZCanvasSurface>
 
                 {nodes.length === 0 ? <CanvasEmptyGuide onCreate={(type) => createNode(type)} onUploadMaterial={() => createUploadMaterialNode()} /> : null}
 

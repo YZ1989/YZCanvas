@@ -1,4 +1,4 @@
-# TDCanvas 官方插件注册表
+# YZCanvas 官方插件注册表
 
 本目录负责一次构建所有内置画布插件，并在本地 `dist/` 生成插件脚本和 `official-plugins.json` 清单。
 

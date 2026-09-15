@@ -1,4 +1,4 @@
-// TDCanvas 官方插件集中构建:一次进程构建所有内置插件并生成本地清单。
+// YZCanvas 官方插件集中构建:一次进程构建所有内置插件并生成本地清单。
 // 官方插件目录本身不各自安装依赖:统一从本目录 node_modules 解析 SDK(nodePaths)。
 // 当前不预设远程发布入口；本地自测时把插件注册表配置指向 dist/official-plugins.json。
 import { build } from "esbuild";

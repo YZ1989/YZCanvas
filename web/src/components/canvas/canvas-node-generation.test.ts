@@ -12,7 +12,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
     it("globally gets a generated image result from the current canvas without a connection", () => {
         const generated = node("generated-image", CanvasNodeType.Image, "Character result", {
             content: "asset://generated-character.png",
-            localPath: "C:\\TDCanvas\\media-cache\\generated-character.png",
+            localPath: "C:\\YZCanvas\\media-cache\\generated-character.png",
             mimeType: "image/png",
             sourceOrigin: "generated",
             canvasSetEnabled: true,
@@ -31,7 +31,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
                     name: "Character result.png",
                     type: "image/png",
                     dataUrl: "asset://generated-character.png",
-                    localPath: "C:\\TDCanvas\\media-cache\\generated-character.png",
+                    localPath: "C:\\YZCanvas\\media-cache\\generated-character.png",
                 },
             },
         ]);
@@ -41,7 +41,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
         const image = node("uploaded-image", CanvasNodeType.Image, "reference-frame.webp", {
             content: "blob:uploaded-image",
             storageKey: "image:reference-frame",
-            localPath: "C:\\TDCanvas\\media-cache\\reference-frame.webp",
+            localPath: "C:\\YZCanvas\\media-cache\\reference-frame.webp",
             mimeType: "image/webp",
             bytes: 24_576,
             naturalWidth: 1536,
@@ -63,7 +63,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
                     type: "image/webp",
                     dataUrl: "blob:uploaded-image",
                     storageKey: "image:reference-frame",
-                    localPath: "C:\\TDCanvas\\media-cache\\reference-frame.webp",
+                    localPath: "C:\\YZCanvas\\media-cache\\reference-frame.webp",
                 },
             },
         ]);
@@ -73,7 +73,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
         const video = node("uploaded-video", CanvasNodeType.Video, "motion-reference", {
             content: "blob:uploaded-video",
             storageKey: "video:motion-reference",
-            localPath: "C:\\TDCanvas\\media-cache\\motion-reference.mov",
+            localPath: "C:\\YZCanvas\\media-cache\\motion-reference.mov",
             mimeType: "video/quicktime",
             bytes: 8_388_608,
             naturalWidth: 1920,
@@ -95,7 +95,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
                     type: "video/quicktime",
                     url: "blob:uploaded-video",
                     storageKey: "video:motion-reference",
-                    localPath: "C:\\TDCanvas\\media-cache\\motion-reference.mov",
+                    localPath: "C:\\YZCanvas\\media-cache\\motion-reference.mov",
                     bytes: 8_388_608,
                     width: 1920,
                     height: 1080,
@@ -109,7 +109,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
         const audio = node("uploaded-audio", CanvasNodeType.Audio, "voice-reference", {
             content: "blob:uploaded-audio",
             storageKey: "audio:voice-reference",
-            localPath: "C:\\TDCanvas\\media-cache\\voice-reference.wav",
+            localPath: "C:\\YZCanvas\\media-cache\\voice-reference.wav",
             mimeType: "audio/wav",
             bytes: 1_048_576,
             durationMs: 12_340,
@@ -130,7 +130,7 @@ describe("buildNodeGenerationInputs uploaded materials", () => {
                     type: "audio/wav",
                     url: "blob:uploaded-audio",
                     storageKey: "audio:voice-reference",
-                    localPath: "C:\\TDCanvas\\media-cache\\voice-reference.wav",
+                    localPath: "C:\\YZCanvas\\media-cache\\voice-reference.wav",
                     durationMs: 12_340,
                 },
             },

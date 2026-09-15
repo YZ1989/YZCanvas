@@ -88,7 +88,7 @@ const seedance25 = (inputKind: AitudouModelInputKind): AitudouModelConstraints =
     seconds: { min: 4, max: 30, defaultValue: 5 },
     resolutions: SEEDANCE_25_RESOLUTIONS,
     ...(inputKind === "multi-reference-video" ? { maxImages: 30, maxVideos: 10, maxAudios: 10, maxReferences: 50 } : {}),
-    notes: ["TDCanvas requires an explicit duration for standard generation; automatic duration is not exposed."],
+    notes: ["YZCanvas requires an explicit duration for standard generation; automatic duration is not exposed."],
 });
 
 const flux3 = (inputKind: AitudouModelInputKind): AitudouModelConstraints => ({

@@ -1,14 +1,17 @@
-# TDCanvas ComfyUI Local Module
+# YZCanvas ComfyUI Local Module
 
-`modules/comfyui-local` 是「ComfyUI 本地模式」的独立领域模块。它不读取 TDCanvas store，也不依赖 Aitudou 业务；主应用只通过公开 contracts、原生 client 和单一画布 integration 接入。
+> 上游可选模块参考：不包含在当前 YZCanvas Windows 轻量版中。内部包名和协议标识保留以避免破坏引用。
+
+
+`modules/comfyui-local` 是「ComfyUI 本地模式」的独立领域模块。它不读取 YZCanvas store，也不依赖 Aitudou 业务；主应用只通过公开 contracts、原生 client 和单一画布 integration 接入。
 
 ## 推荐整合包
 
-推荐使用 **土豆 ComfyUI 纯净整合包**，将本地工作流接入 TDCanvas 并封装为画布插件节点。
+推荐使用 **土豆 ComfyUI 纯净整合包**，将本地工作流接入 YZCanvas 并封装为画布插件节点。
 
 **[下载纯净整合包（无模型，包含启动器）→](https://pan.quark.cn/s/d96c1eb34170)**
 
-解压后按工作流需要准备模型与自定义节点，在 TDCanvas「ComfyUI 本地」选择 ComfyUI 环境目录并启动，再导入 **API Format JSON** 工作流、选择输入输出并添加到画布。纯净包不包含模型。
+解压后按工作流需要准备模型与自定义节点，在 YZCanvas「ComfyUI 本地」选择 ComfyUI 环境目录并启动，再导入 **API Format JSON** 工作流、选择输入输出并添加到画布。纯净包不包含模型。
 
 ## 已完成
 
@@ -28,7 +31,7 @@
 - 支持启动、状态同步、停止、进程树清理、环形日志、`/system_stats` 与 `/object_info`
 - 保存原生进程所有权，下一次启动只回收命令行身份完全匹配的遗留进程
 
-### TDCanvas 集成
+### YZCanvas 集成
 
 - 独立的「ComfyUI 本地」运行环境页面
 - 五步导入向导：文件、依赖、输入、输出、预览保存

@@ -24,7 +24,7 @@ const hasFlag = (name) => args.includes(name);
 let target = choices[String(option("--target") || "").toLowerCase()];
 if (!target) {
     const prompt = createInterface({ input, output });
-    console.log("\nTDCanvas 桌面客户端打包\n");
+    console.log("\nYZCanvas 桌面客户端打包\n");
     console.log("  1. Windows 安装包（NSIS .exe）");
     console.log("  2. macOS 通用安装包（Intel + Apple Silicon .app/.dmg）");
     console.log("  3. Windows + macOS（通过 GitHub Actions 双平台构建）\n");
@@ -54,12 +54,12 @@ if (useCi) {
 }
 
 function updaterReleaseConfig() {
-    const endpoint = process.env.TDCANVAS_UPDATER_ENDPOINT?.trim();
-    const publicKey = process.env.TDCANVAS_UPDATER_PUBLIC_KEY?.trim();
+    const endpoint = process.env.YZCANVAS_UPDATER_ENDPOINT?.trim();
+    const publicKey = process.env.YZCANVAS_UPDATER_PUBLIC_KEY?.trim();
     const privateKey = process.env.TAURI_SIGNING_PRIVATE_KEY?.trim();
     const missing = [];
-    if (!endpoint) missing.push("TDCANVAS_UPDATER_ENDPOINT");
-    if (!publicKey) missing.push("TDCANVAS_UPDATER_PUBLIC_KEY");
+    if (!endpoint) missing.push("YZCANVAS_UPDATER_ENDPOINT");
+    if (!publicKey) missing.push("YZCANVAS_UPDATER_PUBLIC_KEY");
     if (!privateKey) missing.push("TAURI_SIGNING_PRIVATE_KEY");
     if (missing.length) {
         fail(`正式安装包必须配置签名更新参数：${missing.join(", ")}。本地无更新能力的测试构建可使用 npm run desktop:build。`);
@@ -68,9 +68,9 @@ function updaterReleaseConfig() {
     const urlForValidation = endpoint.replace(/\{\{(?:target|arch|current_version)\}\}/g, "value");
     try {
         const parsed = new URL(urlForValidation);
-        if (parsed.protocol !== "https:") fail("TDCANVAS_UPDATER_ENDPOINT 必须使用 HTTPS。");
+        if (parsed.protocol !== "https:") fail("YZCANVAS_UPDATER_ENDPOINT 必须使用 HTTPS。");
     } catch {
-        fail("TDCANVAS_UPDATER_ENDPOINT 不是有效的更新地址。");
+        fail("YZCANVAS_UPDATER_ENDPOINT 不是有效的更新地址。");
     }
 
     return {
@@ -92,7 +92,7 @@ function dispatchCi(selectedTarget) {
     const executable = process.platform === "win32" ? "gh.exe" : "gh";
     const check = spawnSync(executable, ["auth", "status"], { stdio: "ignore" });
     if (check.status !== 0) {
-        fail("“全部”需要在 Windows 与 macOS 两台构建机上执行。请安装并登录 GitHub CLI，或在仓库 Actions 页面手动运行“TDCanvas Desktop Package”。");
+        fail("“全部”需要在 Windows 与 macOS 两台构建机上执行。请安装并登录 GitHub CLI，或在仓库 Actions 页面手动运行“YZCanvas Desktop Package”。");
     }
     run(executable, ["workflow", "run", "desktop-package.yml", "-f", `target=${selectedTarget}`]);
     console.log(`\n已提交 ${label(selectedTarget)} 构建任务。完成后可在 GitHub Actions 下载安装包。\n`);

@@ -8,12 +8,12 @@ import { archiveCodexThread, CodexSkillLookupError, configureCodexSkill, generat
 import type { CodexReasoningEffort, CodexSkillSelector } from "../agent/codex-protocol.js";
 import type { AgentAttachment, AgentPermissionMode } from "../agent/types.js";
 import { AGENT_PROTOCOL_VERSION, CanvasSession } from "../canvas/session.js";
-import { DEFAULT_PORT, ensureSiteWorkspace, loadConfig, saveConfig, updateSiteWorkspace, type TDCanvasAgentConfig } from "../config.js";
+import { DEFAULT_PORT, ensureSiteWorkspace, loadConfig, saveConfig, updateSiteWorkspace, type YZCanvasAgentConfig } from "../config.js";
 import { logger } from "../utils/logger.js";
 import { checkVersions } from "../version-check.js";
 import { SkillStore, SkillStoreError } from "../skills/store.js";
 
-/** 启动仅监听本机的 TDCanvas Agent HTTP 服务。 */
+/** 启动仅监听本机的 YZCanvas Agent HTTP 服务。 */
 export function startHttpServer() {
     const config = loadConfig(true);
     const port = Number(process.env.PORT) || Number(new URL(config.url).port) || DEFAULT_PORT;
@@ -420,7 +420,7 @@ export function startHttpServer() {
     });
 
     app.listen(port, "127.0.0.1", () => {
-        console.log("TDCanvas Agent");
+        console.log("YZCanvas Agent");
         checkVersions();
         console.log(`Local URL: ${config.url}`);
         console.log(`Connect token: ${config.token}`);
@@ -428,7 +428,7 @@ export function startHttpServer() {
         console.log("Optional MCP add: codex mcp add tdcanvas -- tdcanvas-agent mcp");
         console.log("Remove manually added MCP: codex mcp remove tdcanvas");
         if (logger.enabled) console.log(`Debug log: ${logger.filePath}`);
-        logger.info("TDCanvas Agent started", { url: config.url, workspace: ensureSiteWorkspace(config).workspacePath, debugLog: logger.filePath });
+        logger.info("YZCanvas Agent started", { url: config.url, workspace: ensureSiteWorkspace(config).workspacePath, debugLog: logger.filePath });
         const activeThreadId = initialWorkspace.activeThreadId || "";
         if (activeThreadId && session.beginCodexMutation()) {
             void prepareExistingThread(activeThreadId).catch(async (error) => {
@@ -501,12 +501,12 @@ function revealLocalFile(filePath: string, isDirectory: boolean) {
 }
 
 /** 结合服务配置解析当前请求 URL。 */
-function requestUrl(req: Request, config: TDCanvasAgentConfig) {
+function requestUrl(req: Request, config: YZCanvasAgentConfig) {
     return new URL(req.originalUrl || req.url || "/", config.url);
 }
 
 /** 设置跨域响应头并记录通过 token 授权的来源。 */
-function setCors(req: Request, res: Response, url: URL, config: TDCanvasAgentConfig) {
+function setCors(req: Request, res: Response, url: URL, config: YZCanvasAgentConfig) {
     const origin = req.headers.origin;
     res.setHeader("Access-Control-Allow-Origin", origin || "*");
     res.setHeader("Access-Control-Allow-Headers", "content-type,x-canvas-agent-token");

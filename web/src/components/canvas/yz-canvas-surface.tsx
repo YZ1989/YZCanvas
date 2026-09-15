@@ -4,7 +4,7 @@ import { canvasThemes, type CanvasBackgroundMode } from "@/lib/canvas-theme";
 import { useThemeStore } from "@/stores/use-theme-store";
 import type { ViewportTransform } from "@/types/canvas";
 
-type TDCanvasSurfaceProps = {
+type YZCanvasSurfaceProps = {
     containerRef: React.RefObject<HTMLDivElement | null>;
     viewport: ViewportTransform;
     backgroundMode?: CanvasBackgroundMode;
@@ -17,7 +17,7 @@ type TDCanvasSurfaceProps = {
     children: React.ReactNode;
 };
 
-export function TDCanvasSurface({ containerRef, viewport, backgroundMode = "dots", onViewportChange, onCanvasMouseDown, onCanvasDeselect, onCanvasDoubleClick, onContextMenu, onDrop, children }: TDCanvasSurfaceProps) {
+export function YZCanvasSurface({ containerRef, viewport, backgroundMode = "dots", onViewportChange, onCanvasMouseDown, onCanvasDeselect, onCanvasDoubleClick, onContextMenu, onDrop, children }: YZCanvasSurfaceProps) {
     const themeName = useThemeStore((state) => state.theme);
     const theme = canvasThemes[themeName];
     const panState = useRef({

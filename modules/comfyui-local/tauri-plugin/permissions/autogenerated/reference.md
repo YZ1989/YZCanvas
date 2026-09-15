@@ -1,6 +1,6 @@
 ## Default Permission
 
-Allows TDCanvas to detect, start, stop, inspect, execute workflows, and cache results from the user-selected local ComfyUI environment.
+Allows YZCanvas to detect, start, stop, inspect, execute workflows, and cache results from the user-selected local ComfyUI environment.
 
 #### This default permission set includes the following:
 

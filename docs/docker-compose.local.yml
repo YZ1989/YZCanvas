@@ -1,7 +1,7 @@
 services:
   docs:
-    image: tdcanvas-docs:local
-    container_name: tdcanvas-docs
+    image: yzcanvas-docs:local
+    container_name: yzcanvas-docs
     build:
       context: ..
       dockerfile: docs/Dockerfile

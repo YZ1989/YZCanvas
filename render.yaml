@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: tdcanvas
+    name: yzcanvas
     runtime: docker
     plan: free
     autoDeployTrigger: off

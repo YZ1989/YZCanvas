@@ -271,14 +271,14 @@ test("可选 MCP 失败进入 warning，画布 MCP 失败进入 failed", () => {
     requiredFailure.completeConversationMcpInventory([{ name: "tdcanvas", authStatus: "notLoggedIn" }]);
     const failed = requiredFailure.completeConversationPreparation("thread-2");
     assert.equal(failed.status, "failed");
-    assert.match(failed.error || "", /TDCanvas MCP/);
+    assert.match(failed.error || "", /YZCanvas MCP/);
 
     const requiredMissing = new CanvasSession();
     requiredMissing.beginConversation();
     requiredMissing.completeConversationMcpInventory([{ name: "notion", authStatus: "unsupported" }]);
     const missing = requiredMissing.completeConversationPreparation("thread-3");
     assert.equal(missing.status, "failed");
-    assert.match(missing.error || "", /TDCanvas MCP/);
+    assert.match(missing.error || "", /YZCanvas MCP/);
 });
 
 test("Codex 写操作在多窗口之间互斥且不能与运行 turn 并发", () => {
@@ -427,7 +427,7 @@ test("增量事件重放时转换为完整文本快照", (t) => {
 test("并行 item 更新后重放仍保留开始顺序和命令字段", (t) => {
     const session = new CanvasSession();
     session.setCodexState({ busy: true, threadId: "thread-1", turnId: "turn-1" });
-    session.emitThread("agent_event", "thread-1", { turnId: "turn-1", type: "item.started", item: { id: "first", type: "command_execution", command: "first", cwd: "D:\\TDCanvas" } });
+    session.emitThread("agent_event", "thread-1", { turnId: "turn-1", type: "item.started", item: { id: "first", type: "command_execution", command: "first", cwd: "D:\\YZCanvas" } });
     session.emitThread("agent_event", "thread-1", { turnId: "turn-1", type: "item.started", item: { id: "second", type: "command_execution", command: "second" } });
     session.emitThread("agent_event", "thread-1", { turnId: "turn-1", type: "item.updated", item: { id: "first", type: "command_execution", delta: "output" } });
 
@@ -436,7 +436,7 @@ test("并行 item 更新后重放仍保留开始顺序和命令字段", (t) => {
     const events = client.events("agent_event") as Array<Record<string, unknown>>;
 
     assert.deepEqual(events.map((event) => field(field(event, "item"), "id")), ["first", "second"]);
-    assert.deepEqual(field(events[0], "item"), { id: "first", type: "command_execution", command: "first", cwd: "D:\\TDCanvas", text: "output" });
+    assert.deepEqual(field(events[0], "item"), { id: "first", type: "command_execution", command: "first", cwd: "D:\\YZCanvas", text: "output" });
 });
 
 test("长 turn 不会淘汰仍在更新的活动条目快照", (t) => {

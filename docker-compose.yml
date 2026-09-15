@@ -1,7 +1,7 @@
 services:
   app:
-    image: ${TDCANVAS_IMAGE:-tdcanvas:local}
-    container_name: tdcanvas
+    image: ${YZCANVAS_IMAGE:-yzcanvas:local}
+    container_name: yzcanvas
     ports:
       - "3000:3000"
     restart: unless-stopped

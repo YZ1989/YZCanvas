@@ -6,13 +6,13 @@ import type * as React from "react";
 
 import type { PluginRuntime } from "./types";
 
-type RuntimeGlobal = { TDCanvasRuntime?: PluginRuntime };
+type RuntimeGlobal = { YZCanvasRuntime?: PluginRuntime };
 
 /** 取宿主注入的插件运行时(含 React、事件总线、injectCSS 等)。 */
 export function getRuntime(): PluginRuntime {
-    const runtime = (globalThis as unknown as RuntimeGlobal).TDCanvasRuntime;
+    const runtime = (globalThis as unknown as RuntimeGlobal).YZCanvasRuntime;
     if (!runtime) {
-        throw new Error("[plugin-sdk] TDCanvas 运行时未就绪:请在画布宿主中加载本插件");
+        throw new Error("[plugin-sdk] YZCanvas 运行时未就绪:请在画布宿主中加载本插件");
     }
     return runtime;
 }

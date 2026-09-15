@@ -1,6 +1,6 @@
 ---
 title: Docker 部署
-description: 使用 Docker Compose 从本地源码部署 TDCanvas
+description: 使用 Docker Compose 从本地源码部署 YZCanvas
 ---
 
 # Docker 部署
@@ -10,7 +10,7 @@ description: 使用 Docker Compose 从本地源码部署 TDCanvas
 ## 从源码构建主应用
 
 ```bash
-cd /path/to/TDCanvas
+cd /path/to/YZCanvas
 docker compose -f docker-compose.local.yml up -d --build
 ```
 
@@ -20,7 +20,7 @@ docker compose -f docker-compose.local.yml up -d --build
 http://localhost:3000
 ```
 
-镜像构建为 `tdcanvas:local` 后，可直接使用默认 Compose 文件再次启动，无需重复构建：
+镜像构建为 `yzcanvas:local` 后，可直接使用默认 Compose 文件再次启动，无需重复构建：
 
 ```bash
 docker compose up -d
@@ -57,7 +57,7 @@ docker compose -f docker-compose.local.yml up -d --build
 ```yaml
 services:
   app:
-    image: tdcanvas:local
+    image: yzcanvas:local
     ports:
       - "3000:3000"
     environment:
@@ -71,7 +71,7 @@ services:
 docker run -d -p 3000:3000 \
   -e ANALYTICS_GA4_ID=G-XXXXXXXXXX \
   -e ANALYTICS_BAIDU_ID=e8263761cc5c32f5f7a855b8203b965a \
-  tdcanvas:local
+  yzcanvas:local
 ```
 
 单页应用的路由切换会自动向所有已启用的统计上报 pageview。

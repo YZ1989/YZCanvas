@@ -27,20 +27,20 @@ const messages = {
   en: {
     eyebrow: 'TDTV AI canvas workspace',
     center: 'Documentation',
-    description: 'Learn how to run TDCanvas, organize node-based creative workflows, manage local assets, and connect your own model services.',
+    description: 'Learn how to run YZCanvas, organize node-based creative workflows, manage local assets, and connect your own model services.',
     quickStart: 'Quick Start',
     gallery: 'Gallery',
     features: 'Explore Features',
-    previewAlt: 'TDCanvas preview',
+    previewAlt: 'YZCanvas preview',
   },
   'zh-CN': {
     eyebrow: 'TDTV AI 画布工作空间',
     center: '文档中心',
-    description: '了解如何启动 TDCanvas、组织节点式创作流程、管理本地素材，并连接你自己的模型服务。',
+    description: '了解如何启动 YZCanvas、组织节点式创作流程、管理本地素材，并连接你自己的模型服务。',
     quickStart: '快速开始',
     gallery: '效果展示',
     features: '功能介绍',
-    previewAlt: 'TDCanvas 效果图',
+    previewAlt: 'YZCanvas 效果图',
   },
 };
 

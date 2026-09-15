@@ -12,7 +12,7 @@ const CODEX_VERSION = String((require("@openai/codex/package.json") as { version
 /** 输出当前版本，并在后台检查 npm 最新版本。 */
 export function checkVersions() {
     const localCodexVersion = commandVersion("codex");
-    logger.info("TDCanvas Agent version", { version: VERSION });
+    logger.info("YZCanvas Agent version", { version: VERSION });
     logger.info("Bundled Codex version", { version: CODEX_VERSION });
     logger.info("Local Codex version", { version: localCodexVersion || "not found" });
     if (!localCodexVersion) {
@@ -23,11 +23,11 @@ export function checkVersions() {
     void checkLatestCodexVersion(localCodexVersion);
 }
 
-/** 查询 Codex 的 npm 版本；TDCanvas Agent 本身仅从当前本地源码构建。 */
+/** 查询 Codex 的 npm 版本；YZCanvas Agent 本身仅从当前本地源码构建。 */
 async function checkLatestCodexVersion(localCodexVersion: string) {
     try {
         const latestCodex = await npmVersion("@openai/codex");
-        if (isOlder(CODEX_VERSION, latestCodex)) logger.warn(`Update available: bundled Codex ${CODEX_VERSION} -> ${latestCodex}. Update the TDCanvas Agent source dependency and rebuild locally.`);
+        if (isOlder(CODEX_VERSION, latestCodex)) logger.warn(`Update available: bundled Codex ${CODEX_VERSION} -> ${latestCodex}. Update the YZCanvas Agent source dependency and rebuild locally.`);
         if (localCodexVersion && isOlder(localCodexVersion, latestCodex)) logger.warn(`Update available: local Codex ${localCodexVersion} -> ${latestCodex}. Run: npm install -g @openai/codex@latest`);
     } catch {
         logger.warn("Unable to check the latest npm versions; startup will continue.");

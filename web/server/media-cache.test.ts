@@ -157,7 +157,7 @@ describe("local media cache contract", () => {
 
 describe("media cache directory boundary", () => {
     it("defaults to repo/data/media-cache and rejects paths outside repo/data", () => {
-        const repoRoot = resolve("C:/workspace/TDCanvas");
+        const repoRoot = resolve("C:/workspace/YZCanvas");
         expect(resolveMediaCacheDirectory(repoRoot)).toEqual({
             dataRoot: resolve(repoRoot, "data"),
             cacheDir: resolve(repoRoot, "data/media-cache"),

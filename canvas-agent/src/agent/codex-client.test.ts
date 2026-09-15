@@ -698,16 +698,16 @@ test("稀疏的命令完成通知会保留开始通知中的命令内容", () =>
     const client = Reflect.construct(CodexAppClient, [child, (type: string, payload: unknown) => events.push({ type, payload }), history]) as CodexAppClient;
     const testClient = client as unknown as TestClient;
 
-    testClient.handleNotification("item/started", { threadId: "thread-1", turnId: "turn-1", item: { id: "command-1", type: "commandExecution", command: "Get-Location", cwd: "D:\\TDCanvas" } });
-    testClient.handleNotification("item/commandExecution/outputDelta", { threadId: "thread-1", turnId: "turn-1", itemId: "command-1", delta: "D:\\TDCanvas" });
+    testClient.handleNotification("item/started", { threadId: "thread-1", turnId: "turn-1", item: { id: "command-1", type: "commandExecution", command: "Get-Location", cwd: "D:\\YZCanvas" } });
+    testClient.handleNotification("item/commandExecution/outputDelta", { threadId: "thread-1", turnId: "turn-1", itemId: "command-1", delta: "D:\\YZCanvas" });
     testClient.handleNotification("item/completed", { threadId: "thread-1", turnId: "turn-1", item: { id: "command-1", type: "commandExecution", status: "completed", exitCode: 0 } });
 
     const completed = events.find((event) => event.type === "agent_event" && eventType(event.payload) === "item.completed");
     const item = (completed?.payload as { item?: Record<string, unknown> })?.item;
     assert.equal(item?.command, "Get-Location");
-    assert.equal(item?.cwd, "D:\\TDCanvas");
+    assert.equal(item?.cwd, "D:\\YZCanvas");
     assert.equal(item?.status, "completed");
-    assert.equal(item?.aggregatedOutput, "D:\\TDCanvas");
+    assert.equal(item?.aggregatedOutput, "D:\\YZCanvas");
     assert.deepEqual(persisted, [{
         threadId: "thread-1",
         turnId: "turn-1",

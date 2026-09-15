@@ -507,7 +507,7 @@ async fn start_environment<R: Runtime>(
 ) -> Result<LaunchResult, String> {
     let _lifecycle = state.lifecycle.lock().await;
     if !state.accepting_starts.load(Ordering::Acquire) {
-        return Err("TDCanvas 正在退出，不能再启动 ComfyUI".to_owned());
+        return Err("YZCanvas 正在退出，不能再启动 ComfyUI".to_owned());
     }
     let profile = registry.profile(&profile_id)?;
     let launch = build_launch_spec(&profile)?;
@@ -522,7 +522,7 @@ async fn start_environment<R: Runtime>(
                 .map_err(|error| format!("无法读取 ComfyUI 进程状态：{error}"))?
                 .is_none()
             {
-                return Err("ComfyUI 已由 TDCanvas 启动，请先停止或重启当前环境".to_owned());
+                return Err("ComfyUI 已由 YZCanvas 启动，请先停止或重启当前环境".to_owned());
             }
         }
         inner.child = None;
@@ -554,7 +554,7 @@ async fn start_environment<R: Runtime>(
         .ok_or_else(|| "无法读取 ComfyUI 进程 ID".to_owned())?;
     if !state.accepting_starts.load(Ordering::Acquire) {
         terminate_process_tree(&mut child, Some(pid)).await;
-        return Err("TDCanvas 正在退出，已取消启动 ComfyUI".to_owned());
+        return Err("YZCanvas 正在退出，已取消启动 ComfyUI".to_owned());
     }
     let started_at = now_millis();
     let ownership = ProcessOwnership {
@@ -1106,7 +1106,7 @@ async fn cache_comfy_output<R: Runtime>(
     } else {
         app.path()
             .app_local_data_dir()
-            .map_err(|error| format!("无法定位 TDCanvas 本地数据目录：{error}"))?
+            .map_err(|error| format!("无法定位 YZCanvas 本地数据目录：{error}"))?
             .join("comfyui-local")
             .join("results")
             .join(sanitize_path_segment(prompt_id, "prompt"))
@@ -1189,7 +1189,7 @@ async fn cache_comfy_output<R: Runtime>(
 fn video_output_directory(comfy_root: &Path, output_folder: &str) -> PathBuf {
     comfy_root
         .join("output")
-        .join(sanitize_result_filename(output_folder, "TDCanvas"))
+        .join(sanitize_result_filename(output_folder, "YZCanvas"))
 }
 
 fn comfy_result_source_path(
@@ -1493,7 +1493,7 @@ fn validate_extra_args(args: &[String]) -> Result<(), String> {
     for arg in args {
         let normalized = arg.trim().to_ascii_lowercase();
         if !SAFE_FLAGS.contains(&normalized.as_str()) {
-            return Err(format!("启动参数 {arg} 未列入 TDCanvas 本地安全白名单"));
+            return Err(format!("启动参数 {arg} 未列入 YZCanvas 本地安全白名单"));
         }
     }
     Ok(())

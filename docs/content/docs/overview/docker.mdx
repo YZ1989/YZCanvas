@@ -1,6 +1,6 @@
 ---
 title: Docker Deployment
-description: Build and deploy TDCanvas from local source with Docker Compose
+description: Build and deploy YZCanvas from local source with Docker Compose
 ---
 
 # Docker Deployment
@@ -8,13 +8,13 @@ description: Build and deploy TDCanvas from local source with Docker Compose
 ## Build the application from source
 
 ```bash
-cd /path/to/TDCanvas
+cd /path/to/YZCanvas
 docker compose -f docker-compose.local.yml up -d --build
 ```
 
 Open `http://localhost:3000`.
 
-After the image has been built as `tdcanvas:local`, the default Compose file can start it again without rebuilding:
+After the image has been built as `yzcanvas:local`, the default Compose file can start it again without rebuilding:
 
 ```bash
 docker compose up -d
@@ -45,7 +45,7 @@ No analytics are enabled by default. A deployment can enable GA4, Baidu Analytic
 ```yaml
 services:
   app:
-    image: tdcanvas:local
+    image: yzcanvas:local
     ports:
       - "3000:3000"
     environment:

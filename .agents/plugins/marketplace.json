@@ -1,7 +1,7 @@
 {
   "name": "tdcanvas-local",
   "interface": {
-    "displayName": "TDCanvas"
+    "displayName": "YZCanvas"
   },
   "plugins": [
     {

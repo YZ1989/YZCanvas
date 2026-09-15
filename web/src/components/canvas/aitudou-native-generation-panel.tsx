@@ -155,7 +155,7 @@ export function AitudouNativeGenerationPanel({
     const promptEnabled = aitudouNativeUsesPrompt(operation.id);
     const emptyPromptIsOnlyValidationIssue = useMemo(() => {
         if (!validationError || !promptEnabled || visiblePrompt.trim() || referenceCounts.text > 0) return false;
-        const probePayload = writeAitudouNativePrompt(operation.id, { ...effectivePayload }, "TDCanvas 验证提示词");
+        const probePayload = writeAitudouNativePrompt(operation.id, { ...effectivePayload }, "YZCanvas 验证提示词");
         return validateAitudouNativePayload(kind, operation.id, probePayload, referenceCounts) === null;
     }, [effectivePayload, kind, operation.id, promptEnabled, referenceCounts, validationError, visiblePrompt]);
     const visibleValidationError = emptyPromptIsOnlyValidationIssue ? null : validationError;

@@ -742,10 +742,10 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore = "requires TDCANVAS_MEDIA_SMOKE_URL and public network access"]
+    #[ignore = "requires YZCANVAS_MEDIA_SMOKE_URL and public network access"]
     async fn caches_configured_public_media() {
-        let source = std::env::var("TDCANVAS_MEDIA_SMOKE_URL")
-            .expect("TDCANVAS_MEDIA_SMOKE_URL is required");
+        let source = std::env::var("YZCANVAS_MEDIA_SMOKE_URL")
+            .expect("YZCANVAS_MEDIA_SMOKE_URL is required");
         let cache_dir = std::env::temp_dir().join(format!(
             "tdcanvas-native-cache-smoke-{}",
             std::process::id()

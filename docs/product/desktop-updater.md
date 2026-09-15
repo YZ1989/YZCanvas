@@ -1,6 +1,6 @@
-# TDCanvas 客户端自动更新
+# YZCanvas 客户端自动更新
 
-TDCanvas 使用 Tauri 2 官方 Updater 完成完整客户端更新。客户端启动时检查一次；发现新版本后由用户下载，下载完成后点击“重启并更新”。画布、本地素材、API Key 与 ComfyUI 配置不属于安装包更新内容，不应被覆盖。
+YZCanvas 使用 Tauri 2 官方 Updater 完成完整客户端更新。客户端启动时检查一次；发现新版本后由用户下载，下载完成后点击“重启并更新”。画布、本地素材、API Key 与 ComfyUI 配置不属于安装包更新内容，不应被覆盖。
 
 ## 发布前配置
 
@@ -15,8 +15,8 @@ npm run tauri signer generate -- -w C:\secure\tdcanvas-updater.key
 正式打包需要以下环境变量：
 
 ```text
-TDCANVAS_UPDATER_ENDPOINT=https://api.example.com/desktop/update/{{target}}/{{arch}}/{{current_version}}
-TDCANVAS_UPDATER_PUBLIC_KEY=<签名公钥内容>
+YZCANVAS_UPDATER_ENDPOINT=https://api.example.com/desktop/update/{{target}}/{{arch}}/{{current_version}}
+YZCANVAS_UPDATER_PUBLIC_KEY=<签名公钥内容>
 TAURI_SIGNING_PRIVATE_KEY=<私钥内容或私钥文件路径>
 TAURI_SIGNING_PRIVATE_KEY_PASSWORD=<私钥密码，可为空>
 ```
@@ -37,7 +37,7 @@ HTTP/1.1 204 No Content
 {
   "version": "0.15.0",
   "pub_date": "2026-09-01T12:00:00Z",
-  "url": "https://cdn.example.com/tdcanvas/0.15.0/TDCanvas-update.zip",
+  "url": "https://cdn.example.com/tdcanvas/0.15.0/YZCanvas-update.zip",
   "signature": "<对应 .sig 文件的完整文本内容>",
   "notes": "本次更新说明"
 }

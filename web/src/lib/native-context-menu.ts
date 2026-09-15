@@ -2,7 +2,7 @@ type ContextMenuEventTarget = Pick<Document, "addEventListener" | "removeEventLi
 
 /**
  * Suppress the WebView/browser menu without stopping event propagation.
- * Canvas-level React handlers still receive the event and can open TDCanvas menus.
+ * Canvas-level React handlers still receive the event and can open YZCanvas menus.
  */
 export function installNativeContextMenuGuard(target: ContextMenuEventTarget = document) {
     const preventNativeMenu = (event: Event) => event.preventDefault();

@@ -11,12 +11,12 @@ export const AGENT_PROMPT = fs.readFileSync(new URL("../agent-instructions.md", 
 const initializedWorkspaces = new Set<string>();
 
 export type SiteWorkspaceConfig = { workspacePath: string; activeThreadId?: string; pinnedThreadIds?: string[] };
-export type TDCanvasAgentConfig = { url: string; token: string; origins?: string[]; workspace?: SiteWorkspaceConfig };
+export type YZCanvasAgentConfig = { url: string; token: string; origins?: string[]; workspace?: SiteWorkspaceConfig };
 
-/** 读取本地 TDCanvas Agent 配置，不存在时生成默认配置。 */
-export function loadConfig(create = false): TDCanvasAgentConfig {
+/** 读取本地 YZCanvas Agent 配置，不存在时生成默认配置。 */
+export function loadConfig(create = false): YZCanvasAgentConfig {
     try {
-        return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8")) as TDCanvasAgentConfig;
+        return JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8")) as YZCanvasAgentConfig;
     } catch {
         const config = { url: `http://127.0.0.1:${Number(process.env.PORT) || DEFAULT_PORT}`, token: crypto.randomBytes(18).toString("hex") };
         if (create) saveConfig(config);
@@ -24,14 +24,14 @@ export function loadConfig(create = false): TDCanvasAgentConfig {
     }
 }
 
-/** 将 TDCanvas Agent 配置写入用户配置目录。 */
-export function saveConfig(config: TDCanvasAgentConfig) {
+/** 将 YZCanvas Agent 配置写入用户配置目录。 */
+export function saveConfig(config: YZCanvasAgentConfig) {
     fs.mkdirSync(CONFIG_DIR, { recursive: true });
     fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2));
 }
 
 /** 确保站点级 Codex 工作空间存在并已初始化。 */
-export function ensureSiteWorkspace(config: TDCanvasAgentConfig) {
+export function ensureSiteWorkspace(config: YZCanvasAgentConfig) {
     const current = config.workspace;
     if (current?.workspacePath) {
         const workspacePath = resolveWorkspacePath(current.workspacePath);
@@ -46,7 +46,7 @@ export function ensureSiteWorkspace(config: TDCanvasAgentConfig) {
 }
 
 /** 更新站点级 Codex 工作空间配置。 */
-export function updateSiteWorkspace(config: TDCanvasAgentConfig, patch: Partial<SiteWorkspaceConfig>) {
+export function updateSiteWorkspace(config: YZCanvasAgentConfig, patch: Partial<SiteWorkspaceConfig>) {
     const current = ensureSiteWorkspace(config);
     const workspacePath = patch.workspacePath ? resolveWorkspacePath(patch.workspacePath) : current.workspacePath;
     const next = { ...current, ...patch, workspacePath };
@@ -62,7 +62,7 @@ function initializeWorkspace(workspacePath: string) {
     fs.mkdirSync(workspacePath, { recursive: true });
     const instructionsFile = path.join(workspacePath, "AGENTS.md");
     const current = fs.existsSync(instructionsFile) ? fs.readFileSync(instructionsFile, "utf8") : "";
-    if (!current || current.startsWith("# TDCanvas Agent")) fs.writeFileSync(instructionsFile, AGENT_PROMPT);
+    if (!current || current.startsWith("# YZCanvas Agent")) fs.writeFileSync(instructionsFile, AGENT_PROMPT);
     initializedWorkspaces.add(workspacePath);
 }
 
@@ -73,7 +73,7 @@ function resolveWorkspacePath(value: string) {
     return path.resolve(value);
 }
 
-/** 从当前包信息中读取 TDCanvas Agent 版本号。 */
+/** 从当前包信息中读取 YZCanvas Agent 版本号。 */
 function readPackageVersion() {
     try {
         const pkg = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.url), "utf8")) as { version?: string };

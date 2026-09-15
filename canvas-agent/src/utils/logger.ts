@@ -7,7 +7,7 @@ import winston, {format, transports, type Logger as WinstonLogger} from "winston
 
 import {formatDateForFilename} from "./date.js";
 
-/** 管理 TDCanvas Agent 的终端与文件 Debug 日志。 */
+/** 管理 YZCanvas Agent 的终端与文件 Debug 日志。 */
 export class Logger {
     readonly enabled = process.argv.includes("--debug");
     readonly filePath = this.enabled ? path.join(os.homedir(), ".tdcanvas", "logs", `tdcanvas-${formatDateForFilename()}.log`) : "";

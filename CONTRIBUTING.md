@@ -1,4 +1,4 @@
-# TDCanvas 团队协作指南
+# YZCanvas 团队协作指南
 
 ## 开始开发
 

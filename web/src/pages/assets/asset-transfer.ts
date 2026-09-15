@@ -81,7 +81,7 @@ export async function downloadAssetsZip(assets: Asset[], canvasTitle: string, de
     }
 
     if (!zipFiles.length) throw new Error("没有可下载的本地素材");
-    const filename = normalizeDownloadFilename(`${canvasTitle.trim() || "TDCanvas"}.zip`, "application/zip");
+    const filename = normalizeDownloadFilename(`${canvasTitle.trim() || "YZCanvas"}.zip`, "application/zip");
     const zip = await createZip(zipFiles);
     await deps.saveImpl(zip, filename);
     emitDownloadComplete({ ...feedback, filename });

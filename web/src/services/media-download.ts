@@ -222,12 +222,12 @@ function downloadErrorMessage(error: unknown) {
 }
 
 export function normalizeDownloadFilename(filename?: string, mimeType?: string) {
-    let candidate = (filename || "tdcanvas-download").trim();
+    let candidate = (filename || "yzcanvas-download").trim();
     if (/^https?:\/\//i.test(candidate)) {
         try {
-            candidate = decodeURIComponent(new URL(candidate).pathname.split("/").filter(Boolean).pop() || "tdcanvas-download");
+            candidate = decodeURIComponent(new URL(candidate).pathname.split("/").filter(Boolean).pop() || "yzcanvas-download");
         } catch {
-            candidate = "tdcanvas-download";
+            candidate = "yzcanvas-download";
         }
     }
     candidate = candidate
@@ -235,7 +235,7 @@ export function normalizeDownloadFilename(filename?: string, mimeType?: string) 
         .replace(/[<>:"/\\|?*\u0000-\u001f]/g, "_")
         .replace(/[. ]+$/g, "")
         .trim();
-    if (!candidate) candidate = "tdcanvas-download";
+    if (!candidate) candidate = "yzcanvas-download";
     const extension = MIME_EXTENSIONS[String(mimeType || "").toLowerCase()] || "bin";
     if (!/\.[a-z0-9]{1,10}$/i.test(candidate)) candidate += `.${extension}`;
     return candidate.length > 180 ? candidate.slice(0, 180) : candidate;

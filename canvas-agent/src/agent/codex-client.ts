@@ -95,7 +95,7 @@ export class CodexAppClient {
             stop();
             emit("agent_log", { text: `Codex app-server exited: ${code ?? 0}` });
         });
-        await client.request("initialize", { clientInfo: { name: "tdcanvas-agent", title: "TDCanvas Agent", version: VERSION }, capabilities: { experimentalApi: true, requestAttestation: false } });
+        await client.request("initialize", { clientInfo: { name: "tdcanvas-agent", title: "YZCanvas Agent", version: VERSION }, capabilities: { experimentalApi: true, requestAttestation: false } });
         client.notify("initialized");
         return client;
     }
@@ -770,7 +770,7 @@ function turnCacheKey(threadId: string, turnId: string) {
     return `${threadId}\0${turnId}`;
 }
 
-/** 生成 Codex 调用 TDCanvas Agent MCP 的启动命令。 */
+/** 生成 Codex 调用 YZCanvas Agent MCP 的启动命令。 */
 function tdCanvasAgentMcpCommand() {
     const current = process.argv.find((arg) => /index\.(t|j)s$/.test(arg)) || "";
     const entry = path.resolve(current || fileURLToPath(new URL("../index.js", import.meta.url)));

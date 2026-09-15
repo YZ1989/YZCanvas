@@ -24,9 +24,9 @@ describe("desktop custom download directory", () => {
     });
 
     it("persists, trims, and resets the selected location", () => {
-        setCustomDownloadDirectory("  D:\\TDCanvas Downloads  ");
-        expect(values.get(CUSTOM_DOWNLOAD_DIRECTORY_STORAGE_KEY)).toBe("D:\\TDCanvas Downloads");
-        expect(readCustomDownloadDirectory()).toBe("D:\\TDCanvas Downloads");
+        setCustomDownloadDirectory("  D:\\YZCanvas Downloads  ");
+        expect(values.get(CUSTOM_DOWNLOAD_DIRECTORY_STORAGE_KEY)).toBe("D:\\YZCanvas Downloads");
+        expect(readCustomDownloadDirectory()).toBe("D:\\YZCanvas Downloads");
 
         clearCustomDownloadDirectory();
         expect(readCustomDownloadDirectory()).toBe("");

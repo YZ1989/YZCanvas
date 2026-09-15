@@ -1,9 +1,9 @@
 ---
 name: open-canvas
-description: 启动并打开本地 TDCanvas，自动连接本机 TDCanvas Agent。用户要求打开、启动、进入或使用 TDCanvas 画布时使用。
+description: 启动并打开本地 YZCanvas，自动连接本机 YZCanvas Agent。用户要求打开、启动、进入或使用 YZCanvas 画布时使用。
 ---
 
-# Open TDCanvas
+# Open YZCanvas
 
 当前项目使用本地源码开发模式，不使用远程站点或 Docker。
 

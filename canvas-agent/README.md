@@ -1,6 +1,9 @@
-# TDCanvas Agent
+# YZCanvas Agent
 
-TDCanvas Agent 用来连接 TDCanvas 网页、本机 Codex 与 Claude Code。当前仓库只提供本地源码运行方式，不依赖远程 npm 包或线上站点。
+> 上游可选模块参考：不包含在当前 YZCanvas Windows 轻量版中。内部包名和协议标识保留以避免破坏引用。
+
+
+YZCanvas Agent 用来连接 YZCanvas 网页、本机 Codex 与 Claude Code。当前仓库只提供本地源码运行方式，不依赖远程 npm 包或线上站点。
 
 ## 本地构建与启动
 
@@ -17,7 +20,7 @@ node dist/index.js
 node dist/index.js --debug
 ```
 
-Agent 默认监听 `127.0.0.1:17371`，启动后会输出 `Local URL` 和 `Connect token`。在 TDCanvas 的 Agent 面板中填写这两项即可连接。
+Agent 默认监听 `127.0.0.1:17371`，启动后会输出 `Local URL` 和 `Connect token`。在 YZCanvas 的 Agent 面板中填写这两项即可连接。
 
 配置保存在 `~/.tdcanvas/tdcanvas-agent.json`，调试日志保存在 `~/.tdcanvas/logs/tdcanvas-YYYY-MM-DD.log`。首次连接会记录网页 Origin；如需切换站点，请清理配置中的 `origins`。
 
@@ -31,7 +34,7 @@ npm link
 tdcanvas-agent --debug
 ```
 
-`npm link` 只注册当前源码构建出的本地命令，不会下载或调用远程 TDCanvas 包。
+`npm link` 只注册当前源码构建出的本地命令，不会下载或调用远程 YZCanvas 包。
 
 ## Codex MCP
 
@@ -44,7 +47,7 @@ codex mcp add tdcanvas -- tdcanvas-agent mcp
 或直接使用当前仓库的绝对路径：
 
 ```bash
-codex mcp add tdcanvas -- node /absolute/path/to/TDCanvas/canvas-agent/dist/index.js mcp
+codex mcp add tdcanvas -- node /absolute/path/to/YZCanvas/canvas-agent/dist/index.js mcp
 ```
 
 移除手动注册的 MCP：
@@ -72,4 +75,4 @@ Windows PowerShell 可使用 `$PWD` 代替 `$(pwd)`。
 claude mcp add --scope user --transport stdio tdcanvas -- tdcanvas-agent mcp
 ```
 
-TDCanvas Agent 调用 Claude Code 时只允许 `mcp__tdcanvas__*` 工具；画布写操作仍由网页侧边栏确认。
+YZCanvas Agent 调用 Claude Code 时只允许 `mcp__tdcanvas__*` 工具；画布写操作仍由网页侧边栏确认。

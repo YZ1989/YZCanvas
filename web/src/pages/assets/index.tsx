@@ -57,7 +57,7 @@ export default function AssetsPage() {
     const tags = Form.useWatch("tags", form) || [];
     const content = Form.useWatch("content", form) || "";
     const validAssets = useMemo(() => assets.filter((asset) => asset.kind === "text" || asset.kind === "image" || asset.kind === "video"), [assets]);
-    const recentCanvasTitle = useMemo(() => [...projects].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]?.title || "TDCanvas", [projects]);
+    const recentCanvasTitle = useMemo(() => [...projects].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0]?.title || "YZCanvas", [projects]);
     const selectedAssets = useMemo(() => validAssets.filter((asset) => selectedAssetIds.has(asset.id)), [selectedAssetIds, validAssets]);
 
     const filteredAssets = useMemo(() => {

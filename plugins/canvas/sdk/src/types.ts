@@ -1,4 +1,4 @@
-// TDCanvas 插件公共契约类型。
+// YZCanvas 插件公共契约类型。
 //
 // 这是插件作者面向的「公开接口」子集,自包含、不依赖宿主 `@/` 内部模块,
 // 因此可以被独立构建的插件包直接 import,获得完整的 TS 提示。
@@ -149,7 +149,7 @@ export type CanvasTheme = {
 // 画布指令集(ctx.applyOps):与 AI Agent 同级的画布操作能力
 // ---------------------------------------------------------------------------
 
-export type TDCanvasAgentOp =
+export type YZCanvasAgentOp =
   | {
       type: "add_node";
       id?: string;
@@ -192,7 +192,7 @@ export type TDCanvasAgentOp =
       prompt?: string;
     };
 
-export type CanvasAgentOp = TDCanvasAgentOp;
+export type CanvasAgentOp = YZCanvasAgentOp;
 
 // ---------------------------------------------------------------------------
 // 资源:插件节点作为上游输入被消费时输出什么(接入生成/引用体系)
@@ -311,7 +311,7 @@ export type CanvasNodeContext = {
   getUpstream: (portId?: string) => CanvasNodeData[];
   getDownstream: (portId?: string) => CanvasNodeData[];
   // 画布操作(复用 Agent 指令集)
-  applyOps: (ops: TDCanvasAgentOp[]) => void;
+  applyOps: (ops: YZCanvasAgentOp[]) => void;
   // 节点间/插件间通信
   emit: (event: string, payload?: unknown) => void;
   on: (event: string, handler: (payload: unknown) => void) => () => void;

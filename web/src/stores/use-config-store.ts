@@ -70,7 +70,7 @@ const CHANNEL_MODEL_SEPARATOR = "::";
 function createOfficialAitudouChannel(apiKey = ""): ModelChannel {
     return {
         id: AITUDOU_CHANNEL_ID,
-        name: "TDCanvas",
+        name: "YZCanvas",
         baseUrl: AITUDOU_OFFICIAL_BASE_URL,
         apiKey,
         apiFormat: "aitudou",

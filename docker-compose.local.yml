@@ -1,6 +1,6 @@
 services:
   app:
-    image: tdcanvas:local
+    image: yzcanvas:local
     build:
       context: .
       dockerfile: Dockerfile

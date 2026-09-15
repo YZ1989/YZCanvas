@@ -20,7 +20,7 @@ export type LocalMediaCacheDependencies = {
 };
 
 export async function importLegacyCachedMedia(absolutePath: string, sourceUrl: string): Promise<LocalMediaCacheResult> {
-    if (!isTauriRuntime()) throw new Error("旧网页缓存迁移只适用于 TDCanvas 桌面客户端");
+    if (!isTauriRuntime()) throw new Error("旧网页缓存迁移只适用于 YZCanvas 桌面客户端");
     if (!absolutePath.trim() || !/^https:\/\//i.test(sourceUrl.trim())) throw new Error("旧网页缓存缺少可验证的来源信息");
     let nativeResult: Omit<LocalMediaCacheResult, "localUrl">;
     try {

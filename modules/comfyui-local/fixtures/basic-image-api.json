@@ -25,7 +25,7 @@
   "9": {
     "class_type": "SaveImage",
     "inputs": {
-      "filename_prefix": "TDCanvas",
+      "filename_prefix": "YZCanvas",
       "images": ["3", 0]
     }
   }

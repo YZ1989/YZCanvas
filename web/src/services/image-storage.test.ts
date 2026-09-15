@@ -42,10 +42,10 @@ describe("image storage data URL conversion", () => {
         readDesktopFileBlob.mockResolvedValueOnce(new Blob(["cached-image"], { type: "image/png" }));
         const fetchSpy = vi.spyOn(globalThis, "fetch");
 
-        const dataUrl = await imageToDataUrl({ dataUrl: "https://temporary.example/expired.png", localPath: "C:\\TDCanvas\\media-cache\\reference.png" });
+        const dataUrl = await imageToDataUrl({ dataUrl: "https://temporary.example/expired.png", localPath: "C:\\YZCanvas\\media-cache\\reference.png" });
 
         expect(dataUrl).toBe("data:image/png;base64,Y2FjaGVkLWltYWdl");
-        expect(readDesktopFileBlob).toHaveBeenCalledWith("C:\\TDCanvas\\media-cache\\reference.png");
+        expect(readDesktopFileBlob).toHaveBeenCalledWith("C:\\YZCanvas\\media-cache\\reference.png");
         expect(fetchSpy).not.toHaveBeenCalled();
         fetchSpy.mockRestore();
         vi.unstubAllGlobals();
