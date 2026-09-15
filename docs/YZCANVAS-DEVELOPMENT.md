@@ -22,6 +22,7 @@ Windows 轻量桌面 Fork，基线 TDCanvas `16b31273633f983cdbd8de05694ec36d471
 - 裁剪后已有测试 281 项通过、2 项跳过；跳过的在线接口测试不计为已验收。
 - 浏览器实际操作：新建画布、输入中文文本、导入 PNG、1:1 裁剪生成新节点、撤销、重做、刷新后恢复文字与两张图片，均已验证。
 - 原版 Windows NSIS 已成功构建，基线数据见 `measurements/upstream-baseline.json`。
+- YZCanvas Windows x64 NSIS 构建成功，安装包 3,750,394 字节（约 3.58 MiB），较基线减少 26.9%；记录见 `measurements/yzcanvas.json`。
 - 完整桌面交互、真实 API 生成、长时间运行和大量媒体压力测试仍需进一步验收。
 
 ## 已知边界

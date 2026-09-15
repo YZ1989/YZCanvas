@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "platform": "windows-x64",
+  "nativeExeBytes": 12411904,
+  "installerBytes": 3750394,
+  "frontendBytes": 2516437,
+  "installerSha256": "01d262fa235bf65b64f788e94cddb8839105feaea35030fb919d655f0381e885",
+  "excludes": [
+    "WebView2 runtime",
+    "user media",
+    "development dependencies and build caches"
+  ]
+}

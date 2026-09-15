@@ -1,4 +1,11 @@
-# TDCanvas Documentation Index
+# YZCanvas Documentation Index
+
+- [YZCanvas implementation and verification](./YZCANVAS-DEVELOPMENT.md)
+- [Windows build measurements](./measurements/README.md)
+- [Current roadmap](./content/docs/progress/todo.mdx)
+- [Manual acceptance checklist](./content/docs/progress/pending-test.mdx)
+
+The sections below are inherited TDCanvas references and may describe features removed from YZCanvas.
 
 ## Overview
 
