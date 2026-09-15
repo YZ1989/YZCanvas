@@ -14,6 +14,12 @@ Windows x64 安装包本机实测 **3.59 MiB**，比同机上游基线减少 **2
 
 AI 生成默认接入 **[Jinyu API](https://api.yz-jinyu.com/)**；[接口文档](https://api.yz-jinyu.com/docs/)。生成按提供商实际计费。没有 API Key 也可以编辑画布、导入图片和使用本地裁剪等工具。远程生成尚待真实 API 验收。
 
+## 一键测试（Windows）
+
+双击根目录 `Start-YZCanvas.cmd`，自动启动本地服务并打开浏览器。已运行时直接复用，修改前端代码后自动刷新，无需打包。首次使用需安装 Node.js 22.12+ 并在 `web` 执行 `npm ci --legacy-peer-deps`。
+
+浏览器预览与桌面版数据分开；原生文件保存等能力请在桌面版验收。关闭浏览器后服务仍在后台运行，重启电脑后再次双击即可。启动日志位于 `%LOCALAPPDATA%/YZCanvas/dev-preview`。
+
 ## Windows 开发
 
 需要 Node.js 22.12+、Rust stable、Visual Studio C++ Build Tools 和 WebView2。
