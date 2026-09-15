@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Home, Images, Menu, Plus, Redo2, Sparkles, Trash2, Undo2, Upload } from "lucide-react";
+import { BookOpen, Home, Images, Menu, Plus, Redo2, Trash2, Undo2, Upload } from "lucide-react";
 import { Dropdown, Modal, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 
@@ -65,9 +65,7 @@ export function CanvasTopBar({
                 <div className="pointer-events-auto flex min-w-0 items-center gap-1.5 opacity-85 transition-opacity duration-150 hover:opacity-100 focus-within:opacity-100">
                     <Tooltip title={t("canvas.home")}>
                         <button type="button" onClick={onHome} aria-label={t("canvas.home")} className="mr-1 grid size-9 place-items-center rounded-xl transition duration-150 hover:scale-105">
-                            <span className="grid size-7 place-items-center rounded-[9px] bg-gradient-to-br from-emerald-300 via-cyan-300 to-violet-400 text-slate-950 shadow-[0_0_24px_rgba(52,211,153,.18)]">
-                                <Sparkles className="size-4" strokeWidth={2.4} />
-                            </span>
+                            <img src="/logo.svg" alt="" className="size-8" />
                         </button>
                     </Tooltip>
                     <Dropdown

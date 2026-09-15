@@ -3,24 +3,26 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>AITudou · YZCanvas 正在启动</title>
+        <title>YZCanvas 正在启动</title>
         <script type="module" src="/src/splashscreen.ts"></script>
     </head>
     <body>
-        <main class="startup-layer" aria-label="AITudou YZCanvas 正在启动">
-            <canvas id="particle-field" class="particle-field" aria-hidden="true"></canvas>
-
-            <section class="startup-lockup">
-                <div id="particle-core" class="particle-core" aria-hidden="true">
-                    <span class="core-pin"><i></i></span>
+        <main class="startup-layer" aria-label="YZCanvas 正在启动">
+            <section class="startup-card">
+                <div class="canvas-grid" aria-hidden="true"></div>
+                <div class="brand-lockup">
+                    <img class="brand-icon" src="/logo.svg" width="100" height="100" alt="" />
+                    <div class="brand-copy">
+                        <p class="brand-eyebrow">图像 · 视频 · 无限画布</p>
+                        <h1>YZ<span>Canvas</span></h1>
+                        <p class="brand-caption">让灵感，自由生长。</p>
+                    </div>
                 </div>
-
-                <div id="startup-brand" class="startup-brand">
-                    <h1><span>AI</span>Tudou</h1>
-                </div>
+                <footer>
+                    <p role="status">正在打开你的创作空间</p>
+                    <span class="startup-line" aria-hidden="true"><i></i></span>
+                </footer>
             </section>
-
-            <p class="sr-only" role="status" aria-live="polite">正在启动 YZCanvas 创作引擎</p>
         </main>
     </body>
 </html>

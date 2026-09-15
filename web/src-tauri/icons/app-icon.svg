@@ -1,7 +1,12 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="116" fill="#0B0D10"/>
-  <rect x="20" y="20" width="472" height="472" rx="98" stroke="#FFFFFF" stroke-opacity="0.1" stroke-width="4"/>
-  <path d="M86 168V86H168M344 86H426V168M426 344V426H344M168 426H86V344" stroke="#F5F7FA" stroke-width="20" stroke-linecap="round"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M132 166H296V210H242V376H196V210H132V166ZM286 166H330C411 166 456 208 456 271C456 334 411 376 330 376H286V166ZM332 210V332C379 332 409 311 409 271C409 231 379 210 332 210Z" fill="#F5F7FA"/>
-  <circle cx="409" cy="112" r="14" fill="#7CFFB2"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" fill="none">
+  <defs><linearGradient id="surface" x1="64" y1="0" x2="448" y2="512" gradientUnits="userSpaceOnUse"><stop stop-color="#202E3A"/><stop offset="1" stop-color="#101720"/></linearGradient><linearGradient id="ink" x1="104" y1="132" x2="404" y2="374" gradientUnits="userSpaceOnUse"><stop stop-color="#7FF2D2"/><stop offset="1" stop-color="#80AEFF"/></linearGradient></defs>
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="url(#surface)"/>
+  <rect x="18" y="18" width="476" height="476" rx="110" stroke="#FFFFFF" stroke-opacity=".08" stroke-width="4"/>
+  <g stroke="url(#ink)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M152 100H116a16 16 0 0 0-16 16v36M360 100h36a16 16 0 0 1 16 16v36M100 360v36a16 16 0 0 0 16 16h36M412 360v36a16 16 0 0 1-16 16h-36"/>
+  </g>
+  <g stroke="url(#ink)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M142 186l48 66 48-66M190 252v74"/>
+    <path d="M280 186h90l-90 140h90"/>
+  </g>
 </svg>

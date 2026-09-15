@@ -1,12 +1,14 @@
 # YZCanvas
 
+<img src="web/public/logo.svg" width="80" alt="YZCanvas 图标" />
+
 轻量 Windows AI 无限画布，用于图像编辑、图像生成与视频创作。
 
 基于 [AICoderTudou/TDCanvas](https://github.com/AICoderTudou/TDCanvas) 二次开发，延续 **AGPL-3.0**。TDCanvas 原作者为 TDTV，并源自 `basketikun/infinite-canvas`。完整许可见 [LICENSE](LICENSE)。
 
 ## 当前版本
 
-0.1.0 开发预览版：保留画布、图片工具、视频节点、素材与工程保存；移除 Agent 界面、ComfyUI 集成和远程节点插件执行链，使用独立的 YZCanvas 应用与存储标识。
+0.1.1 开发预览版：保留画布、图片工具、视频节点、素材与工程保存；移除 Agent 界面、ComfyUI 集成和远程节点插件执行链，使用独立的 YZCanvas 应用与存储标识。
 
 Windows x64 安装包本机实测 **3.58 MiB**，比同机上游基线减少 **26.8%**；不含共享 WebView2 运行时和用户媒体。详见 [测量记录](docs/measurements/README.md)。
 

@@ -65,14 +65,7 @@ export function DesktopTitlebar() {
             className="td-desktop-titlebar relative z-[1200] flex h-12 shrink-0 select-none items-center bg-[#f4f2ed] text-[#78716c] dark:bg-[#090a0c] dark:text-[#8b8f94]"
         >
             <div data-tauri-drag-region className="td-desktop-titlebar-brand flex h-full shrink-0 items-center gap-2 pl-4 pr-5">
-                <span
-                    aria-hidden="true"
-                    className="pointer-events-none size-[18px] shrink-0 bg-current opacity-90"
-                    style={{
-                        mask: "url(/logo.svg) center / contain no-repeat",
-                        WebkitMask: "url(/logo.svg) center / contain no-repeat",
-                    }}
-                />
+                <img src="/logo.svg" alt="" className="pointer-events-none size-6 shrink-0" />
                 <span className="pointer-events-none text-[13px] font-semibold tracking-[-0.01em] text-[#292524] dark:text-[#f4f4f5]">YZCanvas</span>
             </div>
 

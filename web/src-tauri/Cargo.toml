@@ -1,6 +1,6 @@
 [package]
 name = "yzcanvas"
-version = "0.1.0"
+version = "0.1.1"
 description = "YZCanvas lightweight AI image and video canvas"
 authors = ["YZ1989", "TDTV (upstream)"]
 license = "AGPL-3.0-only"
