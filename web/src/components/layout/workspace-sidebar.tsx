@@ -14,7 +14,7 @@ export function WorkspaceSidebar() {
     return (
         <aside className="yz-sidebar" aria-label="工作台导航">
             <NavLink to="/" className="yz-sidebar-brand" aria-label="YZCanvas 首页">
-                <img src="/logo.svg" alt="" width={44} height={44} />
+                <img src="/brand/logo-atelier.svg" alt="" width={44} height={44} />
                 <span>YZCanvas</span>
             </NavLink>
             <nav className="yz-sidebar-nav">

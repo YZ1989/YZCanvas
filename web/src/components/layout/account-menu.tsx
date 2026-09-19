@@ -50,7 +50,7 @@ export function AccountMenu({ embedded = false }: { embedded?: boolean }) {
                 content={
                     <section aria-label="账户面板" className="w-[320px] max-w-[calc(100vw-48px)] max-h-[calc(100dvh-160px)] overflow-y-auto p-2" style={{ color: token.colorText }}>
                         <div className="flex items-center gap-3 px-2 pb-5 pt-2">
-                            <img src="/logo.svg" className="size-11 rounded-xl" alt="" />
+                            <img src="/brand/logo-atelier.svg" className="size-11 rounded-xl" alt="" />
                             <div>
                                 <div className="text-base font-semibold">YZCanvas</div>
                                 <div className="mt-1 text-xs" style={{ color: token.colorTextSecondary }}>

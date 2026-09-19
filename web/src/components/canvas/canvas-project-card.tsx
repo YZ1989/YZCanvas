@@ -31,6 +31,8 @@ export function CanvasProjectCard({ project }: { project: CanvasProject }) {
         <article data-canvas-project-card={project.id} className={`yz-project-card group ${selected ? "is-selected" : ""}`}>
             <div className="yz-project-cover">
                 <CanvasProjectCover project={project} />
+                <img src="/brand/film-edge.webp" alt="" className="yz-film-edge" draggable={false} />
+                <img src="/brand/film-edge.webp" alt="" className="yz-film-edge yz-film-edge-right" draggable={false} />
                 <button type="button" className="yz-project-open" onClick={open} aria-label={t("canvas.start.openProject", { name: project.title })} />
                 <label className={`yz-project-checkbox ${selected ? "is-selected" : ""}`} title={t("canvas.project.select", { name: project.title })}>
                     <input type="checkbox" checked={selected} onChange={(event) => toggleSelected(project.id, event.target.checked)} aria-label={t("canvas.project.select", { name: project.title })} />

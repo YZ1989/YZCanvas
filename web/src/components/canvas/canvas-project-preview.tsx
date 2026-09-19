@@ -18,12 +18,6 @@ export function CanvasProjectPreview({ project }: { project: Pick<CanvasProject,
 
     return (
         <svg data-canvas-project-preview="nodes" className="absolute inset-0 size-full text-stone-400/55 dark:text-zinc-600/75" viewBox="0 0 100 62" preserveAspectRatio="none" aria-hidden="true">
-            <defs>
-                <linearGradient id="td-home-node-accent" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#8178ff" />
-                    <stop offset="1" stopColor="#5d55d8" />
-                </linearGradient>
-            </defs>
             <g fill="none" stroke="currentColor" strokeWidth="0.55">
                 {project.connections.slice(0, 24).map((connection) => {
                     const from = nodeById.get(connection.fromNodeId);
@@ -42,7 +36,7 @@ export function CanvasProjectPreview({ project }: { project: Pick<CanvasProject,
                     const media = node.type === "image" || node.type === "video";
                     return (
                         <g key={node.id} data-preview-node-type={node.type}>
-                            <rect x={x} y={y} width={width} height={height} rx="1.8" fill={media ? "url(#td-home-node-accent)" : "currentColor"} opacity={media ? 0.86 : node.type === "text" ? 0.42 : 0.25} />
+                            <rect x={x} y={y} width={width} height={height} rx="1.8" fill={media ? "var(--yz-preview-node, #8a9075)" : "currentColor"} opacity={media ? 0.86 : node.type === "text" ? 0.42 : 0.25} />
                             <rect x={x + 1.2} y={y + 1.2} width={Math.max(0, width - 2.4)} height="0.7" rx="0.35" fill="white" opacity={media ? 0.36 : 0.22} />
                         </g>
                     );

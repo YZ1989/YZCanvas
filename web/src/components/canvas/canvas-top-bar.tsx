@@ -65,7 +65,7 @@ export function CanvasTopBar({
                 <div className="pointer-events-auto flex min-w-0 items-center gap-1.5 opacity-85 transition-opacity duration-150 hover:opacity-100 focus-within:opacity-100">
                     <Tooltip title={t("canvas.home")}>
                         <button type="button" onClick={onHome} aria-label={t("canvas.home")} className="mr-1 grid size-9 place-items-center rounded-xl transition duration-150 hover:scale-105">
-                            <img src="/logo.svg" alt="" className="size-8" />
+                            <img src="/brand/logo-atelier.svg" alt="" className="size-8" />
                         </button>
                     </Tooltip>
                     <Dropdown

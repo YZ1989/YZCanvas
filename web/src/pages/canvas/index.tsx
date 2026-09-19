@@ -44,21 +44,31 @@ export default function CanvasPage() {
 
     return (
         <main data-canvas-home className="yz-home">
+            <header className="yz-home-masthead">
+                <span>YZCANVAS / 影像手记</span>
+                <span className="yz-masthead-rule" aria-hidden="true" />
+                <span className="yz-masthead-note">图像 · 视频 · 无限画布</span>
+            </header>
             <section className="yz-home-hero" aria-labelledby="workspace-heading">
-                <img className="yz-home-art" src="/brand/workspace-hero.webp" alt="" width={1000} height={500} fetchPriority="high" />
                 <div className="yz-home-hero-copy">
                     <h1 id="workspace-heading">
-                        保持好奇，
+                        光影有迹，
                         <br />
-                        让创作多一点<span>好玩。</span>
+                        想象无界。
                     </h1>
-                    <p>从一张画布开始，把好想法变成作品。</p>
+                    <p>在无限画布上，编织你的下一幕。</p>
                     <button type="button" className="yz-create-button" onClick={createAndEnter} disabled={!hydrated}>
-                        <Plus size={22} />
+                        <Plus size={23} strokeWidth={1.5} />
                         <span>新建画布</span>
-                        <ArrowUpRight size={18} />
                     </button>
+                    <div className="yz-hero-colophon" aria-hidden="true">
+                        THE ART OF IMAGINATION
+                    </div>
                 </div>
+                <figure className="yz-home-plate">
+                    <img className="yz-home-art" src="/brand/film-atelier.webp" alt="窗边的复古摄影机、胶片与场记板" width={1199} height={740} fetchPriority="high" />
+                    <figcaption>LIGHT · FRAME · STORY</figcaption>
+                </figure>
             </section>
             <section className="yz-home-projects" aria-labelledby="my-canvases-heading">
                 <div className="yz-projects-heading">

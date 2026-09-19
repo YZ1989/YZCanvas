@@ -62,11 +62,11 @@ export function DesktopTitlebar() {
         <header
             data-tauri-drag-region
             data-window-focused={focused}
-            className="td-desktop-titlebar relative z-[1200] flex h-12 shrink-0 select-none items-center bg-[#f4f2ed] text-[#78716c] dark:bg-[#090a0c] dark:text-[#8b8f94]"
+            className="td-desktop-titlebar relative z-[1200] flex h-12 shrink-0 select-none items-center bg-background text-foreground"
         >
             <div data-tauri-drag-region className="td-desktop-titlebar-brand flex h-full shrink-0 items-center gap-2 pl-4 pr-5">
-                <img src="/logo.svg" alt="" className="pointer-events-none size-6 shrink-0" />
-                <span className="pointer-events-none text-[13px] font-semibold tracking-[-0.01em] text-[#292524] dark:text-[#f4f4f5]">YZCanvas</span>
+                <img src="/brand/logo-atelier.svg" alt="" className="pointer-events-none size-6 shrink-0" />
+                <span className="pointer-events-none text-[13px] font-semibold tracking-[-0.01em] text-foreground">YZCanvas</span>
             </div>
 
             <div id="td-desktop-titlebar-navigation-slot" className="td-desktop-titlebar-slot flex h-full min-w-0 shrink items-stretch" />

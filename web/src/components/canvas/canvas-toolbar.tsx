@@ -81,14 +81,14 @@ export function CanvasToolbar({
     const primaryExtensionDefs = extensionDefs.filter((definition) => definition.createMenuPlacement === "primary");
     const groupedExtensionDefs = extensionDefs.filter((definition) => definition.createMenuPlacement !== "primary");
     const dockStyle: CSSProperties = {
-        background: colorTheme === "dark" ? "rgba(15, 17, 18, .92)" : "rgba(250, 250, 248, .92)",
+        background: theme.toolbar.panel,
         borderColor: colorTheme === "dark" ? "rgba(255,255,255,.08)" : "rgba(28,25,23,.10)",
         color: theme.toolbar.item,
         boxShadow: colorTheme === "dark" ? "0 12px 32px rgba(0,0,0,.28)" : "0 12px 30px rgba(28,25,23,.10)",
         maxHeight: "calc(100dvh - var(--td-desktop-titlebar-height, 0px) - 136px)",
     };
     const popoverStyle: CSSProperties = {
-        background: colorTheme === "dark" ? "rgba(17, 19, 20, .96)" : "rgba(252, 252, 250, .97)",
+        background: theme.toolbar.panel,
         borderColor: colorTheme === "dark" ? "rgba(255,255,255,.09)" : "rgba(28,25,23,.11)",
         color: theme.toolbar.item,
     };
