@@ -317,11 +317,12 @@
 }
 .yz-project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 450px));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
     gap: 30px 28px;
 }
 .yz-project-card {
     min-width: 0;
+    perspective: 1000px;
 }
 .yz-project-cover {
     position: relative;
@@ -331,6 +332,11 @@
     outline: 1px solid var(--yz-border);
     border-radius: 3px;
     background: var(--yz-panel);
+    transform-origin: center 60%;
+    box-shadow: 0 3px 7px color-mix(in srgb, var(--yz-text) 8%, transparent);
+    transition:
+        transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
+        box-shadow 280ms ease;
 }
 .yz-project-cover > [data-canvas-project-preview] {
     color: var(--yz-muted);
@@ -338,8 +344,24 @@
 .yz-project-cover > img[data-canvas-project-cover] {
     transition: transform 0.2s;
 }
-.yz-project-card:hover .yz-project-cover > img[data-canvas-project-cover] {
-    transform: scale(1.025);
+@media (prefers-reduced-motion: no-preference) {
+    .yz-project-card:focus-within .yz-project-cover {
+        transform: translateY(-3px);
+    }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .yz-project-card:hover .yz-project-cover {
+        transform: translateY(-7px) rotateX(4deg) rotateY(-4deg);
+        box-shadow:
+            7px 14px 22px color-mix(in srgb, var(--yz-text) 18%, transparent),
+            0 3px 5px color-mix(in srgb, var(--yz-text) 9%, transparent);
+    }
+    .yz-project-card:hover .yz-project-cover > img[data-canvas-project-cover] {
+        transform: scale(1.035);
+    }
+    .yz-project-card:active .yz-project-cover {
+        transform: translateY(-2px) rotateX(1deg) rotateY(-1deg);
+    }
 }
 .yz-film-edge {
     position: absolute;
@@ -403,7 +425,7 @@
     white-space: nowrap;
     text-align: left;
     font-family: var(--yz-serif);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     cursor: pointer;
 }
@@ -544,7 +566,7 @@
         padding-top: 28px;
     }
     .yz-project-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
     }
 }
 @media (max-width: 850px) {
@@ -642,7 +664,7 @@
         height: 42px;
     }
     .yz-project-grid {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 320px);
     }
     .yz-project-name {
         font-size: 18px;
