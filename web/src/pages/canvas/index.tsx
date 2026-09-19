@@ -57,9 +57,14 @@ export default function CanvasPage() {
                         想象无界。
                     </h1>
                     <p>在无限画布上，编织你的下一幕。</p>
-                    <button type="button" className="yz-create-button" onClick={createAndEnter} disabled={!hydrated}>
-                        <Plus size={23} strokeWidth={1.5} />
-                        <span>新建画布</span>
+                    <button type="button" className="yz-create-button" aria-label="新建画布" onClick={createAndEnter} disabled={!hydrated}>
+                        <span className="yz-create-emblem" aria-hidden="true">
+                            <Plus size={24} strokeWidth={1.6} />
+                        </span>
+                        <span className="yz-create-label">
+                            <span>新建画布</span>
+                            <small aria-hidden="true">NEW CANVAS</small>
+                        </span>
                     </button>
                     <div className="yz-hero-colophon" aria-hidden="true">
                         THE ART OF IMAGINATION

@@ -23,6 +23,7 @@ export const canvasThemes = {
         },
         toolbar: {
             panel: "rgba(245,239,223,.96)",
+            shadow: "inset 0 1px 0 #fff8e9, 0 3px 0 #bdad91, 0 8px 18px rgba(78,52,29,.18)",
             border: "#c5bba6",
             item: "#665e50",
             itemHover: "#e3dac8",
@@ -51,6 +52,7 @@ export const canvasThemes = {
         },
         toolbar: {
             panel: "rgba(40,43,35,.96)",
+            shadow: "inset 0 1px 0 #565847, 0 3px 0 #11160e, 0 8px 18px rgba(0,0,0,.38)",
             border: "#525345",
             item: "#d6cbb5",
             itemHover: "#36392f",

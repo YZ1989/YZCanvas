@@ -30,6 +30,10 @@ const neutral = {
 
 export function getAntThemeConfig(dark: boolean): ThemeConfig {
     const color = dark ? neutral.dark : neutral.light;
+    const highlight = dark ? "rgba(231,220,182,.13)" : "rgba(255,250,232,.9)";
+    const shade = dark ? "rgba(0,0,0,.38)" : "rgba(87,58,31,.18)";
+    const raised = `inset 0 1px 0 ${highlight}, 0 2px 0 ${shade}, 0 4px 7px ${shade}`;
+    const elevated = `inset 0 1px 0 ${highlight}, 0 4px 0 ${shade}, 0 12px 30px ${shade}`;
 
     return {
         algorithm: dark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
@@ -40,7 +44,9 @@ export function getAntThemeConfig(dark: boolean): ThemeConfig {
             colorText: dark ? "#eee5d2" : "#302e28",
             colorTextSecondary: dark ? "#b9af9a" : "#6f6657",
             colorBorder: dark ? "#525345" : "#c5bba6",
-            borderRadius: 6,
+            borderRadius: 7,
+            boxShadow: elevated,
+            boxShadowSecondary: elevated,
             fontFamily: '"Segoe UI", "Microsoft YaHei", system-ui, sans-serif',
             colorPrimary: color.primary,
             colorInfo: color.primary,
@@ -55,7 +61,13 @@ export function getAntThemeConfig(dark: boolean): ThemeConfig {
         },
         components: {
             Button: {
-                primaryShadow: "none",
+                primaryShadow: raised,
+                defaultShadow: raised,
+                defaultBg: dark ? "#34372d" : "#ede3cf",
+                defaultBorderColor: dark ? "#71684e" : "#bda984",
+            },
+            Input: {
+                activeShadow: `inset 0 1px 3px ${shade}, 0 0 0 2px ${color.itemSelectedBg}`,
             },
             Dropdown: {
                 colorBgElevated: color.elevatedBg,

@@ -18,6 +18,10 @@
     --yz-action: #803f38;
     --yz-action-text: #fff4e4;
     --yz-preview-node: #8a9075;
+    --yz-highlight: #fff8e9;
+    --yz-depth: #b7a17d;
+    --yz-brass: #b79b63;
+    --yz-shadow: rgb(78 52 29 / 18%);
     --yz-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", "SimSun", serif;
     background: var(--yz-bg);
     color: var(--yz-text);
@@ -34,6 +38,10 @@
     --yz-selected: #3f3a2d;
     --yz-action: #9b5147;
     --yz-preview-node: #a8ac89;
+    --yz-highlight: #626352;
+    --yz-depth: #11160e;
+    --yz-brass: #96825c;
+    --yz-shadow: rgb(0 0 0 / 38%);
 }
 .yz-sidebar,
 .yz-home {
@@ -48,7 +56,11 @@
     flex-direction: column;
     padding: 30px 14px 12px;
     background-color: var(--yz-sidebar);
-    border-right: 1px solid var(--yz-border);
+    border-right: 1px solid var(--yz-depth);
+    box-shadow:
+        inset -2px 0 0 color-mix(in srgb, var(--yz-highlight) 65%, transparent),
+        4px 0 14px var(--yz-shadow);
+    z-index: 1;
     overflow-y: auto;
 }
 .yz-sidebar-brand {
@@ -63,11 +75,16 @@
     letter-spacing: -1px;
     text-decoration: none;
     white-space: nowrap;
+    text-shadow: 0 1px 0 var(--yz-highlight);
 }
 .yz-sidebar-brand img {
     flex-shrink: 0;
     width: 38px;
     height: 38px;
+    border-radius: 8px;
+    box-shadow:
+        0 2px 0 var(--yz-depth),
+        0 4px 6px var(--yz-shadow);
 }
 .yz-sidebar-nav {
     display: flex;
@@ -81,7 +98,14 @@
     gap: 18px;
     min-height: 56px;
     border-radius: 4px;
-    border-left: 4px solid transparent;
+    border: 1px solid var(--yz-border);
+    border-left: 4px solid var(--yz-border);
+    background: var(--yz-panel) url("/brand/atelier-paper.webp");
+    background-blend-mode: soft-light;
+    box-shadow:
+        inset 0 1px 0 var(--yz-highlight),
+        0 2px 0 var(--yz-depth),
+        0 4px 6px var(--yz-shadow);
     padding: 10px 21px;
     color: var(--yz-text);
     font-size: 16px;
@@ -102,6 +126,9 @@
     background: var(--yz-selected);
     color: var(--yz-accent);
     border-left-color: var(--yz-accent);
+    box-shadow:
+        inset 0 2px 4px var(--yz-shadow),
+        inset 0 -1px 0 var(--yz-highlight);
 }
 .yz-sidebar-bottom {
     margin-top: auto;
@@ -124,6 +151,13 @@
 }
 .yz-sidebar-account .yz-account-trigger {
     color: var(--yz-text) !important;
+    border: 1px solid var(--yz-border);
+    border-radius: 7px;
+    background: var(--yz-panel) !important;
+    box-shadow:
+        inset 0 1px 0 var(--yz-highlight),
+        0 2px 0 var(--yz-depth),
+        0 4px 8px var(--yz-shadow);
 }
 .yz-home {
     height: 100%;
@@ -183,27 +217,92 @@
     letter-spacing: 0.5px;
 }
 .yz-create-button {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    min-height: 62px;
+    gap: 19px;
+    min-height: 86px;
     min-width: 278px;
-    padding: 13px 28px;
-    border: 1px solid transparent;
-    border-radius: 7px;
-    background: var(--yz-action);
-    color: var(--yz-action-text);
-    font-family: var(--yz-serif);
-    font-size: 23px;
+    padding: 14px 28px;
+    border: 2px solid #c4a36c;
+    border-top-color: #eed4a2;
+    border-bottom-color: #9a754b;
+    border-radius: 10px;
+    background: #713d34 url("/brand/oxblood-leather.webp") center / 192px;
+    color: #f4ddb0;
+    box-shadow:
+        inset 0 2px 3px rgb(255 225 167 / 28%),
+        inset 0 -3px 4px rgb(37 12 6 / 48%),
+        0 5px 0 #58392b,
+        0 7px 0 #ae8951,
+        0 12px 18px var(--yz-shadow);
     cursor: pointer;
     transition:
-        filter 0.15s,
-        transform 0.15s;
+        transform 160ms ease,
+        box-shadow 160ms ease,
+        filter 160ms ease;
 }
-.yz-create-button:hover {
-    filter: brightness(1.1);
-    transform: translateY(-1px);
+.yz-create-button::before {
+    content: "";
+    position: absolute;
+    inset: 5px;
+    border: 1px solid rgb(228 193 131 / 50%);
+    border-radius: 5px;
+    pointer-events: none;
+}
+.yz-create-emblem {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border: 1px solid #c4a36c;
+    border-radius: 50%;
+    box-shadow:
+        inset 0 1px 1px rgb(255 234 187 / 25%),
+        0 2px 2px rgb(30 13 6 / 45%);
+    filter: drop-shadow(0 1px 0 #3e1e16);
+}
+.yz-create-label {
+    display: grid;
+    gap: 5px;
+    text-align: center;
+}
+.yz-create-label > span {
+    font-family: "YZ Atelier Serif", var(--yz-serif);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.25;
+    letter-spacing: 5px;
+    text-shadow:
+        0 2px 1px #381c16,
+        0 -1px 0 rgb(255 235 177 / 35%);
+}
+.yz-create-label small {
+    font-family: Georgia, serif;
+    font-size: 9px;
+    letter-spacing: 3.5px;
+    color: #ddc29a;
+    text-shadow: 0 1px 1px #381c16;
+}
+.yz-create-button:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 2px 3px rgb(255 225 167 / 28%),
+        inset 0 -3px 4px rgb(37 12 6 / 48%),
+        0 7px 0 #58392b,
+        0 9px 0 #ae8951,
+        0 16px 22px var(--yz-shadow);
+}
+.yz-create-button:active:not(:disabled) {
+    transform: translateY(5px);
+    box-shadow:
+        inset 0 2px 5px rgb(37 12 6 / 50%),
+        0 1px 0 #58392b,
+        0 2px 0 #ae8951,
+        0 4px 6px var(--yz-shadow);
 }
 .yz-create-button:disabled {
     opacity: 0.5;
@@ -237,8 +336,14 @@
     height: auto;
     aspect-ratio: 1.62;
     object-fit: cover;
-    padding: 6px;
-    border: 1px solid var(--yz-border);
+    padding: 8px;
+    border: 1px solid var(--yz-brass);
+    background: var(--yz-panel);
+    box-shadow:
+        inset 0 1px 0 var(--yz-highlight),
+        inset 0 -2px 2px var(--yz-shadow),
+        0 3px 0 var(--yz-depth),
+        0 9px 16px var(--yz-shadow);
 }
 .yz-home-plate figcaption {
     padding-top: 12px;
@@ -291,6 +396,9 @@
     border-radius: 28px;
     color: var(--yz-muted);
     background: var(--yz-panel);
+    box-shadow:
+        inset 0 2px 4px var(--yz-shadow),
+        0 1px 0 var(--yz-highlight);
 }
 .yz-project-search input {
     min-width: 0;
@@ -323,6 +431,15 @@
 .yz-project-card {
     min-width: 0;
     perspective: 1000px;
+    padding: 9px 9px 11px;
+    border: 1px solid var(--yz-border);
+    border-radius: 5px;
+    background: var(--yz-panel) url("/brand/atelier-paper.webp");
+    background-blend-mode: soft-light;
+    box-shadow:
+        inset 0 1px 0 var(--yz-highlight),
+        0 2px 0 var(--yz-depth),
+        0 6px 12px var(--yz-shadow);
 }
 .yz-project-cover {
     position: relative;
@@ -333,7 +450,10 @@
     border-radius: 3px;
     background: var(--yz-panel);
     transform-origin: center 60%;
-    box-shadow: 0 3px 7px color-mix(in srgb, var(--yz-text) 8%, transparent);
+    box-shadow:
+        0 1px 0 var(--yz-highlight),
+        0 3px 0 var(--yz-depth),
+        0 7px 12px var(--yz-shadow);
     transition:
         transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1),
         box-shadow 280ms ease;
@@ -556,9 +676,14 @@
         margin-bottom: 20px;
     }
     .yz-create-button {
-        min-width: 190px;
-        min-height: 52px;
-        font-size: 20px;
+        min-width: 230px;
+        min-height: 76px;
+        gap: 14px;
+        padding: 12px 20px;
+    }
+    .yz-create-label > span {
+        font-size: 23px;
+        letter-spacing: 3px;
     }
     .yz-hero-colophon {
         font-size: 9px;
@@ -629,9 +754,10 @@
         margin: 14px 0 20px;
     }
     .yz-create-button {
-        min-height: 48px;
-        min-width: 180px;
-        font-size: 19px;
+        min-height: 76px;
+        min-width: 0;
+        width: min(100%, 260px);
+        padding: 12px 16px;
     }
     .yz-hero-colophon {
         display: none;
@@ -688,4 +814,15 @@
 .dark .yz-sidebar,
 .dark .yz-home {
     background-blend-mode: multiply;
+}
+
+.dark .yz-sidebar-link,
+.dark .yz-project-card {
+    background-blend-mode: multiply;
+}
+@media (prefers-reduced-motion: reduce) {
+    .yz-create-button:hover:not(:disabled),
+    .yz-create-button:active:not(:disabled) {
+        transform: none;
+    }
 }

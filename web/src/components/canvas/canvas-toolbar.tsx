@@ -84,10 +84,11 @@ export function CanvasToolbar({
         background: theme.toolbar.panel,
         borderColor: colorTheme === "dark" ? "rgba(255,255,255,.08)" : "rgba(28,25,23,.10)",
         color: theme.toolbar.item,
-        boxShadow: colorTheme === "dark" ? "0 12px 32px rgba(0,0,0,.28)" : "0 12px 30px rgba(28,25,23,.10)",
+        boxShadow: theme.toolbar.shadow,
         maxHeight: "calc(100dvh - var(--td-desktop-titlebar-height, 0px) - 136px)",
     };
     const popoverStyle: CSSProperties = {
+        boxShadow: theme.toolbar.shadow,
         background: theme.toolbar.panel,
         borderColor: colorTheme === "dark" ? "rgba(255,255,255,.09)" : "rgba(28,25,23,.11)",
         color: theme.toolbar.item,
@@ -136,7 +137,7 @@ export function CanvasToolbar({
     return (
         <div ref={rootRef} className="td-canvas-toolbar pointer-events-none absolute left-4 top-1/2 z-50 -translate-y-1/2">
             {tip ? <DockTip label={tip} y={tipY} theme={theme} /> : null}
-            <span className="pointer-events-none absolute left-7 top-0 z-50 -translate-y-1 whitespace-nowrap rounded-full bg-gradient-to-r from-cyan-400 to-violet-500 px-1.5 py-0.5 text-[9px] font-semibold leading-none text-white shadow-lg">
+            <span className="pointer-events-none absolute left-7 top-0 z-50 -translate-y-1 whitespace-nowrap rounded border px-1.5 py-0.5 text-[9px] font-semibold leading-none" style={{ background: theme.toolbar.activeBg, color: theme.toolbar.activeText, borderColor: theme.toolbar.border, boxShadow: theme.toolbar.shadow }}>
                 {t("canvas.newNodeBadge")}
             </span>
             <div ref={wrapRef} className="td-canvas-dock thin-scrollbar pointer-events-auto flex w-12 flex-col items-center gap-0.5 overflow-y-auto rounded-[20px] border px-1.5 py-2 backdrop-blur-xl [&>*]:shrink-0" style={dockStyle}>
