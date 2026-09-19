@@ -1,62 +1,30 @@
 import { Popover, Tooltip } from "antd";
 import { LoaderCircle, RefreshCw, WalletCards } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import { canvasThemes } from "@/lib/canvas-theme";
-import { runAitudouOperation, AITUDOU_OFFICIAL_BASE_URL } from "@/services/api/aitudou";
-import { AITUDOU_WALLET_REFRESH_EVENT, formatAitudouWalletAmount, parseAitudouWalletSummary, type AitudouWalletSummary } from "@/services/api/aitudou-wallet";
-import { useConfigStore } from "@/stores/use-config-store";
+import { useJinyuAccount } from "@/hooks/use-jinyu-account";
+import { formatAitudouWalletAmount } from "@/services/api/aitudou-wallet";
 import { useThemeStore } from "@/stores/use-theme-store";
-
-type WalletStatus = "idle" | "loading" | "ready" | "error";
 
 /** A compact balance indicator refreshed only on demand or after a completed task. */
 export function CanvasWalletBalance() {
     const { t, i18n } = useTranslation();
-    const apiKey = useConfigStore((state) => state.config.apiKey);
+    const account = useJinyuAccount();
     const colorTheme = useThemeStore((state) => state.theme);
     const theme = canvasThemes[colorTheme];
-    const [wallet, setWallet] = useState<AitudouWalletSummary | null>(null);
-    const [status, setStatus] = useState<WalletStatus>("idle");
-    const [updatedAt, setUpdatedAt] = useState<Date | null>(null);
-
-    const refresh = useCallback(async () => {
-        const currentApiKey = apiKey.trim();
-        if (!currentApiKey) {
-            setWallet(null);
-            setStatus("idle");
-            setUpdatedAt(null);
-            return;
-        }
-
-        setStatus("loading");
-        try {
-            const result = await runAitudouOperation({ apiKey: currentApiKey, baseUrl: AITUDOU_OFFICIAL_BASE_URL }, "utility.wallet", {});
-            const nextWallet = parseAitudouWalletSummary(result.raw);
-            if (!nextWallet) throw new Error("Unexpected wallet response");
-            setWallet(nextWallet);
-            setUpdatedAt(new Date());
-            setStatus("ready");
-        } catch {
-            setStatus("error");
-        }
-    }, [apiKey]);
-
-    useEffect(() => {
-        if (!apiKey.trim()) return;
-        void refresh();
-        const refreshAfterTask = () => void refresh();
-        window.addEventListener(AITUDOU_WALLET_REFRESH_EVENT, refreshAfterTask);
-        return () => window.removeEventListener(AITUDOU_WALLET_REFRESH_EVENT, refreshAfterTask);
-    }, [apiKey, refresh]);
+    const wallet = account.connected ? account.data : null;
+    const status = account.isFetching ? "loading" : account.isError ? "error" : account.connected ? "ready" : "idle";
+    const refresh = () => account.refetch({ cancelRefetch: false });
+    const updatedAt = account.dataUpdatedAt;
 
     const updatedLabel = useMemo(() => {
         if (!updatedAt) return null;
         return new Intl.DateTimeFormat(i18n.language, { hour: "2-digit", minute: "2-digit" }).format(updatedAt);
     }, [i18n.language, updatedAt]);
 
-    if (!apiKey.trim()) return null;
+    if (!account.hasKey) return null;
 
     const amount = wallet ? formatAitudouWalletAmount(wallet.amount) : "—";
     const label = t("canvas.wallet.balance", { amount });

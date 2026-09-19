@@ -1,11 +1,11 @@
 import { App, Button, Form, Input, Modal, theme } from "antd";
 import { ArrowUpRight, KeyRound, ShieldCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { invoke } from "@tauri-apps/api/core";
 
-import { runAitudouOperation } from "@/services/api/aitudou";
-import { formatAitudouWalletAmount, parseAitudouWalletSummary, type AitudouWalletSummary } from "@/services/api/aitudou-wallet";
+import { verifyJinyuKey } from "@/services/api/jinyu-account";
+import { formatAitudouWalletAmount, type AitudouWalletSummary } from "@/services/api/aitudou-wallet";
 import { AITUDOU_OFFICIAL_BASE_URL, useConfigStore, type ConfigTabKey } from "@/stores/use-config-store";
 import { JINYU_DOCS_URL } from "@/constant/provider";
 
@@ -25,6 +25,9 @@ export function AppConfigPanel({ showDoneButton = false }: AppConfigPanelProps) 
     const setConfigDialogOpen = useConfigStore((state) => state.setConfigDialogOpen);
     const clearPromptContinue = useConfigStore((state) => state.clearPromptContinue);
     const [draftApiKey, setDraftApiKey] = useState(apiKey);
+    const pending = useRef<AbortController | null>(null);
+    useEffect(() => () => pending.current?.abort(), []);
+    const [saving, setSaving] = useState(false);
     const [checkingWallet, setCheckingWallet] = useState(false);
     const [wallet, setWallet] = useState<AitudouWalletSummary | null>(null);
 
@@ -33,29 +36,44 @@ export function AppConfigPanel({ showDoneButton = false }: AppConfigPanelProps) 
         setWallet(null);
     }, [apiKey]);
 
-    const saveApiKey = () => {
+    const saveApiKey = async () => {
         const nextApiKey = draftApiKey.trim();
-        updateConfig("apiKey", nextApiKey);
-        if (showDoneButton) setConfigDialogOpen(false);
-        message.success(t(nextApiKey ? (shouldPromptContinue ? "config.savedContinue" : "config.saved") : "config.apiKeyCleared"));
-        clearPromptContinue();
+        if (saving || checkingWallet) return;
+        const controller = new AbortController();
+        pending.current?.abort();
+        pending.current = controller;
+        setSaving(true);
+        try {
+            if (nextApiKey) await verifyJinyuKey(nextApiKey, controller.signal);
+            if (controller.signal.aborted) return;
+            updateConfig("apiKey", nextApiKey);
+            if (showDoneButton) setConfigDialogOpen(false);
+            message.success(t(nextApiKey ? (shouldPromptContinue ? "config.savedContinue" : "config.saved") : "config.apiKeyCleared"));
+            clearPromptContinue();
+        } catch {
+            if (!controller.signal.aborted) message.error("验证未通过或服务暂不可用，API Key 未保存，请检查后重试。");
+        } finally {
+            if (!controller.signal.aborted) setSaving(false);
+        }
     };
 
     const checkWallet = async () => {
         const nextApiKey = draftApiKey.trim();
         if (!nextApiKey) return;
+        const controller = new AbortController();
+        pending.current?.abort();
+        pending.current = controller;
         setCheckingWallet(true);
         setWallet(null);
         try {
-            const result = await runAitudouOperation({ apiKey: nextApiKey, baseUrl: AITUDOU_OFFICIAL_BASE_URL }, "utility.wallet", {});
-            const summary = parseAitudouWalletSummary(result.raw);
-            if (!summary) throw new Error(t("config.apiKeyWalletUnexpected"));
+            const summary = await verifyJinyuKey(nextApiKey, controller.signal);
+            if (controller.signal.aborted) return;
             setWallet(summary);
             message.success(t("config.apiKeyVerified"));
-        } catch (error) {
-            message.error(error instanceof Error ? error.message : t("config.apiKeyVerifyFailed"));
+        } catch {
+            if (!controller.signal.aborted) message.error(t("config.apiKeyVerifyFailed"));
         } finally {
-            setCheckingWallet(false);
+            if (!controller.signal.aborted) setCheckingWallet(false);
         }
     };
 
@@ -119,6 +137,7 @@ export function AppConfigPanel({ showDoneButton = false }: AppConfigPanelProps) 
                 <Input.Password
                     autoFocus={showDoneButton}
                     autoComplete="off"
+                    disabled={saving || checkingWallet}
                     size="large"
                     value={draftApiKey}
                     placeholder={t("config.apiKeyPlaceholder")}
@@ -142,11 +161,11 @@ export function AppConfigPanel({ showDoneButton = false }: AppConfigPanelProps) 
             </div>
 
             <div className="mt-7 flex items-center justify-between gap-3 border-t border-black/[0.06] pt-5 dark:border-white/[0.06]">
-                <Button type="text" loading={checkingWallet} disabled={!draftApiKey.trim()} onClick={() => void checkWallet()}>
+                <Button type="text" loading={checkingWallet} disabled={saving || !draftApiKey.trim()} onClick={() => void checkWallet()}>
                     {t("config.apiKeyVerify")}
                 </Button>
-                <Button type="primary" htmlType="submit" disabled={draftApiKey.trim() === apiKey}>
-                    {t("common.save")}
+                <Button type="primary" htmlType="submit" loading={saving} disabled={checkingWallet || draftApiKey.trim() === apiKey}>
+                    {draftApiKey.trim() ? "验证并登录" : "清除 API Key"}
                 </Button>
             </div>
         </Form>
@@ -163,7 +182,7 @@ export function AppConfigModal() {
         <Modal
             title={
                 <div>
-                    <div className="text-lg font-semibold">{t("config.title")}</div>
+                    <div className="text-lg font-semibold">设置</div>
                     <div className="mt-1 text-xs font-normal text-stone-500">{t("config.modalDescription")}</div>
                 </div>
             }

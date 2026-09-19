@@ -30,3 +30,15 @@ describe("Jinyu credential boundary", () => {
         expect(restored.config.channels[0].apiKey).toBe("jinyu-test-key");
     });
 });
+
+it("clears credentials from all derived channels when logging out", () => {
+    const original = useConfigStore.getState().config;
+    try {
+        useConfigStore.getState().updateConfig("apiKey", "test-session-key");
+        useConfigStore.getState().updateConfig("apiKey", "");
+        expect(useConfigStore.getState().config.apiKey).toBe("");
+        expect(useConfigStore.getState().config.channels.every((channel) => !channel.apiKey)).toBe(true);
+    } finally {
+        useConfigStore.setState({ config: original });
+    }
+});
