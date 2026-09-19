@@ -8,7 +8,7 @@ import { formatAitudouWalletAmount } from "@/services/api/aitudou-wallet";
 import { useConfigStore } from "@/stores/use-config-store";
 import { JINYU_API_BASE_URL, JINYU_DOCS_URL } from "@/constant/provider";
 
-export function AccountMenu() {
+export function AccountMenu({ embedded = false }: { embedded?: boolean }) {
     const { token } = theme.useToken();
     const { message } = App.useApp();
     const { pathname } = useLocation();
@@ -40,7 +40,7 @@ export function AccountMenu() {
     };
     const row = "flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-black/5 dark:hover:bg-white/10 focus-visible:outline focus-visible:outline-2";
     return (
-        <div className={`fixed left-3 z-[60] ${inCanvas ? "bottom-16" : "bottom-3"}`} data-canvas-no-zoom>
+        <div className={embedded ? "yz-sidebar-account" : `fixed left-3 z-[60] ${inCanvas ? "bottom-16" : "bottom-3"}`} data-canvas-no-zoom>
             <Popover
                 trigger="click"
                 placement="topLeft"
@@ -140,8 +140,8 @@ export function AccountMenu() {
                     aria-label="账户与登录"
                     aria-expanded={open}
                     title={status}
-                    className={`flex items-center rounded-xl border text-left shadow-sm ${inCanvas ? "size-10 justify-center" : "h-14 w-[196px] max-w-[calc(100vw-24px)] gap-3 px-3"}`}
-                    style={{ background: token.colorBgElevated, borderColor: token.colorBorderSecondary, color: token.colorText }}
+                    className={`yz-account-trigger flex items-center rounded-xl text-left ${embedded ? "h-16 w-full gap-3 px-2" : inCanvas ? "size-10 justify-center border shadow-sm" : "h-14 w-[196px] gap-3 px-3 border shadow-sm"}`}
+                    style={{ background: embedded ? "transparent" : token.colorBgElevated, borderColor: token.colorBorderSecondary, color: token.colorText }}
                 >
                     <UserRound className="size-5 shrink-0" style={{ color: account.connected ? token.colorPrimary : token.colorTextSecondary }} />
                     <span className={inCanvas ? "sr-only" : "min-w-0 flex-1"}>
